@@ -1,0 +1,182 @@
+package bez.dev.featurenotes.views
+
+import android.content.Intent
+import android.os.Bundle
+import android.view.Menu
+import android.view.MenuItem
+import android.widget.ImageView
+import android.widget.Toast
+import androidx.appcompat.widget.PopupMenu
+import androidx.lifecycle.Observer
+import androidx.recyclerview.widget.ItemTouchHelper
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import bez.dev.featurenotes.R
+import bez.dev.featurenotes.data.Note
+import bez.dev.featurenotes.misc.App
+import kotlinx.android.synthetic.main.main_activity.*
+import kotlinx.android.synthetic.main.main_activity_toolbar.*
+import kotlinx.android.synthetic.main.no_notes_layout.*
+
+
+class MainActivity : BaseActivity(), MainListAdapter.OnItemClickListener {
+
+    private lateinit var mainListAdapter: MainListAdapter
+    private var noteList: List<Note> = ArrayList()
+
+    private val observer = Observer<List<Note>> {
+        noteList = it
+        this.refreshUI(noteList)
+    }
+
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.main_activity)
+
+        initUI()
+
+        initNoteViewModel()
+
+    }
+
+    private fun initUI() {
+        //TOOLBAR
+        setSupportActionBar(main_list_toolbar)    //merges the custom TOOLBAR with the existing MENU
+
+        //RECYCLER
+        recycler_view.layoutManager = LinearLayoutManager(this)
+        recycler_view.setHasFixedSize(true)
+
+        //GESTURES
+        ItemTouchHelper(object : ItemTouchHelper.SimpleCallback(
+                0,
+                ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT) {
+
+            override fun onMove(recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder, viewHolder1: RecyclerView.ViewHolder): Boolean {
+                return false
+            }
+
+            override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
+                val note = mainListAdapter.getNoteAt(viewHolder.adapterPosition)
+                deleteNote(note)
+            }
+        }).attachToRecyclerView(recycler_view)
+
+    }
+
+
+    private fun initNoteViewModel() {
+        repoViewModel.allNotes.observe(this, observer)
+    }
+
+
+    private fun refreshUI(notes: List<Note>?) {
+        //RecyclerView
+        mainListAdapter = MainListAdapter(this)
+        recycler_view.adapter = mainListAdapter
+        mainListAdapter.submitList(notes)  //reads the adapter DIFF we created, and displays list
+
+        //no notes layout
+        no_notes_layout.toggleShowView(notes.isNullOrEmpty())
+
+        //Notification
+        App.notificationManager.updateNotification(noteList)
+    }
+
+
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        val menuInflater = menuInflater
+        menuInflater.inflate(R.menu.main_activity_menu, menu)
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            R.id.main_menu_add_note -> {
+                addNote()
+                true
+            }
+            R.id.main_menu_reset_all_notifications -> {
+                resetAllNotifications()
+                true
+            }
+            R.id.main_menu_delete_all_notes -> {
+                deleteNotes()
+                true
+            }
+
+            else -> super.onOptionsItemSelected(item)
+        }
+    }
+
+    private fun resetAllNotifications() {
+        repoViewModel.resetAllNotifications()
+    }
+
+    override fun onNoteItemTextClick(note: Note) {
+        editNote(note)
+    }
+
+    override fun onNoteItemOverflowClick(note: Note, overflow: ImageView, noteHolder: MainListAdapter.NoteHolder) {
+        val popup = PopupMenu(this, overflow)
+        //Inflating the Popup using xml file
+        popup.menuInflater.inflate(R.menu.overflow_note_popup, popup.menu)
+
+        //registering popup with OnMenuItemClickListener
+        popup.setOnMenuItemClickListener {
+            when (it.itemId) {
+                R.id.main_overflow_note_edit -> {
+                    editNote(note)
+                }
+                R.id.main_overflow_note_delete -> {
+                    deleteNote(note)
+                }
+                R.id.main_overflow_note_notification -> {
+                    noteHolder.checkboxToggleNotification.performClick()
+                }
+
+            }
+            false
+        }
+
+        popup.show() //showing popup menu
+    }
+
+    override fun onToggleNotificationClick(note: Note, isChecked: Boolean) {
+        if (isChecked != note.isNotification) {
+            App.notificationManager.cancelNotificationById(note.id)
+
+            note.isNotification = isChecked
+            repoViewModel.update(note)
+        }
+
+    }
+
+
+    private fun addNote() {
+        val intent = Intent(this, DetailActivity::class.java)
+        startActivity(intent)
+    }
+
+    private fun editNote(note: Note) {
+        val intent = Intent(this, DetailActivity::class.java)
+        intent.putExtra(EXTRA_NOTE, note)
+        startActivity(intent)
+    }
+
+    private fun deleteNote(note: Note) {
+        repoViewModel.delete(note)
+        App.notificationManager.cancelNotificationById(note.id)
+        Toast.makeText(this, "Note deleted", Toast.LENGTH_SHORT).show()
+    }
+
+    private fun deleteNotes() {
+        if (!noteList.isNullOrEmpty()) {
+            Toast.makeText(this, "All notes deleted", Toast.LENGTH_SHORT).show()
+            repoViewModel.deleteAllNotes()
+        }
+    }
+
+
+}

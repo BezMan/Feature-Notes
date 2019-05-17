@@ -1,0 +1,6 @@
+<resources>
+
+    <!--Global Integers-->
+    <integer name="default_priority">3</integer>
+
+</resources>
