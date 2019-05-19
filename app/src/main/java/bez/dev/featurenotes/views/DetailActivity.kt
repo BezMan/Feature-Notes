@@ -209,7 +209,7 @@ class DetailActivity : BaseActivity(), OnPrioritySaveClickListener, DetailEditTe
 
         if (isNoteEmpty()) {
             if (isExistingNote) {
-                repoViewModel.delete(currentNote)
+                deleteNote(currentNote)
             }
         } else {
 

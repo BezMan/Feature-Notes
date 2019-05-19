@@ -165,12 +165,6 @@ class MainActivity : BaseActivity(), MainListAdapter.OnItemClickListener {
         startActivity(intent)
     }
 
-    private fun deleteNote(note: Note) {
-        repoViewModel.delete(note)
-        App.notificationManager.cancelNotificationById(note.id)
-        Toast.makeText(this, "Note deleted", Toast.LENGTH_SHORT).show()
-    }
-
     private fun deleteNotes() {
         if (!noteList.isNullOrEmpty()) {
             Toast.makeText(this, "All notes deleted", Toast.LENGTH_SHORT).show()
