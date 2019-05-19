@@ -76,9 +76,7 @@ class NotificationManager(context: Context) {
 
             if (note.isNotification) {
                 ++count
-                NotificationManagerCompat.from(mContext).apply {
-                    notify(note.id.toInt(), createNotificationBuilder(note))
-                }
+                updateSpecificNotification(note)
             }
         }
         if (count > 0) {

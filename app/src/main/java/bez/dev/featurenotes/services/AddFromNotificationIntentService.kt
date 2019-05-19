@@ -25,8 +25,7 @@ import bez.dev.featurenotes.misc.App
 class AddFromNotificationIntentService : IntentService("AddFromNotificationIntentService") {
 
     override fun onHandleIntent(intent: Intent) {
-        val action = intent.action
-        if (ACTION_REPLY == action) {
+        if (intent.action == ACTION_REPLY) {
             val note = intent.getParcelableExtra(NOTIFICATION_NOTE) as Note
             val message = RemoteInput.getResultsFromIntent(intent)?.getCharSequence(EXTRA_REPLY)
 
@@ -43,9 +42,8 @@ class AddFromNotificationIntentService : IntentService("AddFromNotificationInten
             val list = Converters.jsonToList(note.items)
             list.add(0, replyCharSequence.toString())
             note.items = Converters.listToJson(list)
-
-            App.database.noteDao().update(note)
         }
+        App.database.noteDao().update(note) // must update() to notify(), even when empty.
 
     }
 
