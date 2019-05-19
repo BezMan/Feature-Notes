@@ -40,6 +40,31 @@ class NoteRepository {
         handler.post { noteDao.resetAllNotifications() }
     }
 
+    fun getNoteItems(note: Note): LiveData<String> {
+        return GetNoteItems(this, noteDao).execute(note).get()
+    }
+
+
+    private class GetNoteItems(noteRepository: NoteRepository, private val noteDao: NoteDao) : AsyncTask<Note, Void, LiveData<String>>() {
+
+        private val repoReference: WeakReference<NoteRepository> = WeakReference(noteRepository)
+
+        override fun doInBackground(vararg note: Note): LiveData<String> {
+            return noteDao.getNoteItems(note[0].id)
+        }
+
+        override fun onPostExecute(items: LiveData<String>) {
+            // if no reference to the activity - then return
+            repoReference.get() ?: return
+            //otherwise, we have a repo reference so we proceed to return items
+            getItems(items)
+        }
+
+        private fun getItems(items: LiveData<String>): LiveData<String> {
+            return items
+        }
+    }
+
 
     private class InsertTask(noteRepository: NoteRepository, private val noteDao: NoteDao) : AsyncTask<Note, Void, Long>() {
 

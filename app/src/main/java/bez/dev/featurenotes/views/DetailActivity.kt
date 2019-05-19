@@ -6,6 +6,7 @@ import android.view.MenuItem
 import android.view.View
 import android.widget.ScrollView
 import androidx.core.content.ContextCompat
+import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -34,6 +35,10 @@ class DetailActivity : BaseActivity(), OnPrioritySaveClickListener, DetailEditTe
     private var isExistingNote: Boolean = false
     private lateinit var touchHelper: ItemTouchHelper
 
+    private val observer = Observer<String> {
+        itemList = Converters.jsonToList(it)
+        refreshRecyclerView(itemList)
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -59,6 +64,9 @@ class DetailActivity : BaseActivity(), OnPrioritySaveClickListener, DetailEditTe
         editTextDialog?.dismiss()
     }
 
+    private fun initNoteViewModel() {
+        repoViewModel.getNoteItems(currentNote).observe(this, observer)
+    }
 
     override fun onDetailItemClick(text: String, position: Int) {
         openEditTextDialog(position, text)
@@ -186,10 +194,12 @@ class DetailActivity : BaseActivity(), OnPrioritySaveClickListener, DetailEditTe
 
             val itemsStr = currentNote.items
             itemList = Converters.jsonToList(itemsStr)
-            refreshRecyclerView(itemList)
 
             edit_text_title.setText(currentNote.title)
             mPriority = currentNote.priority
+
+            initNoteViewModel()
+
         } else { //NEW
             enterEditMode()
         }
