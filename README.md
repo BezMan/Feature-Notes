@@ -26,8 +26,10 @@ I know there are many basic features I haven’t included yet, my focus was gett
 figured I'll open-source, to hear tips on how to improve code structure and modularity, so be my guest :)
 I do plan on adding interesting features, so please let me know what similar apps are missing.
 
-<img src="images/screenshots/scr1.jpeg" width="100">
-<img src="images/screenshots/scr2.jpeg" width="100">
-<img src="images/screenshots/scr3.jpeg" width="100">
-<img src="images/screenshots/scr4.jpeg" width="100">
-<img src="images/screenshots/scr5.jpeg" width="100">
+<div class="row">
+<img src="images/screenshots/scr1.jpeg" width="150">
+<img src="images/screenshots/scr2.jpeg" width="150">
+<img src="images/screenshots/scr3.jpeg" width="150">
+<img src="images/screenshots/scr4.jpeg" width="150">
+<img src="images/screenshots/scr5.jpeg" width="150">
+</div>
