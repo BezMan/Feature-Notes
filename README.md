@@ -1,5 +1,6 @@
 # Feature-Notes
-Note taking android app, Todo lists made easy.
+
+<img src="images/feature-graphic.png"
 
 I was motivated to add features I haven’t seen in other note apps, such as adding notes through notification actions, 
 where the user can add items while other apps are in foreground (playing a video for example).
