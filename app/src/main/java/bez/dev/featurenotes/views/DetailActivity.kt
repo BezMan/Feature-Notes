@@ -179,7 +179,7 @@ class DetailActivity : BaseActivity(), OnPrioritySaveClickListener, DetailEditTe
         recycler_view_detail.adapter = detailListAdapter
         detailListAdapter.submitList(notes)
 
-        if (isExistingNote && currentNote.isNotification) {
+        if (!isNoteEmpty() && isExistingNote && currentNote.isNotification) {
             currentNote.items = notes.toString()
             App.notificationManager.updateSpecificNotification(currentNote)
         }
