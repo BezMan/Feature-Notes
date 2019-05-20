@@ -1,6 +1,6 @@
-# Feature-Notes
-Note taking android app, Todo lists made easy.
+<img src="images/feature-graphic.png" >
 
+# Feature-Notes
 I was motivated to add features I haven’t seen in other note apps, such as adding notes through notification actions, 
 where the user can add items while other apps are in foreground (playing a video for example).
 
@@ -21,7 +21,15 @@ where the user can add items while other apps are in foreground (playing a video
 - Setting notes as Notifications, for quick add, even while watching a video.
 
 
+<div class="row">
+<img src="images/screenshots/scr1.jpeg" width="150">
+<img src="images/screenshots/scr2.jpeg" width="150">
+<img src="images/screenshots/scr3.jpeg" width="150">
+<img src="images/screenshots/scr4.jpeg" width="150">
+<img src="images/screenshots/scr5.jpeg" width="150">
+</div>
+
 
 I know there are many basic features I haven’t included yet, my focus was getting familiar with Kotlin.
 figured I'll open-source, to hear tips on how to improve code structure and modularity, so be my guest :)
-I do plan on adding more interesting features, so please let me know what similar apps are missing.
+I do plan on adding interesting features, so please let me know what similar apps are missing.
