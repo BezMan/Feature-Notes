@@ -78,7 +78,7 @@ class MainActivity : BaseActivity(), MainListAdapter.OnItemClickListener {
         mainListAdapter.submitList(notes)  //reads the adapter DIFF we created, and displays list
 
         //no notes layout
-        no_notes_layout.toggleShowView(notes.isNullOrEmpty())
+        no_notes_view.toggleShowView(notes.isNullOrEmpty())
 
         //Notification
         App.notificationManager.updateNotification(noteList)
