@@ -20,6 +20,7 @@ where the user can add items while other apps are in foreground (playing a video
 - auto generated primary key, where insert() provides us a unique ID val.
 - Setting notes as Notifications, for quick add, even while watching a video.
 
+<br/>
 
 <div class="row">
 <img src="images/screenshots/scr1.jpeg" width="150">
@@ -29,7 +30,15 @@ where the user can add items while other apps are in foreground (playing a video
 <img src="images/screenshots/scr5.jpeg" width="150">
 </div>
 
+<br/>
 
 I know there are many basic features I haven’t included yet, my focus was getting familiar with Kotlin.
 figured I'll open-source, to hear tips on how to improve code structure and modularity, so be my guest :)
 I do plan on adding interesting features, so please let me know what similar apps are missing.
+
+<br/>
+
+<a href="https://play.google.com/store/apps/details?id=bez.dev.featurenotes">
+<img src="images/badge-google-play.png" width="150" title="Feature Notes" 
+alt="Feature Notes">
+</a>
