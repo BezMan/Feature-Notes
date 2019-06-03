@@ -7,9 +7,11 @@ import androidx.lifecycle.LiveData
 import bez.dev.featurenotes.misc.App
 import java.lang.ref.WeakReference
 
+const val KEY_FIRST_RUN = "KEY_FIRST_RUN"
 
-class NoteRepository {
-    private val noteDao: NoteDao = App.database.noteDao()
+abstract class NoteRepository {
+    private val noteDatabase: NoteDatabase = App.database
+    private val noteDao: NoteDao = noteDatabase.noteDao()
     val allNotes: LiveData<List<Note>>
     private val handler: Handler
 
@@ -20,6 +22,10 @@ class NoteRepository {
         handlerThread.start()
         handler = Handler(handlerThread.looper)
     }
+
+    abstract fun getSavedNotes()
+
+
     fun insert(note: Note): Long {
         return InsertTask(this, noteDao).execute(note).get()
     }
@@ -34,6 +40,10 @@ class NoteRepository {
 
     fun deleteAllNotes() {
         handler.post { noteDao.deleteAllNotes() }
+    }
+
+    fun clearAllData() {
+        handler.post { noteDatabase.clearAllTables() }
     }
 
     fun resetAllNotifications() {
