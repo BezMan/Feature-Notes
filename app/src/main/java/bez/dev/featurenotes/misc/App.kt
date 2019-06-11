@@ -13,7 +13,6 @@ class App : Application() {
         super.onCreate()
         appContext = applicationContext
         database = NoteDatabase.getInstance(appContext)
-        notificationManager = NotificationManager(appContext)
         prefs = getSharedPreferences(PREFS, MODE_PRIVATE)
 
         startService(Intent(baseContext, OnClearFromRecentService::class.java))
@@ -24,7 +23,6 @@ class App : Application() {
         lateinit var prefs: SharedPreferences
         lateinit var appContext: Context
         lateinit var database: NoteDatabase
-        lateinit var notificationManager: NotificationManager
     }
 
 

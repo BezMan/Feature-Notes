@@ -14,7 +14,6 @@ import androidx.recyclerview.widget.RecyclerView
 import bez.dev.featurenotes.R.*
 import bez.dev.featurenotes.data.Converters
 import bez.dev.featurenotes.data.Note
-import bez.dev.featurenotes.misc.App
 import bez.dev.featurenotes.views.DetailPriorityDialog.OnPrioritySaveClickListener
 import kotlinx.android.synthetic.main.detail_activity.*
 import kotlinx.android.synthetic.main.detail_activity_toolbar.*
@@ -181,7 +180,7 @@ class DetailActivity : BaseActivity(), OnPrioritySaveClickListener, DetailEditTe
 
         if (!isNoteEmpty() && isExistingNote && currentNote.isNotification) {
             currentNote.items = notes.toString()
-            App.notificationManager.updateSpecificNotification(currentNote)
+            notificationManager.updateSpecificNotification(currentNote)
         }
 
     }

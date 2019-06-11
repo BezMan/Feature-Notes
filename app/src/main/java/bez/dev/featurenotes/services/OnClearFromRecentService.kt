@@ -3,7 +3,7 @@ package bez.dev.featurenotes.services
 import android.app.Service
 import android.content.Intent
 import android.os.IBinder
-import bez.dev.featurenotes.misc.App
+import bez.dev.featurenotes.misc.NotificationManager
 
 
 class OnClearFromRecentService : Service() {
@@ -20,7 +20,8 @@ class OnClearFromRecentService : Service() {
 
     override fun onTaskRemoved(rootIntent: Intent) {
 
-        App.notificationManager.cancelNotifications()
+        val notificationManager = NotificationManager(this)
+        notificationManager.cancelNotifications()
 
         stopSelf()
     }

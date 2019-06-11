@@ -13,7 +13,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import bez.dev.featurenotes.R
 import bez.dev.featurenotes.data.Note
-import bez.dev.featurenotes.misc.App
 import kotlinx.android.synthetic.main.main_activity.*
 import kotlinx.android.synthetic.main.main_activity_toolbar.*
 import kotlinx.android.synthetic.main.no_notes_layout.*
@@ -81,7 +80,7 @@ class MainActivity : BaseActivity(), MainListAdapter.OnItemClickListener {
         no_notes_view.toggleShowView(notes.isNullOrEmpty())
 
         //Notification
-        App.notificationManager.updateNotification(noteList)
+        notificationManager.updateNotification(noteList)
     }
 
 
@@ -145,7 +144,7 @@ class MainActivity : BaseActivity(), MainListAdapter.OnItemClickListener {
 
     override fun onToggleNotificationClick(note: Note, isChecked: Boolean) {
         if (isChecked != note.isNotification) {
-            App.notificationManager.cancelNotificationById(note.id)
+            notificationManager.cancelNotificationById(note.id)
 
             note.isNotification = isChecked
             repoViewModel.update(note)
