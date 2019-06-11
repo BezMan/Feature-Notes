@@ -21,6 +21,7 @@ import androidx.core.app.RemoteInput
 import bez.dev.featurenotes.data.Converters
 import bez.dev.featurenotes.data.Note
 import bez.dev.featurenotes.misc.App
+import bez.dev.featurenotes.misc.NotificationManager
 import bez.dev.featurenotes.misc.Utils
 
 class AddFromNotificationIntentService : IntentService("AddFromNotificationIntentService") {
@@ -47,7 +48,8 @@ class AddFromNotificationIntentService : IntentService("AddFromNotificationInten
         App.database.noteDao().update(note) // must update() to notify(), even when empty.
         if (!Utils.isAppForeground) {
             //must call notify() manually when outside of app, otherwise notification doesn't refresh with new item.
-            App.notificationManager.updateSpecificNotification(note) //
+            val notificationManager = NotificationManager(this)
+            notificationManager.updateSpecificNotification(note) //
         }
     }
 
