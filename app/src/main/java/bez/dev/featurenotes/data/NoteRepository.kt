@@ -9,7 +9,7 @@ import java.lang.ref.WeakReference
 
 const val KEY_FIRST_RUN = "KEY_FIRST_RUN"
 
-abstract class NoteRepository {
+abstract class NoteRepository : IRepository {
     private val noteDatabase: NoteDatabase = App.database
     private val noteDao: NoteDao = noteDatabase.noteDao()
     val allNotes: LiveData<List<Note>>
@@ -26,31 +26,31 @@ abstract class NoteRepository {
     abstract fun getSavedNotes()
 
 
-    fun insert(note: Note): Long {
+    override fun insert(note: Note): Long {
         return InsertTask(this, noteDao).execute(note).get()
     }
 
-    fun update(note: Note) {
+    override fun update(note: Note) {
         handler.post { noteDao.update(note) }
     }
 
-    fun delete(note: Note) {
+    override fun delete(note: Note) {
         handler.post { noteDao.delete(note) }
     }
 
-    fun deleteAllNotes() {
+    override fun deleteAllNotes() {
         handler.post { noteDao.deleteAllNotes() }
     }
 
-    fun clearAllData() {
+    override fun clearAllData() {
         handler.post { noteDatabase.clearAllTables() }
     }
 
-    fun resetAllNotifications() {
+    override fun resetAllNotifications() {
         handler.post { noteDao.resetAllNotifications() }
     }
 
-    fun getNoteItems(note: Note): LiveData<String> {
+    override fun getNoteItems(note: Note): LiveData<String> {
         return GetNoteItems(this, noteDao).execute(note).get()
     }
 
