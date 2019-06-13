@@ -179,7 +179,7 @@ class DetailActivity : BaseActivity(), OnPrioritySaveClickListener, DetailEditTe
         detailListAdapter.submitList(notes)
 
         if (!isNoteEmpty() && isExistingNote && currentNote.isNotification) {
-            currentNote.items = notes.toString()
+            currentNote.items = Converters.listToJson(notes as MutableList<String>)
             notificationManager.updateSpecificNotification(currentNote)
         }
 
