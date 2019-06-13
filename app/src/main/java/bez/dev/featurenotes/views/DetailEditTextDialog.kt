@@ -40,7 +40,7 @@ class DetailEditTextDialog(context: Context, listener: OnItemSaveClickListener, 
     }
 
     fun saveMe() {
-        myListener.onTextSaveDialogBtnClick(dialogEditText.text.toString(), position, isAddedItem)
+        myListener.onTextSaveDialogBtnClick(dialogEditText.text.toString().trim(), position, isAddedItem)
     }
 
 

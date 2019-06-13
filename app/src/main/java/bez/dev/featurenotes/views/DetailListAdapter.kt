@@ -34,7 +34,7 @@ class DetailListAdapter internal constructor(myListener: OnDetailItemClickListen
     @SuppressLint("ClickableViewAccessibility")
     override fun onBindViewHolder(detailItemHolder: DetailItemHolder, position: Int) {
         val currentNote = getDetailItemAt(position)
-        detailItemHolder.itemText.text = currentNote
+        detailItemHolder.itemText.text = currentNote.trim()
 
         //VISIBILITY
         detailItemHolder.itemText.isEnabled = mIsEditMode
