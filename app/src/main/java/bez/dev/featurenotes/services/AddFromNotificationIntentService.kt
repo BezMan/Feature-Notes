@@ -20,7 +20,7 @@ import android.content.Intent
 import androidx.core.app.RemoteInput
 import bez.dev.featurenotes.data.Converters
 import bez.dev.featurenotes.data.Note
-import bez.dev.featurenotes.misc.App
+import bez.dev.featurenotes.misc.DInjector
 import bez.dev.featurenotes.misc.NotificationManager
 import bez.dev.featurenotes.misc.Utils
 
@@ -45,7 +45,7 @@ class AddFromNotificationIntentService : IntentService("AddFromNotificationInten
             list.add(0, replyCharSequence.toString().trim())
             note.items = Converters.listToJson(list)
         }
-        App.database.noteDao().update(note) // must update() to notify(), even when empty.
+        DInjector.getRepository().update(note) // must update() to notify(), even when empty.
         if (!Utils.isAppForeground) {
             //must call notify() manually when outside of app, otherwise notification doesn't refresh with new item.
             val notificationManager = NotificationManager(this)
