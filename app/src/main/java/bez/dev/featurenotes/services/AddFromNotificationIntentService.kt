@@ -42,7 +42,7 @@ class AddFromNotificationIntentService : IntentService("AddFromNotificationInten
 
         if (!replyCharSequence.isNullOrBlank()) {
             val list = Converters.jsonToList(note.items)
-            list.add(0, replyCharSequence.toString())
+            list.add(0, replyCharSequence.toString().trim())
             note.items = Converters.listToJson(list)
         }
         App.database.noteDao().update(note) // must update() to notify(), even when empty.
