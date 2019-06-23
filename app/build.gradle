@@ -2,7 +2,7 @@ apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-kapt'
-
+apply plugin: 'com.google.gms.google-services'
 
 android {
     compileSdkVersion 28
@@ -84,6 +84,8 @@ dependencies {
 
     implementation 'com.google.code.gson:gson:2.8.5'
     implementation 'androidx.lifecycle:lifecycle-livedata-ktx:2.2.0-alpha01'
+
+    implementation 'com.google.firebase:firebase-core:16.0.9'
 }
 repositories {
     mavenCentral()
