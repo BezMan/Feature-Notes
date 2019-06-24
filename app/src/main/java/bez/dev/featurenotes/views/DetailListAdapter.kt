@@ -46,6 +46,10 @@ class DetailListAdapter internal constructor(myListener: OnDetailItemClickListen
             val text = getDetailItemAt(position)
             listener.onDetailItemClick(text, position)
         }
+        detailItemHolder.itemText.setOnLongClickListener {
+            val text = getDetailItemAt(position)
+            listener.onDetailItemLongClick(text, position)
+        }
         detailItemHolder.deleteItem.setOnClickListener {
             listener.onDeleteItemClick(position)
         }
@@ -68,6 +72,7 @@ class DetailListAdapter internal constructor(myListener: OnDetailItemClickListen
 
     interface OnDetailItemClickListener {
         fun onDetailItemClick(text: String, position: Int)
+        fun onDetailItemLongClick(text: String, position: Int): Boolean
         fun onDeleteItemClick(position: Int)
     }
 

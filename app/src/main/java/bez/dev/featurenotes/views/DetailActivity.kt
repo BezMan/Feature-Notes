@@ -1,10 +1,14 @@
 package bez.dev.featurenotes.views
 
+import android.content.ClipData
+import android.content.ClipboardManager
+import android.content.Context
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.widget.ScrollView
+import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.DividerItemDecoration
@@ -69,6 +73,19 @@ class DetailActivity : BaseActivity(), OnPrioritySaveClickListener, DetailEditTe
 
     override fun onDetailItemClick(text: String, position: Int) {
         openEditTextDialog(position, text)
+    }
+
+    override fun onDetailItemLongClick(text: String, position: Int): Boolean {
+        copyTextToClipboard(text)
+        return true
+    }
+
+    private fun copyTextToClipboard(text: String) {
+        val clipboard = getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+        val clip = ClipData.newPlainText("item", text)
+        clipboard.primaryClip = clip
+
+        Toast.makeText(this, "copied to clipboard", Toast.LENGTH_SHORT).show()
     }
 
     override fun onDeleteItemClick(position: Int) {
