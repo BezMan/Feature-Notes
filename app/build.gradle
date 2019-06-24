@@ -89,6 +89,8 @@ dependencies {
     implementation 'com.google.firebase:firebase-core:17.0.0'
     // Add dependency
     implementation 'com.crashlytics.sdk.android:crashlytics:2.10.1'
+    // debugImplementation because LeakCanary should only run in debug builds.
+    debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.0-alpha-2'
 }
 repositories {
     mavenCentral()
