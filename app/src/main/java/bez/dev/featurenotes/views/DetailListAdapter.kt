@@ -1,12 +1,14 @@
 package bez.dev.featurenotes.views
 
 import android.annotation.SuppressLint
+import android.content.Context
 import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.ListAdapter
@@ -36,30 +38,37 @@ class DetailListAdapter internal constructor(myListener: OnDetailItemClickListen
         val currentNote = getDetailItemAt(position)
         detailItemHolder.itemText.text = currentNote.trim()
 
-        //VISIBILITY
-        detailItemHolder.itemText.isEnabled = mIsEditMode
+        //do regardless of mode
         detailItemHolder.deleteItem.showOnEditMode(mIsEditMode)
         detailItemHolder.dragItem.showOnEditMode(mIsEditMode)
 
-        //CLICK & DRAG LOGIC
-        detailItemHolder.itemText.setOnClickListener {
-            val text = getDetailItemAt(position)
-            listener.onDetailItemClick(text, position)
-        }
         detailItemHolder.itemText.setOnLongClickListener {
             val text = getDetailItemAt(position)
             listener.onDetailItemLongClick(text, position)
         }
-        detailItemHolder.deleteItem.setOnClickListener {
-            listener.onDeleteItemClick(position)
-        }
-        detailItemHolder.dragItem.setOnTouchListener { _, event ->
-            if (event.actionMasked == MotionEvent.ACTION_DOWN) {
-                touchHelper.startDrag(detailItemHolder)
-            }
-            false
-        }
 
+        if (mIsEditMode) { //ONLY edit mode
+            detailItemHolder.itemText.setTextColor(ContextCompat.getColor(listener as Context, R.color.black))
+
+            detailItemHolder.itemText.setOnClickListener {
+                val text = getDetailItemAt(position)
+                listener.onDetailItemClick(text, position)
+            }
+            detailItemHolder.deleteItem.setOnClickListener {
+                listener.onDeleteItemClick(position)
+            }
+            detailItemHolder.dragItem.setOnTouchListener { _, event ->
+                if (event.actionMasked == MotionEvent.ACTION_DOWN) {
+                    touchHelper.startDrag(detailItemHolder)
+                }
+                false
+            }
+        } else {  //NOT edit mode
+            detailItemHolder.itemText.setTextColor(ContextCompat.getColor(listener as Context, R.color.gray))
+
+            detailItemHolder.itemText.setOnClickListener { }
+
+        }
     }
 
     inner class DetailItemHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
