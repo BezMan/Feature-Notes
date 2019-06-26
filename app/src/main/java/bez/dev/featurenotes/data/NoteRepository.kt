@@ -1,10 +1,10 @@
 package bez.dev.featurenotes.data
 
 import android.os.AsyncTask
-import android.os.Handler
-import android.os.HandlerThread
 import androidx.lifecycle.LiveData
 import bez.dev.featurenotes.misc.App
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 import java.lang.ref.WeakReference
 
 const val KEY_FIRST_RUN = "KEY_FIRST_RUN"
@@ -13,14 +13,9 @@ abstract class NoteRepository : IRepository {
     private val noteDatabase: NoteDatabase = App.database
     private val noteDao: NoteDao = noteDatabase.noteDao()
     val allNotes: LiveData<List<Note>>
-    private val handler: Handler
 
     init {
         allNotes = noteDao.getAllNotesByPriority()
-
-        val handlerThread = HandlerThread("HandlerThread")
-        handlerThread.start()
-        handler = Handler(handlerThread.looper)
     }
 
     abstract fun getSavedNotes()
@@ -31,23 +26,23 @@ abstract class NoteRepository : IRepository {
     }
 
     override fun update(note: Note) {
-        handler.post { noteDao.update(note) }
+        GlobalScope.launch { noteDao.update(note) }
     }
 
     override fun delete(note: Note) {
-        handler.post { noteDao.delete(note) }
+        GlobalScope.launch { noteDao.delete(note) }
     }
 
     override fun deleteAllNotes() {
-        handler.post { noteDao.deleteAllNotes() }
+        GlobalScope.launch { noteDao.deleteAllNotes() }
     }
 
     override fun clearAllData() {
-        handler.post { noteDatabase.clearAllTables() }
+        GlobalScope.launch { noteDatabase.clearAllTables() }
     }
 
     override fun resetAllNotifications() {
-        handler.post { noteDao.resetAllNotifications() }
+        GlobalScope.launch { noteDao.resetAllNotifications() }
     }
 
     override fun getNoteItems(note: Note): LiveData<String> {
