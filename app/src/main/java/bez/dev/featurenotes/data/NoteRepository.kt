@@ -6,7 +6,6 @@ import io.reactivex.Completable
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 
-
 const val KEY_FIRST_RUN = "KEY_FIRST_RUN"
 
 abstract class NoteRepository : IRepository {
