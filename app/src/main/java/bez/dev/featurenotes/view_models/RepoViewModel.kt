@@ -4,11 +4,12 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import bez.dev.featurenotes.data.Note
 import bez.dev.featurenotes.data.NoteRepository
+import io.reactivex.Completable
 
 class RepoViewModel(private val repository: NoteRepository) : ViewModel() {
     val allNotes: LiveData<List<Note>> = repository.allNotes
 
-    fun insert(note: Note): Long {
+    fun insert(note: Note): Completable {
         return repository.insert(note)
     }
 

@@ -19,6 +19,8 @@ import bez.dev.featurenotes.R.*
 import bez.dev.featurenotes.data.Converters
 import bez.dev.featurenotes.data.Note
 import bez.dev.featurenotes.views.DetailPriorityDialog.OnPrioritySaveClickListener
+import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.detail_activity.*
 import kotlinx.android.synthetic.main.detail_activity_toolbar.*
 import java.text.SimpleDateFormat
@@ -37,6 +39,8 @@ class DetailActivity : BaseActivity(), OnPrioritySaveClickListener, DetailEditTe
     private lateinit var currentNote: Note
     private var isExistingNote: Boolean = false
     private lateinit var touchHelper: ItemTouchHelper
+    // RX
+    private val disposable = CompositeDisposable()
 
     private val observer = Observer<String> {
         itemList = Converters.jsonToList(it)
@@ -65,6 +69,11 @@ class DetailActivity : BaseActivity(), OnPrioritySaveClickListener, DetailEditTe
     override fun onStop() {
         super.onStop()
         editTextDialog?.dismiss()
+    }
+
+    override fun onDestroy() {
+        disposable.dispose()
+        super.onDestroy()
     }
 
     private fun initNoteViewModel() {
@@ -251,9 +260,16 @@ class DetailActivity : BaseActivity(), OnPrioritySaveClickListener, DetailEditTe
                 currentNote.priority = priority
                 currentNote.items = listItemsStr
                 repoViewModel.update(currentNote)
-            } else {
+            } else { // new note
                 currentNote = Note(title, priority, listItemsStr)
-                currentNote.id = repoViewModel.insert(currentNote)
+                //adding observer to be disposed onDestroy
+                val completable = repoViewModel.insert(currentNote)
+                disposable.add(completable
+                        .subscribeOn(Schedulers.io())
+//                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe({ /*updateUI.isEnabled = true*/ },
+                                { error -> Toast.makeText(this, "Unable to insert note: $error", Toast.LENGTH_SHORT).show() })
+                )
 
                 isExistingNote = true
             }
