@@ -2,13 +2,12 @@ package bez.dev.featurenotes.data
 
 import androidx.lifecycle.LiveData
 import androidx.room.*
-import io.reactivex.Completable
 
 @Dao
 interface NoteDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insert(note: Note): Completable
+    suspend fun insert(note: Note): Long
 
     @Update(onConflict = OnConflictStrategy.REPLACE)
     fun update(note: Note)

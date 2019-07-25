@@ -1,11 +1,10 @@
 package bez.dev.featurenotes.data
 
 import androidx.lifecycle.LiveData
-import io.reactivex.Completable
 
 interface IRepository {
 
-    fun insert(note: Note): Completable
+    suspend fun insert(note: Note): Long
     fun update(note: Note)
     fun delete(note: Note)
     fun deleteAllNotes()

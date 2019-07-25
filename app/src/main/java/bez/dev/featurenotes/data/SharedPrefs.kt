@@ -15,4 +15,9 @@ object SharedPrefs {
         return preferences.getBoolean(key, defaultVal)
     }
 
+    fun deleteAllPrefs() {
+        val preferences = PreferenceManager.getDefaultSharedPreferences(App.appContext)
+        preferences.edit().clear().apply()
+    }
+
 }

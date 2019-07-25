@@ -19,9 +19,11 @@ import bez.dev.featurenotes.R.*
 import bez.dev.featurenotes.data.Converters
 import bez.dev.featurenotes.data.Note
 import bez.dev.featurenotes.views.DetailPriorityDialog.OnPrioritySaveClickListener
-import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.detail_activity.*
 import kotlinx.android.synthetic.main.detail_activity_toolbar.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -255,10 +257,9 @@ class DetailActivity : BaseActivity(), OnPrioritySaveClickListener, DetailEditTe
             } else { // new note
                 currentNote = Note(title, priority, listItemsStr)
 
-                repoViewModel.insert(currentNote)
-                        .subscribeOn(Schedulers.io())
-                        .subscribe()
-
+                CoroutineScope(Dispatchers.IO).launch {
+                    repoViewModel.insert(currentNote)
+                }
 
                 isExistingNote = true
             }
