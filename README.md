@@ -10,7 +10,7 @@ where the user can add items while other apps are in foreground (playing a video
 - Kotlin language + Kotlin extension function (View visibility). 
 - Architecture Components: MVVM, Room, Live Data, Observing DB changes.
 - Dependency Injection for our Repository (small and hand made).
-- using Rx and Coroutines for necessary threaded DB operations.
+- Using Kotlin Coroutines for necessary asynchronous DB operations.
 - Parcelable Note data class, so we can pass it between Activities.
 - TypeConverter for converting List of objects to a String and back.
 - Database ViewModel - mutual data access thru all activities.

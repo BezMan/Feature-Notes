@@ -259,6 +259,13 @@ class DetailActivity : BaseActivity(), OnPrioritySaveClickListener, DetailEditTe
 
                 CoroutineScope(Dispatchers.IO).launch {
                     repoViewModel.insert(currentNote)
+
+                    //Coroutine example - return val to Main thread
+//                    val id = repoViewModel.insert(currentNote)
+//                    delay(2000)
+//                    withContext(Dispatchers.Main){
+//                        Toast.makeText(this@DetailActivity, "id: $id", Toast.LENGTH_SHORT).show()
+//                    }
                 }
 
                 isExistingNote = true
