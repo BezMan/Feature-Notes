@@ -8,6 +8,12 @@
         app:showAsAction="always" />
 
     <item
+        android:id="@+id/share_note"
+        android:icon="@drawable/ic_share"
+        android:title="Share"
+        app:showAsAction="ifRoom" />
+
+    <item
         android:id="@+id/edit_note"
         android:icon="@drawable/ic_edit_24dp"
         android:title="Edit"
