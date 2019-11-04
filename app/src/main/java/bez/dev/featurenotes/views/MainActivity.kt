@@ -8,14 +8,16 @@ import android.widget.ImageView
 import android.widget.Toast
 import androidx.appcompat.widget.PopupMenu
 import androidx.lifecycle.Observer
-import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import bez.dev.featurenotes.R
 import bez.dev.featurenotes.data.Note
+import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.main_activity.*
 import kotlinx.android.synthetic.main.main_activity_toolbar.*
 import kotlinx.android.synthetic.main.no_notes_layout.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 
 class MainActivity : BaseActivity(), MainListAdapter.OnItemClickListener {
@@ -46,22 +48,20 @@ class MainActivity : BaseActivity(), MainListAdapter.OnItemClickListener {
         //RECYCLER
         recycler_view.layoutManager = LinearLayoutManager(this)
         recycler_view.setHasFixedSize(true)
+    }
 
-        //GESTURES
-        ItemTouchHelper(object : ItemTouchHelper.SimpleCallback(
-                0,
-                ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT) {
 
-            override fun onMove(recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder, viewHolder1: RecyclerView.ViewHolder): Boolean {
-                return false
-            }
+    private fun showUndoDelete(note: Note) {
+        val snack = Snackbar.make(main_layout, note.title + " - note deleted", Snackbar.LENGTH_INDEFINITE)
 
-            override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
-                val note = mainListAdapter.getNoteAt(viewHolder.adapterPosition)
-                deleteNote(note)
-            }
-        }).attachToRecyclerView(recycler_view)
-
+        snack.setDuration(8000)
+                .setAction("UNDO") {
+                    // execute when UNDO is clicked
+                    CoroutineScope(Dispatchers.Default).launch {
+                        repoViewModel.insert(note)
+                    }
+                }
+        snack.show()
     }
 
 
@@ -130,6 +130,7 @@ class MainActivity : BaseActivity(), MainListAdapter.OnItemClickListener {
                 }
                 R.id.main_overflow_note_delete -> {
                     deleteNote(note)
+                    showUndoDelete(note)
                 }
                 R.id.main_overflow_note_notification -> {
                     noteHolder.checkboxToggleNotification.performClick()

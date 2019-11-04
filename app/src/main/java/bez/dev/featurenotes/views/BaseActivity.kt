@@ -2,7 +2,6 @@ package bez.dev.featurenotes.views
 
 import android.os.Bundle
 import android.view.View
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProviders
 import bez.dev.featurenotes.data.Note
@@ -33,7 +32,6 @@ abstract class BaseActivity : AppCompatActivity() {
     protected fun deleteNote(note: Note) {
         notificationManager.cancelNotificationById(note.id)
         repoViewModel.delete(note)
-        Toast.makeText(this, "Note deleted", Toast.LENGTH_SHORT).show()
     }
 
 
