@@ -10,6 +10,7 @@ import android.view.MenuItem
 import android.view.View
 import android.widget.ScrollView
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.DividerItemDecoration
@@ -231,7 +232,7 @@ class DetailActivity : BaseActivity(), OnPrioritySaveClickListener, DetailEditTe
             isEditMode ->
                 exitEditMode()
             isNoteEmpty() ->
-                checkEmptyDiscard()
+                checkDiscard()
             isTitleBlank() ->
                 fillTitleWithTimestamp()
             else ->
@@ -263,9 +264,19 @@ class DetailActivity : BaseActivity(), OnPrioritySaveClickListener, DetailEditTe
 
     }
 
-    private fun checkEmptyDiscard() {
-        deleteNote(currentNote)
-        finish()
+    private fun checkDiscard() {
+        val builder = AlertDialog.Builder(this)
+        builder.setMessage("empty note will be discarded.. \n Are you sure?")
+                .setPositiveButton("Discard") { dialog, id ->
+                    finish()
+                    deleteNote(currentNote)
+                }
+                .setNegativeButton("Cancel") { dialog, id ->
+                    dialog.dismiss()
+                }
+
+        val alert = builder.create()
+        alert.show()
     }
 
     private fun fillTitleWithTimestamp() {
