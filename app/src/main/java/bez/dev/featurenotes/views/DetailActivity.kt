@@ -21,6 +21,7 @@ import bez.dev.featurenotes.R.*
 import bez.dev.featurenotes.data.Converters
 import bez.dev.featurenotes.data.Note
 import bez.dev.featurenotes.views.DetailPriorityDialog.OnPrioritySaveClickListener
+import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.detail_activity.*
 import kotlinx.android.synthetic.main.detail_activity_toolbar.*
 import kotlinx.coroutines.CoroutineScope
@@ -94,17 +95,28 @@ class DetailActivity : BaseActivity(), OnPrioritySaveClickListener, DetailEditTe
     }
 
     override fun onDeleteItemClick(position: Int) {
-        removeItemAtPosition(position)
+        val strText = deleteItemAtPosition(position)
         refreshRecyclerView(itemList)
         detailListAdapter.notifyItemRemoved(position)
+        showUndoDelete(position, strText)
     }
+
+    private fun showUndoDelete(position: Int, strText: String) {
+        val snack = Snackbar.make(detail_layout, "item deleted", Snackbar.LENGTH_INDEFINITE)
+
+        snack.setDuration(8000)
+                .setAction("UNDO") {
+                    // execute when UNDO is clicked
+                    addItemAtPosition(position, strText)
+                }
+        snack.show()
+    }
+
 
 
     override fun onTextSaveDialogBtnClick(newText: String, position: Int, isAddedItem: Boolean) {
         if (isAddedItem) { //NEW
-            itemList.add(position, newText)
-            refreshRecyclerView(itemList)
-            detailListAdapter.notifyItemInserted(position)
+            addItemAtPosition(position, newText)
 
             //scroll to show bottom , if we added to bottom
             if (position > 1) {
@@ -118,13 +130,19 @@ class DetailActivity : BaseActivity(), OnPrioritySaveClickListener, DetailEditTe
         }
         //remove item if empty
         if (newText.isBlank()) {
-            removeItemAtPosition(position)
+            deleteItemAtPosition(position)
         }
 
     }
 
-    private fun removeItemAtPosition(position: Int) {
-        itemList.removeAt(position)
+    private fun addItemAtPosition(position: Int, str: String) {
+        itemList.add(position, str)
+        refreshRecyclerView(itemList)
+        detailListAdapter.notifyItemInserted(position)
+    }
+
+    private fun deleteItemAtPosition(position: Int): String {
+        return itemList.removeAt(position)
     }
 
     private fun openEditTextDialog(position: Int = 0, text: String = "") {
