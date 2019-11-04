@@ -232,7 +232,7 @@ class DetailActivity : BaseActivity(), OnPrioritySaveClickListener, DetailEditTe
             isEditMode ->
                 exitEditMode()
             isNoteEmpty() ->
-                checkDiscard()
+                checkDiscardEmpty()
             isTitleBlank() ->
                 fillTitleWithTimestamp()
             else ->
@@ -264,7 +264,7 @@ class DetailActivity : BaseActivity(), OnPrioritySaveClickListener, DetailEditTe
 
     }
 
-    private fun checkDiscard() {
+    private fun checkDiscardEmpty() {
         val builder = AlertDialog.Builder(this)
         builder.setMessage("empty note will be discarded.. \n Are you sure?")
                 .setPositiveButton("Discard") { dialog, id ->

@@ -5,7 +5,7 @@ import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.ImageView
-import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.widget.PopupMenu
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -24,6 +24,7 @@ class MainActivity : BaseActivity(), MainListAdapter.OnItemClickListener {
 
     private lateinit var mainListAdapter: MainListAdapter
     private var noteList: List<Note> = ArrayList()
+    private lateinit var restorePoint: List<Note>
 
     private val observer = Observer<List<Note>> {
         noteList = it
@@ -48,20 +49,6 @@ class MainActivity : BaseActivity(), MainListAdapter.OnItemClickListener {
         //RECYCLER
         recycler_view.layoutManager = LinearLayoutManager(this)
         recycler_view.setHasFixedSize(true)
-    }
-
-
-    private fun showUndoDelete(note: Note) {
-        val snack = Snackbar.make(main_layout, note.title + " - note deleted", Snackbar.LENGTH_INDEFINITE)
-
-        snack.setDuration(8000)
-                .setAction("UNDO") {
-                    // execute when UNDO is clicked
-                    CoroutineScope(Dispatchers.Default).launch {
-                        repoViewModel.insert(note)
-                    }
-                }
-        snack.show()
     }
 
 
@@ -91,26 +78,25 @@ class MainActivity : BaseActivity(), MainListAdapter.OnItemClickListener {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        return when (item.itemId) {
+        when (item.itemId) {
             R.id.main_menu_add_note -> {
                 addNote()
-                true
             }
             R.id.main_menu_reset_all_notifications -> {
                 resetAllNotifications()
-                true
             }
             R.id.main_menu_delete_all_notes -> {
-                deleteNotes()
-                true
+                checkDeleteAllNotes()
             }
-
             else -> super.onOptionsItemSelected(item)
         }
+        return true
     }
 
     private fun resetAllNotifications() {
-        repoViewModel.resetAllNotifications()
+        if (noteList.isNotEmpty()) {
+            repoViewModel.resetAllNotifications()
+        }
     }
 
     override fun onNoteItemTextClick(note: Note) {
@@ -165,12 +151,56 @@ class MainActivity : BaseActivity(), MainListAdapter.OnItemClickListener {
         startActivity(intent)
     }
 
-    private fun deleteNotes() {
-        if (!noteList.isNullOrEmpty()) {
-            Toast.makeText(this, "All notes deleted", Toast.LENGTH_SHORT).show()
-            repoViewModel.deleteAllNotes()
+
+    private fun checkDeleteAllNotes() {
+        if (noteList.isNotEmpty()) {
+            restorePoint = noteList
+
+            val builder = AlertDialog.Builder(this)
+            builder.setMessage("All notes will be deleted.. \n Are you sure?")
+                    .setPositiveButton("Yes") { dialog, id ->
+                        repoViewModel.deleteAllNotes()
+                        showUndoDeleteAllNotes(restorePoint)
+                    }
+                    .setNegativeButton("Cancel") { dialog, id ->
+                        dialog.dismiss()
+                    }
+
+            val alert = builder.create()
+            alert.show()
         }
     }
+
+
+    private fun showUndoDelete(note: Note) {
+        val snack = Snackbar.make(main_layout, note.title + " - note deleted", Snackbar.LENGTH_INDEFINITE)
+
+        snack.setDuration(8000)
+                .setAction("UNDO") {
+                    // execute when UNDO is clicked
+                    CoroutineScope(Dispatchers.Default).launch {
+                        repoViewModel.insert(note)
+                    }
+                }
+        snack.show()
+    }
+
+
+    private fun showUndoDeleteAllNotes(restorePoint: List<Note>) {
+        val snack = Snackbar.make(main_layout, "deleted all notes", Snackbar.LENGTH_INDEFINITE)
+
+        snack.setDuration(8000)
+                .setAction("UNDO") {
+                    // execute when UNDO is clicked
+                    for (note: Note in restorePoint) {
+                        CoroutineScope(Dispatchers.Default).launch {
+                            repoViewModel.insert(note)
+                        }
+                    }
+                }
+        snack.show()
+    }
+
 
 
 }

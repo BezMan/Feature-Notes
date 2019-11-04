@@ -14,7 +14,7 @@ where the user can add items while other apps are in foreground (playing a video
 - Parcelable Note data class, so we can pass it between Activities.
 - TypeConverter for converting List of objects to a String and back.
 - Database ViewModel - mutual data access thru all activities.
-- ItemTouchHelper callbacks for gesture detection: swipe + drag and drop.
+- ItemTouchHelper callbacks for gesture detection: drag and drop.
 - Custom Views (AlertDialog) managing their own UI setup and lifecycle.
 - Toolbar layouts containing menu items in conjunction with custom menu layouts.
 - Data persistence, so we don’t lose data, even when task is removed.
