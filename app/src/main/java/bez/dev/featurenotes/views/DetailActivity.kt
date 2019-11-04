@@ -64,7 +64,6 @@ class DetailActivity : BaseActivity(), OnPrioritySaveClickListener, DetailEditTe
             editTextDialog?.saveMe()
 
         }
-        saveNote()
     }
 
     override fun onStop() {
@@ -228,63 +227,63 @@ class DetailActivity : BaseActivity(), OnPrioritySaveClickListener, DetailEditTe
 
 
     override fun onBackPressed() {
-        if (isEditMode) {
-            exitEditMode()
-        } else {
-            super.onBackPressed()
+        when {
+            isEditMode ->
+                exitEditMode()
+            isNoteEmpty() ->
+                checkEmptyDiscard()
+            isTitleBlank() ->
+                fillTitleWithTimestamp()
+            else ->
+                super.onBackPressed()
         }
     }
 
 
     private fun saveNote() {
 
-        if (isNoteEmpty()) {
-            if (isExistingNote) {
-                deleteNote(currentNote)
+        var title = getNoteTitle().toString()
+        val priority = mPriority
+        val listItemsStr = Converters.listToJson(itemList)
+
+        if (isExistingNote) {
+            currentNote.title = title
+            currentNote.priority = priority
+            currentNote.items = listItemsStr
+        } else { // create new note
+            currentNote = Note(title, priority, listItemsStr)
+
+            CoroutineScope(Dispatchers.Default).launch {
+                currentNote.id = repoViewModel.insert(currentNote)
             }
-        } else {
-
-            var title = getNoteTitle().toString()
-            val priority = mPriority
-            val listItemsStr = Converters.listToJson(itemList)
-
-            if (title.isBlank()) { //only title is empty
-                title = getTimeStamp()
-            }
-            if (isExistingNote) {
-                currentNote.title = title
-                currentNote.priority = priority
-                currentNote.items = listItemsStr
-                repoViewModel.update(currentNote)
-            } else { // new note
-                currentNote = Note(title, priority, listItemsStr)
-
-                CoroutineScope(Dispatchers.IO).launch {
-                    repoViewModel.insert(currentNote)
-
-                    //Coroutine example - return val to Main thread
-//                    val id = repoViewModel.insert(currentNote)
-//                    delay(2000)
-//                    withContext(Dispatchers.Main){
-//                        Toast.makeText(this@DetailActivity, "id: $id", Toast.LENGTH_SHORT).show()
-//                    }
-                }
-
-                isExistingNote = true
-            }
-
+            isExistingNote = true
         }
+        //update, whether an existing/new note
+        repoViewModel.update(currentNote)
 
     }
 
+    private fun checkEmptyDiscard() {
+        deleteNote(currentNote)
+        finish()
+    }
+
+    private fun fillTitleWithTimestamp() {
+        currentNote.title = getTimeStamp()
+        repoViewModel.update(currentNote) // thinking this must happen only after we inserted the new item already
+        finish()
+    }
+
     private fun isNoteEmpty() = getNoteTitle().isBlank() && itemList.isNullOrEmpty()
+
+    private fun isTitleBlank() = getNoteTitle().isBlank()
 
     private fun getNoteTitle(): CharSequence {
         return edit_text_title.text
     }
 
     private fun getTimeStamp(): String {
-        val formatter = SimpleDateFormat("h:mm a, d MMM", Locale.getDefault())
+        val formatter = SimpleDateFormat("MMM d, h:mm a", Locale.getDefault())
         return formatter.format(Date(System.currentTimeMillis()))
     }
 
@@ -322,6 +321,8 @@ class DetailActivity : BaseActivity(), OnPrioritySaveClickListener, DetailEditTe
         menuShare?.isVisible = true
 
         refreshRecyclerView(itemList)
+        //saving frequently so we can SHARE most updated note items
+        saveNote()
     }
 
 
@@ -330,10 +331,11 @@ class DetailActivity : BaseActivity(), OnPrioritySaveClickListener, DetailEditTe
         menuPriorityItem = menu.findItem(id.edit_priority)
         menuShare = menu.findItem(id.share_note)
 
-        if (!isExistingNote) { //NEW
+        if (!isExistingNote) { //NEW note - init menu icons
             menuEditItem?.setIcon(drawable.ic_close)
             mPriority = resources.getInteger(integer.default_priority)
             menuPriorityItem?.title = mPriority.toString()
+            menuShare?.isVisible = false
         }
         return super.onPrepareOptionsMenu(menu)
     }
