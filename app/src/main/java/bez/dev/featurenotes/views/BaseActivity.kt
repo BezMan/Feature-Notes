@@ -3,7 +3,7 @@ package bez.dev.featurenotes.views
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.ViewModelProviders
+import androidx.lifecycle.ViewModelProvider
 import bez.dev.featurenotes.data.Note
 import bez.dev.featurenotes.misc.DInjector
 import bez.dev.featurenotes.misc.NotificationManager
@@ -25,7 +25,7 @@ abstract class BaseActivity : AppCompatActivity() {
     private fun doMutual() {
         supportActionBar?.setDisplayShowTitleEnabled(false)
         notificationManager = NotificationManager(this)
-        repoViewModel = ViewModelProviders.of(this, RepoViewModelFactory(DInjector.getRepository())).get(RepoViewModel::class.java)
+        repoViewModel = ViewModelProvider(this, RepoViewModelFactory(DInjector.getRepository())).get(RepoViewModel::class.java)
     }
 
 

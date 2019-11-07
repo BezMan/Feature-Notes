@@ -98,7 +98,7 @@ dependencies {
 //    implementation 'androidx.room:room-rxjava2:2.2.1'
 
     // debugImplementation because LeakCanary should only run in debug builds.
-    debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.0-alpha-2'
+    debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.0-beta-3'
 
     implementation 'com.google.firebase:firebase-core:17.2.1'
 

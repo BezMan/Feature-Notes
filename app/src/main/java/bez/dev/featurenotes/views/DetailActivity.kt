@@ -89,7 +89,7 @@ class DetailActivity : BaseActivity(), OnPrioritySaveClickListener, DetailEditTe
     private fun copyTextToClipboard(text: String) {
         val clipboard = getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
         val clip = ClipData.newPlainText("item", text)
-        clipboard.primaryClip = clip
+        clipboard.setPrimaryClip(clip)
 
         Toast.makeText(this, "copied to clipboard", Toast.LENGTH_SHORT).show()
     }
