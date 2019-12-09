@@ -26,7 +26,7 @@ class DetailPriorityDialog(context: Context, private val mPriority: Int) : Dialo
 
         savePriorityBtn.setOnClickListener {
             val newPriority = numberPicker.value
-            myListener!!.onPrioritySaveBtnClick(newPriority)
+            myListener?.onPrioritySaveBtnClick(newPriority)
             dismiss()
         }
     }
