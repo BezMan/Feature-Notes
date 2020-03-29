@@ -26,8 +26,8 @@ import bez.dev.featurenotes.misc.Utils
 
 class AddFromNotificationIntentService : IntentService("AddFromNotificationIntentService") {
 
-    override fun onHandleIntent(intent: Intent) {
-        if (intent.action == ACTION_REPLY) {
+    override fun onHandleIntent(intent: Intent?) {
+        if (intent?.action == ACTION_REPLY) {
             val note = intent.getParcelableExtra(NOTIFICATION_NOTE) as Note
             val message = RemoteInput.getResultsFromIntent(intent)?.getCharSequence(EXTRA_REPLY)
 
