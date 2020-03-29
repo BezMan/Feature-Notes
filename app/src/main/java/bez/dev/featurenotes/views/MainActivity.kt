@@ -141,6 +141,10 @@ class MainActivity : BaseActivity(), MainListAdapter.OnItemClickListener {
     }
 
 
+    fun addNote(view: View) {
+        addNote()
+    }
+
     private fun addNote() {
         val intent = Intent(this, DetailActivity::class.java)
         startActivity(intent)

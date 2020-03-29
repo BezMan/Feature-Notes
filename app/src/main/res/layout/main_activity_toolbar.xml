@@ -13,11 +13,11 @@
     app:contentInsetLeft="0dp"
     app:contentInsetRight="0dp"
     app:contentInsetStart="0dp"
+    android:background="@color/colorPrimary"
     app:contentInsetStartWithNavigation="0dp"
     tools:showIn="@layout/main_activity">
 
     <TextView
-        android:id="@+id/editSearch"
         style="@android:style/TextAppearance.Large.Inverse"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

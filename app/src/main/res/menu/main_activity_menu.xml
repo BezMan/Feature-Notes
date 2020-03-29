@@ -2,6 +2,11 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
+    <item
+        android:id="@+id/main_menu_add_note"
+        android:icon="@drawable/ic_add"
+        android:title="Add Note"
+        app:showAsAction="never" />
 
     <item
         android:id="@+id/main_menu_reset_all_notifications"
@@ -13,10 +18,5 @@
         android:title="Delete all notes"
         app:showAsAction="never" />
 
-    <item
-        android:id="@+id/main_menu_add_note"
-        android:icon="@drawable/ic_add"
-        android:title="Add Note"
-        app:showAsAction="always" />
 
 </menu>
