@@ -11,7 +11,7 @@ import kotlinx.android.parcel.Parcelize
 @Entity(tableName = "note_table")
 data class Note(var title: String
                 , var priority: Int = R.integer.default_priority
-                , var items: String = ""
+                , var items: MutableList<NoteItem>
                 , var isNotification: Boolean = false
                 , var numItems: Int = 0
                 , var color: Int = 0
@@ -27,4 +27,17 @@ data class Note(var title: String
         return "title: $title, items: $items\n"
     }
 }
+
+
+@Parcelize
+class NoteItem (var itemText: String, var isStriked: Boolean = false)
+    : Parcelable {
+
+    override fun toString(): String {
+        return "itemText: $itemText , isStriked: $isStriked\n"
+    }
+
+}
+
+
 

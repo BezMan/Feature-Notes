@@ -2,6 +2,7 @@ package bez.dev.featurenotes.data
 
 import androidx.room.TypeConverter
 import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
 
 class Converters {
 
@@ -9,21 +10,15 @@ class Converters {
 
         @TypeConverter
         @JvmStatic
-        fun listToJson(value: MutableList<String>): String {
+        fun listToJson(value: MutableList<NoteItem>): String {
             return Gson().toJson(value)
         }
 
         @TypeConverter
         @JvmStatic
-        fun jsonToList(value: String?): MutableList<String> {
-            var objects: Array<String> = emptyArray()
-            try {
-                objects = Gson().fromJson(value, Array<String>::class.java)
-            } catch (t: Throwable) {
-
-            } finally {
-                return objects.toMutableList()
-            }
+        fun jsonToList(value: String?): MutableList<NoteItem> {
+            val type = object : TypeToken<MutableList<NoteItem>?>() {}.type
+            return Gson().fromJson(value, type)
         }
 
     }

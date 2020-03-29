@@ -24,7 +24,7 @@ interface NoteDao {
     @Query("SELECT * FROM note_table ORDER BY priority DESC")
     fun getAllNotesByPriority(): LiveData<List<Note>>
 
-    @Query("SELECT items FROM note_table WHERE id = :noteId")
-    fun getNoteItems(noteId: Long): LiveData<String>
+    @Query("SELECT * FROM note_table WHERE id = :noteId")
+    fun getNote(noteId: Long): LiveData<Note>
 }
 
