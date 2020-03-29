@@ -28,7 +28,7 @@
                 android:id="@+id/recycler_view_detail"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                tools:listitem="@layout/main_activity_list_item" />
+                tools:listitem="@layout/detail_activity_list_item" />
 
             <include
                 android:id="@+id/bottom_add_item_btn"

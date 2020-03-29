@@ -21,6 +21,7 @@ import bez.dev.featurenotes.R.*
 import bez.dev.featurenotes.data.Converters
 import bez.dev.featurenotes.data.Note
 import bez.dev.featurenotes.views.DetailPriorityDialog.OnPrioritySaveClickListener
+import bez.dev.featurenotes.views.MainActivity.Companion.EXTRA_NOTE
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.detail_activity.*
 import kotlinx.android.synthetic.main.detail_activity_toolbar.*
@@ -89,7 +90,7 @@ class DetailActivity : BaseActivity(), OnPrioritySaveClickListener, DetailEditTe
     private fun copyTextToClipboard(text: String) {
         val clipboard = getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
         val clip = ClipData.newPlainText("item", text)
-        clipboard.primaryClip = clip
+        clipboard.setPrimaryClip(clip)
 
         Toast.makeText(this, "copied to clipboard", Toast.LENGTH_SHORT).show()
     }

@@ -21,7 +21,7 @@ abstract class NoteDatabase : RoomDatabase() {
         private val roomCallback = object : RoomDatabase.Callback() {
             override fun onCreate(db: SupportSQLiteDatabase) {
                 super.onCreate(db)
-                instance!!.noteDao()
+                instance?.noteDao()
             }
         }
 
