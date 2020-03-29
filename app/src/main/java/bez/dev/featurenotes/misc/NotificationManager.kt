@@ -15,7 +15,6 @@ import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import androidx.core.app.RemoteInput
 import androidx.core.content.ContextCompat
-import bez.dev.featurenotes.data.Converters
 import bez.dev.featurenotes.data.Note
 import bez.dev.featurenotes.services.AddFromNotificationIntentService
 import bez.dev.featurenotes.views.MainActivity
@@ -126,10 +125,10 @@ class NotificationManager(context: Context) {
 //        inboxStyle.setSummaryText("best notes app :) ")
 //        inboxStyle.setBigContentTitle("notes")
 
-        val list = Converters.jsonToList(note.items)
+        val list = note.items
 
         for (i in 0 until list.size) {
-            inboxStyle.addLine(list[i])
+            inboxStyle.addLine(list[i].itemText)
         }
 
         return setBodyNotification(note, replyAction, inboxStyle)

@@ -14,16 +14,17 @@ import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import bez.dev.featurenotes.R
+import bez.dev.featurenotes.data.NoteItem
 import kotlinx.android.synthetic.main.detail_activity_list_item.view.*
 
-class DetailListAdapter internal constructor(myListener: OnDetailItemClickListener, myItemTouchHelper: ItemTouchHelper, editMode: Boolean) : ListAdapter<String, DetailListAdapter.DetailItemHolder>(DIFF_CALLBACK) {
+class DetailListAdapter internal constructor(myListener: OnDetailItemClickListener, myItemTouchHelper: ItemTouchHelper, editMode: Boolean) : ListAdapter<NoteItem, DetailListAdapter.DetailItemHolder>(DIFF_CALLBACK) {
 
     private var mIsEditMode: Boolean = editMode
     private var touchHelper: ItemTouchHelper = myItemTouchHelper
     private var listener: OnDetailItemClickListener = myListener
 
 
-    internal fun getDetailItemAt(position: Int): String {
+    internal fun getDetailItemAt(position: Int): NoteItem {
         return getItem(position)
     }
 
@@ -36,23 +37,21 @@ class DetailListAdapter internal constructor(myListener: OnDetailItemClickListen
     @SuppressLint("ClickableViewAccessibility")
     override fun onBindViewHolder(detailItemHolder: DetailItemHolder, position: Int) {
         val currentNote = getDetailItemAt(position)
-        detailItemHolder.itemText.text = currentNote.trim()
+        detailItemHolder.itemText.text = currentNote.itemText.trim()
 
         //do regardless of mode
         detailItemHolder.deleteItem.showOnEditMode(mIsEditMode)
         detailItemHolder.dragItem.showOnEditMode(mIsEditMode)
 
         detailItemHolder.itemText.setOnLongClickListener {
-            val text = getDetailItemAt(position)
-            listener.onDetailItemLongClick(text, position)
+            listener.onDetailItemLongClick(currentNote.itemText, position)
         }
 
         if (mIsEditMode) { //ONLY edit mode
             detailItemHolder.itemText.setTextColor(ContextCompat.getColor(listener as Context, R.color.black))
 
             detailItemHolder.itemText.setOnClickListener {
-                val text = getDetailItemAt(position)
-                listener.onDetailItemClick(text, position)
+                listener.onDetailItemClick(currentNote.itemText, position)
             }
             detailItemHolder.deleteItem.setOnClickListener {
                 listener.onDeleteItemClick(position)
@@ -88,12 +87,12 @@ class DetailListAdapter internal constructor(myListener: OnDetailItemClickListen
 
     companion object {
 
-        private val DIFF_CALLBACK = object : DiffUtil.ItemCallback<String>() {
-            override fun areItemsTheSame(oldItem: String, newItem: String): Boolean {
+        private val DIFF_CALLBACK = object : DiffUtil.ItemCallback<NoteItem>() {
+            override fun areItemsTheSame(oldItem: NoteItem, newItem: NoteItem): Boolean {
                 return false
             }
 
-            override fun areContentsTheSame(oldNote: String, newNote: String): Boolean {
+            override fun areContentsTheSame(oldNote: NoteItem, newNote: NoteItem): Boolean {
                 return false
             }
         }

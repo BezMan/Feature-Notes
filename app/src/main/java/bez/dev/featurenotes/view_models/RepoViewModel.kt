@@ -28,7 +28,7 @@ class RepoViewModel(private val repository: NoteRepository) : ViewModel() {
         repository.resetAllNotifications()
     }
 
-    fun getNoteItems(note: Note): LiveData<String> {
-        return repository.getNoteItems(note)
+    fun getNote(note: Note): LiveData<Note> {
+        return repository.getNote(note)
     }
 }

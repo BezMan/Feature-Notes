@@ -18,8 +18,8 @@ package bez.dev.featurenotes.services
 import android.app.IntentService
 import android.content.Intent
 import androidx.core.app.RemoteInput
-import bez.dev.featurenotes.data.Converters
 import bez.dev.featurenotes.data.Note
+import bez.dev.featurenotes.data.NoteItem
 import bez.dev.featurenotes.misc.DInjector
 import bez.dev.featurenotes.misc.NotificationManager
 import bez.dev.featurenotes.misc.Utils
@@ -41,9 +41,7 @@ class AddFromNotificationIntentService : IntentService("AddFromNotificationInten
     private fun handleActionReply(note: Note, replyCharSequence: CharSequence?) {
 
         if (!replyCharSequence.isNullOrBlank()) {
-            val list = Converters.jsonToList(note.items)
-            list.add(0, replyCharSequence.toString().trim())
-            note.items = Converters.listToJson(list)
+            note.items.add(0, NoteItem(replyCharSequence.toString().trim()) )
         }
         DInjector.getRepository().update(note) // must update() to notify(), even when empty.
         if (!Utils.isAppForeground) {

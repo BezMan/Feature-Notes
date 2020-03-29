@@ -18,8 +18,8 @@ import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import bez.dev.featurenotes.R.*
-import bez.dev.featurenotes.data.Converters
 import bez.dev.featurenotes.data.Note
+import bez.dev.featurenotes.data.NoteItem
 import bez.dev.featurenotes.views.DetailPriorityDialog.OnPrioritySaveClickListener
 import bez.dev.featurenotes.views.MainActivity.Companion.EXTRA_NOTE
 import com.google.android.material.snackbar.Snackbar
@@ -41,13 +41,13 @@ class DetailActivity : BaseActivity(), OnPrioritySaveClickListener, DetailEditTe
     private var mPriority: Int = 0
     private lateinit var detailListAdapter: DetailListAdapter
     private var editTextDialog: DetailEditTextDialog? = null
-    private var itemList: MutableList<String> = mutableListOf()
+    private var itemList: MutableList<NoteItem> = mutableListOf()
     private lateinit var currentNote: Note
     private var isExistingNote: Boolean = false
     private lateinit var touchHelper: ItemTouchHelper
 
-    private val observer = Observer<String> {
-        itemList = Converters.jsonToList(it)
+    private val observer = Observer<Note> {
+        itemList = it.items
         refreshRecyclerView(itemList)
     }
 
@@ -75,7 +75,7 @@ class DetailActivity : BaseActivity(), OnPrioritySaveClickListener, DetailEditTe
     }
 
     private fun initNoteViewModel() {
-        repoViewModel.getNoteItems(currentNote).observe(this, observer)
+        repoViewModel.getNote(currentNote).observe(this, observer)
     }
 
     override fun onDetailItemClick(text: String, position: Int) {
@@ -124,7 +124,7 @@ class DetailActivity : BaseActivity(), OnPrioritySaveClickListener, DetailEditTe
                 nested_scroll_view.post { nested_scroll_view.fullScroll(ScrollView.FOCUS_DOWN) }
             }
         } else { // EDIT
-            itemList[position] = newText
+            itemList[position] = NoteItem(newText)
             refreshRecyclerView(itemList)
             detailListAdapter.notifyItemChanged(position)
 
@@ -137,13 +137,13 @@ class DetailActivity : BaseActivity(), OnPrioritySaveClickListener, DetailEditTe
     }
 
     private fun addItemAtPosition(position: Int, str: String) {
-        itemList.add(position, str)
+        itemList.add(position, NoteItem(str))
         refreshRecyclerView(itemList)
         detailListAdapter.notifyItemInserted(position)
     }
 
     private fun deleteItemAtPosition(position: Int): String {
-        return itemList.removeAt(position)
+        return itemList.removeAt(position).itemText
     }
 
     private fun openEditTextDialog(position: Int = 0, text: String = "") {
@@ -214,13 +214,13 @@ class DetailActivity : BaseActivity(), OnPrioritySaveClickListener, DetailEditTe
     }
 
 
-    private fun refreshRecyclerView(notes: List<String>?) {
+    private fun refreshRecyclerView(notes: MutableList<NoteItem>?) {
         detailListAdapter = DetailListAdapter(this, touchHelper, isEditMode)
         recycler_view_detail.adapter = detailListAdapter
         detailListAdapter.submitList(notes)
 
         if (!isNoteEmpty() && isExistingNote && currentNote.isNotification) {
-            currentNote.items = Converters.listToJson(notes as MutableList<String>)
+            currentNote.items = notes as MutableList<NoteItem>
             notificationManager.updateSpecificNotification(currentNote)
         }
 
@@ -233,7 +233,7 @@ class DetailActivity : BaseActivity(), OnPrioritySaveClickListener, DetailEditTe
             currentNote = intent.getParcelableExtra(EXTRA_NOTE) as Note
 
             val itemsStr = currentNote.items
-            itemList = Converters.jsonToList(itemsStr)
+            itemList = itemsStr
 
             edit_text_title.setText(currentNote.title)
             mPriority = currentNote.priority
@@ -264,14 +264,13 @@ class DetailActivity : BaseActivity(), OnPrioritySaveClickListener, DetailEditTe
 
         var title = getNoteTitle().toString()
         val priority = mPriority
-        val listItemsStr = Converters.listToJson(itemList)
 
         if (isExistingNote) {
             currentNote.title = title
             currentNote.priority = priority
-            currentNote.items = listItemsStr
+            currentNote.items = itemList
         } else { // create new note
-            currentNote = Note(title, priority, listItemsStr)
+            currentNote = Note(title, priority, itemList)
 
             CoroutineScope(Dispatchers.Default).launch {
                 currentNote.id = repoViewModel.insert(currentNote)

@@ -47,8 +47,8 @@ abstract class NoteRepository : IRepository {
         repoScope.launch { noteDao.resetAllNotifications() }
     }
 
-    override fun getNoteItems(note: Note): LiveData<String> {
-        return noteDao.getNoteItems(note.id)
+    override fun getNote(note: Note): LiveData<Note> {
+        return noteDao.getNote(note.id)
     }
 
 }
