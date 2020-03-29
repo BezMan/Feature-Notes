@@ -1,7 +1,6 @@
 package bez.dev.featurenotes.views
 
 import android.os.Bundle
-import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import bez.dev.featurenotes.data.Note
@@ -32,20 +31,6 @@ abstract class BaseActivity : AppCompatActivity() {
     protected fun deleteNote(note: Note) {
         notificationManager.cancelNotificationById(note.id)
         repoViewModel.delete(note)
-    }
-
-
-    companion object {
-        const val EXTRA_NOTE = "EXTRA_NOTE"
-    }
-
-
-    fun View.toggleShowView(show: Boolean) {
-        visibility = if (show) {
-            View.VISIBLE
-        } else {
-            View.GONE
-        }
     }
 
 

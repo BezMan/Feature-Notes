@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
 import android.widget.ImageView
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.widget.PopupMenu
@@ -202,5 +203,16 @@ class MainActivity : BaseActivity(), MainListAdapter.OnItemClickListener {
     }
 
 
+    companion object {
+        const val EXTRA_NOTE = "EXTRA_NOTE"
+
+        fun View.toggleShowView(show: Boolean) {
+            visibility = if (show) {
+                View.VISIBLE
+            } else {
+                View.GONE
+            }
+        }
+    }
 
 }
