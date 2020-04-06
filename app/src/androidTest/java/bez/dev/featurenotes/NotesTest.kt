@@ -1,11 +1,15 @@
 package bez.dev.featurenotes
 
+import androidx.recyclerview.widget.RecyclerView
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.action.ViewActions.typeText
-import androidx.test.espresso.matcher.ViewMatchers.withId
+import androidx.test.espresso.assertion.ViewAssertions
+import androidx.test.espresso.contrib.RecyclerViewActions
+import androidx.test.espresso.matcher.ViewMatchers.*
 import androidx.test.rule.ActivityTestRule
 import androidx.test.runner.AndroidJUnit4
+import bez.dev.featurenotes.views.DetailActivity
 import bez.dev.featurenotes.views.MainActivity
 import org.junit.Rule
 import org.junit.Test
@@ -18,6 +22,7 @@ class NotesTest {
 
     @get:Rule
     var mainActivityTestRule = ActivityTestRule(MainActivity::class.java)
+    var detailActivity = ActivityTestRule(DetailActivity::class.java)
 
 
     @Test
@@ -31,6 +36,20 @@ class NotesTest {
 
         val numItems = 1
         addItems(numItems)
+    }
+
+    @Test
+    fun clickNoteEdit_openDetailActivityEditItem(){
+        val title = "mock 2"
+        onView(withId(R.id.recycler_view))
+                .perform(RecyclerViewActions.actionOnItem<RecyclerView.ViewHolder>(hasDescendant(withText(title)), click()));
+
+        onView(withId(R.id.edit_text_title))
+                .check(ViewAssertions.matches(withText(title)))
+
+//  //click item by position//
+//        onView(withId(R.id.recycler_view))
+//                .perform(RecyclerViewActions.actionOnItemAtPosition<RecyclerView.ViewHolder>(0, click()));
     }
 
 
