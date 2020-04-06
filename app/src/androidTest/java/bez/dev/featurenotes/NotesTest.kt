@@ -19,24 +19,24 @@ class NotesTest {
     @get:Rule
     var mainActivityTestRule = ActivityTestRule(MainActivity::class.java)
 
-    private val timeStamp: String
-        get() {
-            val formatter = SimpleDateFormat("h:mm a, d MMM")
-            return formatter.format(Date(System.currentTimeMillis()))
-
-        }
 
     @Test
     fun clickNoteAdd_openDetailActivityAddNoteTitleAndItem() {
-        onView(withId(R.id.main_menu_add_note))
+        onView(withId(R.id.fab_add_note))
                 .perform(click())
 
         onView(withId(R.id.edit_text_title))
-                .perform(typeText(timeStamp))
+                .perform(typeText(getTimeStamp()))
 
 
         val numItems = 1
         addItems(numItems)
+    }
+
+
+    private fun getTimeStamp(): String{
+        val formatter = SimpleDateFormat("h:mm a, d MMM")
+        return formatter.format(Date(System.currentTimeMillis()))
     }
 
 
