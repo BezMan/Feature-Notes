@@ -1,7 +1,9 @@
 package bez.dev.featurenotes
 
 import androidx.recyclerview.widget.RecyclerView
+import androidx.test.core.app.ApplicationProvider
 import androidx.test.espresso.Espresso.onView
+import androidx.test.espresso.Espresso.openActionBarOverflowOrOptionsMenu
 import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.action.ViewActions.typeText
 import androidx.test.espresso.assertion.ViewAssertions
@@ -52,6 +54,19 @@ class NotesTest {
 //                .perform(RecyclerViewActions.actionOnItemAtPosition<RecyclerView.ViewHolder>(0, click()));
     }
 
+    @Test
+    fun clickOverflowMenuButton_addNote(){
+        openActionBarOverflowOrOptionsMenu(ApplicationProvider.getApplicationContext())
+
+        onView(withText("Add Note"))
+                .perform(click())
+
+        onView(withId(R.id.edit_text_title))
+                .perform(typeText(getTimeStamp()))
+
+
+
+    }
 
     private fun getTimeStamp(): String{
         val formatter = SimpleDateFormat("h:mm a, d MMM")
