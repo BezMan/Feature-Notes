@@ -1,23 +1,25 @@
 package bez.dev.featurenotes
 
+import android.view.View
 import androidx.recyclerview.widget.RecyclerView
 import androidx.test.core.app.ApplicationProvider
-import androidx.test.espresso.Espresso.onView
-import androidx.test.espresso.Espresso.openActionBarOverflowOrOptionsMenu
+import androidx.test.espresso.Espresso.*
+import androidx.test.espresso.NoMatchingViewException
+import androidx.test.espresso.ViewAssertion
 import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.action.ViewActions.typeText
-import androidx.test.espresso.assertion.ViewAssertions
-import androidx.test.espresso.contrib.RecyclerViewActions
 import androidx.test.espresso.matcher.ViewMatchers.*
 import androidx.test.rule.ActivityTestRule
 import androidx.test.runner.AndroidJUnit4
 import bez.dev.featurenotes.views.DetailActivity
 import bez.dev.featurenotes.views.MainActivity
+import org.hamcrest.Matchers.`is`
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import java.text.SimpleDateFormat
 import java.util.*
+
 
 @RunWith(AndroidJUnit4::class)
 class NotesTest {
@@ -26,28 +28,57 @@ class NotesTest {
     var mainActivityTestRule = ActivityTestRule(MainActivity::class.java)
     var detailActivity = ActivityTestRule(DetailActivity::class.java)
 
+    private val notesToAdd: Int = 3
+    private val itemsToAdd: Int = 1
 
     @Test
-    fun clickNoteAdd_openDetailActivityAddNoteTitleAndItem() {
-        onView(withId(R.id.fab_add_note))
-                .perform(click())
+    fun clickNoteAdd_openNewNote_addNoteItems() {
 
-        onView(withId(R.id.edit_text_title))
-                .perform(typeText(getTimeStamp()))
+        onView(withId(R.id.fab_add_note)).perform(click())
 
+        addItems(itemsToAdd)
 
-        val numItems = 1
-        addItems(numItems)
+        pressBack()
+        pressBack()
+
     }
 
     @Test
-    fun clickNoteEdit_openDetailActivityEditItem(){
-        val title = "mock 2"
-        onView(withId(R.id.recycler_view))
-                .perform(RecyclerViewActions.actionOnItem<RecyclerView.ViewHolder>(hasDescendant(withText(title)), click()));
+    fun addNotes(){
 
-        onView(withId(R.id.edit_text_title))
-                .check(ViewAssertions.matches(withText(title)))
+        val recyclerView = mainActivityTestRule.activity.findViewById<RecyclerView>(R.id.recycler_view)
+        val noteCount = getRecyclerItemCount(recyclerView)
+
+        for (i in 1..notesToAdd){
+            clickNoteAdd_openNewNote_addNoteItems()
+        }
+        onView(withId(R.id.recycler_view)).check(RecyclerViewItemCountAssertion(noteCount + notesToAdd));
+    }
+
+    class RecyclerViewItemCountAssertion(private val expectedCount: Int) : ViewAssertion {
+        override fun check(view: View, noViewFoundException: NoMatchingViewException?) {
+            if (noViewFoundException != null) {
+                throw noViewFoundException
+            }
+            val recyclerView = view as RecyclerView
+            assertThat(recyclerView.adapter!!.itemCount, `is`(expectedCount))
+        }
+    }
+
+
+    private fun getRecyclerItemCount(recyclerView: RecyclerView): Int {
+        return recyclerView.adapter!!.itemCount
+    }
+
+
+    @Test
+    fun clickNoteEdit_openDetailActivityEditItem() {
+//        val title = "test mock"
+//        onView(withId(R.id.recycler_view))
+//                .perform(RecyclerViewActions.actionOnItem<RecyclerView.ViewHolder>(hasDescendant(withText(title)), click()));
+//
+//        onView(withId(R.id.edit_text_title))
+//                .check(matches(withText(title)))
 
 //  //click item by position//
 //        onView(withId(R.id.recycler_view))
@@ -55,7 +86,7 @@ class NotesTest {
     }
 
     @Test
-    fun clickOverflowMenuButton_addNote(){
+    fun clickOverflowMenuButton_addNote() {
         openActionBarOverflowOrOptionsMenu(ApplicationProvider.getApplicationContext())
 
         onView(withText("Add Note"))
@@ -65,10 +96,9 @@ class NotesTest {
                 .perform(typeText(getTimeStamp()))
 
 
-
     }
 
-    private fun getTimeStamp(): String{
+    private fun getTimeStamp(): String {
         val formatter = SimpleDateFormat("h:mm a, d MMM")
         return formatter.format(Date(System.currentTimeMillis()))
     }
