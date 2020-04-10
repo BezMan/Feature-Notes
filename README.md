@@ -13,13 +13,15 @@ where the user can add items while other apps are in foreground (playing a video
 - Using Kotlin Coroutines for necessary asynchronous DB operations.
 - Parcelable Note data class, so we can pass it between Activities.
 - TypeConverter for converting List of objects to a String and back.
-- Database ViewModel - mutual data access thru all activities.
-- ItemTouchHelper callbacks for gesture detection: drag and drop.
+- Database ViewModel - mutual data access through all activities.
+- ItemTouchHelper callbacks for gesture detection: drag & drop items.
 - Custom Views (AlertDialog) managing their own UI setup and lifecycle.
 - Toolbar layouts containing menu items in conjunction with custom menu layouts.
-- Data persistence, so we don’t lose data, even when task is removed.
+- Data persistence, so we don’t lose data, even when app task is removed.
 - auto generated primary key, where insert() provides us a unique ID val.
 - Setting notes as Notifications, for quick add, even while watching a video.
+- UNDO after deletion, SnackBar for quick restore of notes and note items.
+- Espresso Instrumentation tests across both activities.
 
 <br/>
 
