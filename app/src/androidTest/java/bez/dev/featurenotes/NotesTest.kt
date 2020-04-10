@@ -1,5 +1,6 @@
 package bez.dev.featurenotes
 
+import android.app.Activity
 import android.view.View
 import androidx.recyclerview.widget.RecyclerView
 import androidx.test.core.app.ApplicationProvider
@@ -9,9 +10,11 @@ import androidx.test.espresso.ViewAssertion
 import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.action.ViewActions.typeText
 import androidx.test.espresso.matcher.ViewMatchers.*
+import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.rule.ActivityTestRule
 import androidx.test.runner.AndroidJUnit4
-import bez.dev.featurenotes.views.DetailActivity
+import androidx.test.runner.lifecycle.ActivityLifecycleMonitorRegistry
+import androidx.test.runner.lifecycle.Stage
 import bez.dev.featurenotes.views.MainActivity
 import org.hamcrest.Matchers.`is`
 import org.junit.Rule
@@ -26,13 +29,13 @@ class NotesTest {
 
     @get:Rule
     var mainActivityTestRule = ActivityTestRule(MainActivity::class.java)
-    var detailActivity = ActivityTestRule(DetailActivity::class.java)
+    var runningActivity: Activity? = null
 
     private val notesToAdd: Int = 3
     private val itemsToAdd: Int = 1
 
     @Test
-    fun clickNoteAdd_openNewNote_addNoteItems() {
+    fun clickFab_openNewNote_addItems() {
 
         onView(withId(R.id.fab_add_note)).perform(click())
 
@@ -44,30 +47,15 @@ class NotesTest {
     }
 
     @Test
-    fun addNotes(){
+    fun addNotes() {
 
         val recyclerView = mainActivityTestRule.activity.findViewById<RecyclerView>(R.id.recycler_view)
         val noteCount = getRecyclerItemCount(recyclerView)
 
-        for (i in 1..notesToAdd){
-            clickNoteAdd_openNewNote_addNoteItems()
+        for (i in 1..notesToAdd) {
+            clickFab_openNewNote_addItems()
         }
         onView(withId(R.id.recycler_view)).check(RecyclerViewItemCountAssertion(noteCount + notesToAdd));
-    }
-
-    class RecyclerViewItemCountAssertion(private val expectedCount: Int) : ViewAssertion {
-        override fun check(view: View, noViewFoundException: NoMatchingViewException?) {
-            if (noViewFoundException != null) {
-                throw noViewFoundException
-            }
-            val recyclerView = view as RecyclerView
-            assertThat(recyclerView.adapter!!.itemCount, `is`(expectedCount))
-        }
-    }
-
-
-    private fun getRecyclerItemCount(recyclerView: RecyclerView): Int {
-        return recyclerView.adapter!!.itemCount
     }
 
 
@@ -105,6 +93,8 @@ class NotesTest {
 
 
     private fun addItems(numItems: Int) {
+        val detailRecyclerView = getActivityInstance()!!.findViewById<RecyclerView>(R.id.recycler_view_detail)
+        val itemCount = getRecyclerItemCount(detailRecyclerView)
 
         for (i in 0 until numItems) {
             onView(withId(R.id.top_add_item_btn))
@@ -116,7 +106,34 @@ class NotesTest {
             onView(withId(R.id.dialogSaveTextBtn))
                     .perform(click())
         }
+        onView(withId(R.id.recycler_view_detail)).check(RecyclerViewItemCountAssertion(itemCount + numItems));
+    }
 
+
+    private fun getRecyclerItemCount(recyclerView: RecyclerView): Int {
+        return recyclerView.adapter!!.itemCount
+    }
+
+
+    private fun getActivityInstance(): Activity? {
+        InstrumentationRegistry.getInstrumentation().runOnMainSync {
+            val resumedActivities: Collection<*> = ActivityLifecycleMonitorRegistry.getInstance().getActivitiesInStage(Stage.RESUMED)
+            if (resumedActivities.iterator().hasNext()) {
+                runningActivity = resumedActivities.iterator().next() as Activity
+            }
+        }
+        return runningActivity
+    }
+
+
+    class RecyclerViewItemCountAssertion(private val expectedCount: Int) : ViewAssertion {
+        override fun check(view: View, noViewFoundException: NoMatchingViewException?) {
+            if (noViewFoundException != null) {
+                throw noViewFoundException
+            }
+            val recyclerView = view as RecyclerView
+            assertThat(recyclerView.adapter!!.itemCount, `is`(expectedCount))
+        }
     }
 
 
