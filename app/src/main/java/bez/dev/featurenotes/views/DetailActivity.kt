@@ -3,7 +3,6 @@ package bez.dev.featurenotes.views
 import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
-import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
@@ -358,7 +357,7 @@ class DetailActivity : BaseActivity(), OnPrioritySaveClickListener, DetailEditTe
     override fun onPrepareOptionsMenu(menu: Menu): Boolean {
         menuEditItem = menu.findItem(id.edit_note)
         menuPriorityItem = menu.findItem(id.edit_priority)
-        menuShare = menu.findItem(id.share_note)
+        menuShare = menu.findItem(id.detail_share_note)
 
         if (!isExistingNote) { //NEW note - init menu icons
             menuEditItem?.setIcon(drawable.ic_close)
@@ -376,25 +375,18 @@ class DetailActivity : BaseActivity(), OnPrioritySaveClickListener, DetailEditTe
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when {
-            item.itemId == id.share_note -> {
-                val sendIntent: Intent = Intent().apply {
-                    action = Intent.ACTION_SEND
-                    putExtra(Intent.EXTRA_TEXT, currentNote.title + "\n" + currentNote.items)
-                    type = "text/plain"
-                }
-
-                val shareIntent = Intent.createChooser(sendIntent, null)
-                startActivity(shareIntent)
+        when (item.itemId) {
+            id.detail_share_note -> {
+                shareNote(currentNote)
             }
-            item.itemId == id.edit_note -> {
+            id.edit_note -> {
                 if (!isEditMode) {
                     enterEditMode()
                 } else {
                     exitEditMode()
                 }
             }
-            item.itemId == id.edit_priority -> {
+            id.edit_priority -> {
                 val priority = Integer.parseInt(item.title.toString())
 
                 val priorityDialog = DetailPriorityDialog(this, priority)

@@ -6,6 +6,10 @@
         android:title="Edit note" />
 
     <item
+        android:id="@+id/main_overflow_note_share"
+        android:title="Share note" />
+
+    <item
         android:id="@+id/main_overflow_note_delete"
         android:title="Delete note" />
 

@@ -115,6 +115,9 @@ class MainActivity : BaseActivity(), MainListAdapter.OnItemClickListener {
                 R.id.main_overflow_note_edit -> {
                     editNote(note)
                 }
+                R.id.main_overflow_note_share -> {
+                    shareNote(note)
+                }
                 R.id.main_overflow_note_delete -> {
                     deleteNote(note)
                     showUndoDelete(note)

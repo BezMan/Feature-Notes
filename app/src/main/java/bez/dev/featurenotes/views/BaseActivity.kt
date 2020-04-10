@@ -1,5 +1,6 @@
 package bez.dev.featurenotes.views
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
@@ -31,6 +32,18 @@ abstract class BaseActivity : AppCompatActivity() {
     protected fun deleteNote(note: Note) {
         notificationManager.cancelNotificationById(note.id)
         repoViewModel.delete(note)
+    }
+
+
+
+    protected fun shareNote(note: Note) {
+        val sendIntent: Intent = Intent().apply {
+            action = Intent.ACTION_SEND
+            putExtra(Intent.EXTRA_TEXT, note.toString())
+            type = "text/plain"
+        }
+        val shareIntent = Intent.createChooser(sendIntent, null)
+        startActivity(shareIntent)
     }
 
 

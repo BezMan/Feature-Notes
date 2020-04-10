@@ -16,11 +16,13 @@ where the user can add items while other apps are in foreground (playing a video
 - Database ViewModel - mutual data access through all activities.
 - ItemTouchHelper callbacks for gesture detection: drag & drop items.
 - Custom Views (AlertDialog) managing their own UI setup and lifecycle.
+- Setting a priority for each note, influences the order in the main list.
 - Toolbar layouts containing menu items in conjunction with custom menu layouts.
 - Data persistence, so we don’t lose data, even when app task is removed.
 - auto generated primary key, where insert() provides us a unique ID val.
 - Setting notes as Notifications, for quick add, even while watching a video.
 - UNDO after deletion, SnackBar for quick restore of notes and note items.
+- Share notes easily + quick text copy of individual note items.
 - Espresso Instrumentation tests across both activities.
 
 <br/>

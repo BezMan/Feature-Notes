@@ -24,17 +24,20 @@ data class Note(var title: String
 
 
     override fun toString(): String {
-        return "title: $title, items: $items\n"
+        return "$title:\n $items"
     }
 }
 
 
 @Parcelize
-class NoteItem (var itemText: String, var isStriked: Boolean = false)
+data class NoteItem(var itemText: String, var isDone: Boolean = false)
     : Parcelable {
 
     override fun toString(): String {
-        return "itemText: $itemText , isStriked: $isStriked\n"
+        if (isDone) {
+            return "\n* $itemText(DONE)"
+        }
+        return "\n* $itemText"
     }
 
 }
