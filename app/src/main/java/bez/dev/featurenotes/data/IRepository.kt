@@ -4,7 +4,6 @@ import androidx.lifecycle.LiveData
 
 interface IRepository {
 
-    suspend fun setInitNotes(noteRepository: NoteRepository)
     suspend fun insert(note: Note): Long
     fun update(note: Note)
     fun delete(note: Note)

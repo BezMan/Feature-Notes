@@ -1,18 +1,3 @@
-/*
-Copyright 2016 The Android Open Source Project
-
-Licensed under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
-
-http://www.apache.org/licenses/LICENSE-2.0
-
-Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an "AS IS" BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
- */
 package bez.dev.featurenotes.services
 
 import android.app.IntentService
@@ -20,7 +5,7 @@ import android.content.Intent
 import androidx.core.app.RemoteInput
 import bez.dev.featurenotes.data.Note
 import bez.dev.featurenotes.data.NoteItem
-import bez.dev.featurenotes.data.NoteRepository
+import bez.dev.featurenotes.misc.DInjector
 import bez.dev.featurenotes.misc.NotificationManager
 import bez.dev.featurenotes.misc.Utils
 import org.koin.android.ext.android.get
@@ -44,7 +29,7 @@ class AddFromNotificationIntentService : IntentService("AddFromNotificationInten
         if (!replyCharSequence.isNullOrBlank()) {
             note.items.add(0, NoteItem(replyCharSequence.toString().trim()) )
         }
-        get<NoteRepository>().update(note)
+        DInjector.getNotes().update(note)
         if (!Utils.isAppForeground) {
             get<NotificationManager>().updateSpecificNotification(note)
         }
