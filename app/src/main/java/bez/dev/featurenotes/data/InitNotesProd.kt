@@ -1,6 +1,6 @@
 package bez.dev.featurenotes.data
 
-class ProdInitNotes: INotesInit {
+class InitNotesProd: INotesInit {
 
     override suspend fun setInitNotes() {
 //        if (SharedPrefs.getBoolValue(KEY_FIRST_RUN, true)) {
