@@ -17,13 +17,13 @@ class NoteRepository : IRepository {
 
     init {
         repoScope.launch {
-            setInitNotes()
+            setInitNotes(this@NoteRepository)
         }
         allNotes = noteDao.getAllNotesByPriority()
     }
 
-     override suspend fun setInitNotes(){
-         DInjector.setInitNoteData()
+     override suspend fun setInitNotes(noteRepository: NoteRepository) {
+         DInjector.setInitNoteData(noteRepository)
      }
 
     override suspend fun insert(note: Note): Long {
