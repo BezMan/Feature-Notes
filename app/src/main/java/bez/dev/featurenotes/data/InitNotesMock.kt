@@ -1,18 +1,28 @@
 package bez.dev.featurenotes.data
 
-class InitNotesMock(): NoteRepository() {
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import org.koin.core.KoinComponent
+import org.koin.core.inject
+
+class InitNotesMock: KoinComponent{
 
     private val initItems: Int = 5
 
 
-    override suspend fun setInitNotes() {
+    fun setInitNotes() {
         if (SharedPrefs.getBoolValue(KEY_FIRST_RUN, true)) {
-            clearAllData()
-            for (i in 1..initItems) {
-                insert(Note("mock $i", i, mutableListOf(NoteItem("select edit"), NoteItem("drag and drop"))))
+
+            CoroutineScope(Dispatchers.IO).launch {
+                val repository : NoteRepository by inject()
+                repository.clearAllData()
+                for (i in 1..initItems) {
+                    repository.insert(Note("mock $i", i, mutableListOf(NoteItem("select edit"), NoteItem("drag and drop"))))
+                }
+                //toggle to not first run anymore:
+                SharedPrefs.setBoolValue(KEY_FIRST_RUN, false)
             }
-            //toggle to not first run anymore:
-            SharedPrefs.setBoolValue(KEY_FIRST_RUN, false)
         }
     }
 

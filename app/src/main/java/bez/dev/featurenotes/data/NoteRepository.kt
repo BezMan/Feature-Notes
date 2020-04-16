@@ -2,6 +2,7 @@ package bez.dev.featurenotes.data
 
 import androidx.lifecycle.LiveData
 import bez.dev.featurenotes.misc.App
+import bez.dev.featurenotes.misc.DInjector
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -15,23 +16,9 @@ open class NoteRepository : IRepository {
     private val repoScope = CoroutineScope(Dispatchers.IO)
 
     init {
-        repoScope.launch {
-            setInitNotes()
-        }
+        DInjector.setInitNotes()
         allNotes = noteDao.getAllNotesByPriority()
     }
-
-     open suspend fun setInitNotes() {
-         if (SharedPrefs.getBoolValue(KEY_FIRST_RUN, true)) {
-             clearAllData()
-             for (i in 1..5) {
-                 insert(Note("mock $i", i, mutableListOf(NoteItem("select edit"), NoteItem("drag and drop"))))
-             }
-             //toggle to not first run anymore:
-             SharedPrefs.setBoolValue(KEY_FIRST_RUN, false)
-         }
-
-     }
 
     override suspend fun insert(note: Note): Long {
         return noteDao.insert(note)

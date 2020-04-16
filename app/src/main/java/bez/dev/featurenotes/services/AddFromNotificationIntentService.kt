@@ -5,7 +5,7 @@ import android.content.Intent
 import androidx.core.app.RemoteInput
 import bez.dev.featurenotes.data.Note
 import bez.dev.featurenotes.data.NoteItem
-import bez.dev.featurenotes.misc.DInjector
+import bez.dev.featurenotes.data.NoteRepository
 import bez.dev.featurenotes.misc.NotificationManager
 import bez.dev.featurenotes.misc.Utils
 import org.koin.android.ext.android.get
@@ -29,7 +29,7 @@ class AddFromNotificationIntentService : IntentService("AddFromNotificationInten
         if (!replyCharSequence.isNullOrBlank()) {
             note.items.add(0, NoteItem(replyCharSequence.toString().trim()) )
         }
-        DInjector.getNotes().update(note)
+        get<NoteRepository>().update(note)
         if (!Utils.isAppForeground) {
             get<NotificationManager>().updateSpecificNotification(note)
         }
