@@ -23,6 +23,7 @@ import bez.dev.featurenotes.data.NoteItem
 import bez.dev.featurenotes.misc.DInjector
 import bez.dev.featurenotes.misc.NotificationManager
 import bez.dev.featurenotes.misc.Utils
+import org.koin.android.ext.android.get
 
 class AddFromNotificationIntentService : IntentService("AddFromNotificationIntentService") {
 
@@ -43,11 +44,9 @@ class AddFromNotificationIntentService : IntentService("AddFromNotificationInten
         if (!replyCharSequence.isNullOrBlank()) {
             note.items.add(0, NoteItem(replyCharSequence.toString().trim()) )
         }
-        DInjector.getRepository().update(note) // must update() to notify(), even when empty.
+        DInjector.getRepository().update(note)
         if (!Utils.isAppForeground) {
-            //must call notify() manually when outside of app, otherwise notification doesn't refresh with new item.
-            val notificationManager = NotificationManager(this)
-            notificationManager.updateSpecificNotification(note) //
+            get<NotificationManager>().updateSpecificNotification(note)
         }
     }
 

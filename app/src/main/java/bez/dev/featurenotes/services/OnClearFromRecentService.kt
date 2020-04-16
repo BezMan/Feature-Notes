@@ -4,6 +4,7 @@ import android.app.Service
 import android.content.Intent
 import android.os.IBinder
 import bez.dev.featurenotes.misc.NotificationManager
+import org.koin.android.ext.android.get
 
 
 class OnClearFromRecentService : Service() {
@@ -20,8 +21,7 @@ class OnClearFromRecentService : Service() {
 
     override fun onTaskRemoved(rootIntent: Intent) {
 
-        val notificationManager = NotificationManager(this)
-        notificationManager.cancelNotifications()
+        get<NotificationManager>().cancelNotifications()
 
         stopSelf()
     }

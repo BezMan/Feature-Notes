@@ -103,6 +103,15 @@ dependencies {
     implementation 'com.crashlytics.sdk.android:crashlytics:2.10.1'
 
     implementation 'com.google.code.gson:gson:2.8.5'
+
+    // Koin for Android
+    def koin_version = "2.1.5"
+    implementation "org.koin:koin-android:$koin_version"
+    //Koin for Lifecycle scoping
+    implementation "org.koin:koin-android-scope:$koin_version"
+    //Koin for Android Architecture ViewModel
+    implementation "org.koin:koin-android-viewmodel:$koin_version"
+
 }
 
 repositories {
