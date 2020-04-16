@@ -1,12 +1,12 @@
 package bez.dev.featurenotes.misc
 
-import bez.dev.featurenotes.data.NoteRepository
-import bez.dev.featurenotes.data.RealNoteRepository
+import bez.dev.featurenotes.data.INotesInit
+import bez.dev.featurenotes.data.ProdInitNotes
 
 object DInjector {
 
-    fun getRepository(): NoteRepository {
-        return RealNoteRepository()
+    fun setInitNoteData(): INotesInit {
+        return ProdInitNotes()
     }
 
 }

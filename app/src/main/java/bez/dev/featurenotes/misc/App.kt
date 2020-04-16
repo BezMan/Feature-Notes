@@ -5,6 +5,7 @@ import android.content.Context
 import android.content.Intent
 import bez.dev.featurenotes.data.NoteDatabase
 import bez.dev.featurenotes.koin_injection.appModule
+import bez.dev.featurenotes.koin_injection.viewModelModule
 import bez.dev.featurenotes.services.OnClearFromRecentService
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -24,7 +25,7 @@ class App : Application() {
     private fun initKoin() {
         startKoin {
             androidContext(this@App)
-            modules(listOf(appModule))
+            modules(listOf(appModule, viewModelModule))
         }
     }
 

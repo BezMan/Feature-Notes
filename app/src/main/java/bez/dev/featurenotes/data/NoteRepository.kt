@@ -2,13 +2,14 @@ package bez.dev.featurenotes.data
 
 import androidx.lifecycle.LiveData
 import bez.dev.featurenotes.misc.App
+import bez.dev.featurenotes.misc.DInjector
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 const val KEY_FIRST_RUN = "KEY_FIRST_RUN"
 
-abstract class NoteRepository : IRepository {
+class NoteRepository : IRepository {
     private val noteDatabase: NoteDatabase = App.database
     private val noteDao: NoteDao = noteDatabase.noteDao()
     val allNotes: LiveData<List<Note>>
@@ -21,7 +22,9 @@ abstract class NoteRepository : IRepository {
         allNotes = noteDao.getAllNotesByPriority()
     }
 
-    abstract suspend fun setInitNotes()
+     override suspend fun setInitNotes(){
+         DInjector.setInitNoteData()
+     }
 
     override suspend fun insert(note: Note): Long {
         return noteDao.insert(note)

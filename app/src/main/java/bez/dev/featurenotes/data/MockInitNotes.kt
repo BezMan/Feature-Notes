@@ -1,6 +1,6 @@
 package bez.dev.featurenotes.data
 
-class MockNoteRepository : NoteRepository() {
+class MockInitNotes: INotesInit {
 
     private val initItems: Int = 5
 

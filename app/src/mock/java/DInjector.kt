@@ -1,12 +1,12 @@
 package bez.dev.featurenotes.misc
 
-import bez.dev.featurenotes.data.MockNoteRepository
-import bez.dev.featurenotes.data.NoteRepository
+import bez.dev.featurenotes.data.INotesInit
+import bez.dev.featurenotes.data.MockInitNotes
 
 object DInjector {
 
-    fun getRepository(): NoteRepository {
-        return MockNoteRepository()
+    fun setInitNoteData(): INotesInit{
+        return MockInitNotes()
     }
 
 }
