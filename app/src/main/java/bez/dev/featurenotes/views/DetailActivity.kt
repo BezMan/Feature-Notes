@@ -271,7 +271,7 @@ class DetailActivity : BaseActivity(), OnPrioritySaveClickListener, DetailEditTe
         } else { // create new note
             currentNote = Note(title, priority, itemList)
 
-            CoroutineScope(Dispatchers.Default).launch {
+            CoroutineScope(Dispatchers.IO).launch {
                 currentNote.id = repoViewModel.insert(currentNote)
             }
             isExistingNote = true

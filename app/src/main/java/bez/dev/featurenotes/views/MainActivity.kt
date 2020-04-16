@@ -73,7 +73,6 @@ class MainActivity : BaseActivity(), MainListAdapter.OnItemClickListener {
 
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        val menuInflater = menuInflater
         menuInflater.inflate(R.menu.main_activity_menu, menu)
         return true
     }
@@ -186,7 +185,7 @@ class MainActivity : BaseActivity(), MainListAdapter.OnItemClickListener {
         snack.setDuration(8000)
                 .setAction("UNDO") {
                     // execute when UNDO is clicked
-                    CoroutineScope(Dispatchers.Default).launch {
+                    CoroutineScope(Dispatchers.IO).launch {
                         repoViewModel.insert(note)
                     }
                 }
@@ -201,7 +200,7 @@ class MainActivity : BaseActivity(), MainListAdapter.OnItemClickListener {
                 .setAction("UNDO") {
                     // execute when UNDO is clicked
                     for (note: Note in restorePoint) {
-                        CoroutineScope(Dispatchers.Default).launch {
+                        CoroutineScope(Dispatchers.IO).launch {
                             repoViewModel.insert(note)
                         }
                     }

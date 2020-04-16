@@ -12,7 +12,7 @@ abstract class NoteRepository : IRepository {
     private val noteDatabase: NoteDatabase = App.database
     private val noteDao: NoteDao = noteDatabase.noteDao()
     val allNotes: LiveData<List<Note>>
-    private val repoScope = CoroutineScope(Dispatchers.Default)
+    private val repoScope = CoroutineScope(Dispatchers.IO)
 
     init {
         repoScope.launch {
