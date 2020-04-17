@@ -7,9 +7,9 @@ where the user can add items while other apps are in foreground (playing a video
 
  This sample project contains and showcases these concepts:
 
-- Kotlin language + Kotlin extension function (View visibility). 
+- Kotlin language + Kotlin extension functions.
 - Architecture Components: MVVM, Room, Live Data, Observing DB changes.
-- Dependency Injection for our Repository (small and hand made).
+- Dependency Injection with Koin: injecting Repository, NotificationManager and ViewModel.
 - Using Kotlin Coroutines for necessary asynchronous DB operations.
 - Parcelable Note data class, so we can pass it between Activities.
 - TypeConverter for converting List of objects to a String and back.
