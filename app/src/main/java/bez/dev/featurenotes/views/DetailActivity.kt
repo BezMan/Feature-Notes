@@ -74,7 +74,7 @@ class DetailActivity : BaseActivity(), OnPrioritySaveClickListener, DetailEditTe
     }
 
     private fun initNoteViewModel() {
-        repoViewModel.getNote(currentNote).observe(this, observer)
+        repoViewModel.getNoteById(currentNote.id).observe(this, observer)
     }
 
     override fun onDetailItemClick(text: String, position: Int) {

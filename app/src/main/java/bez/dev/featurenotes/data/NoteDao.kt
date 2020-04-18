@@ -25,6 +25,6 @@ interface NoteDao {
     fun getAllNotesByPriority(): LiveData<List<Note>>
 
     @Query("SELECT * FROM note_table WHERE id = :noteId")
-    fun getNote(noteId: Long): LiveData<Note>
+    fun getNoteById(noteId: Long): LiveData<Note>
 }
 

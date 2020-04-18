@@ -10,6 +10,6 @@ interface IRepository {
     fun deleteAllNotes()
     fun clearAllData()
     fun resetAllNotifications()
-    fun getNote(note: Note): LiveData<Note>
+    fun getNoteById(noteId: Long): LiveData<Note>
 
 }
