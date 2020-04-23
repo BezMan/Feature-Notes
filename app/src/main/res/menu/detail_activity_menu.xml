@@ -4,7 +4,7 @@
 
     <item
         android:id="@+id/revert_note"
-        android:title="Revert"
+        android:title="Revert Changes"
         app:showAsAction="never" />
 
     <item

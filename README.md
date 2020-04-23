@@ -21,7 +21,8 @@ where the user can add items while other apps are in foreground (playing a video
 - Data persistence, so we don’t lose data, even when app task is removed.
 - auto generated primary key, where insert() provides us a unique ID val.
 - Setting notes as Notifications, for quick add, even while watching a video.
-- UNDO after deletion, SnackBar for quick restore of notes and note items.
+- RESTORE deleted notes and items, through SnackBar action.
+- REVERT CHANGES menu item, during note editing session.
 - Share notes easily + quick text copy of individual note items.
 - Espresso Instrumentation tests across both activities.
 
