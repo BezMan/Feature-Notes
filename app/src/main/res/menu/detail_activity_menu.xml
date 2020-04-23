@@ -3,15 +3,21 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
+        android:id="@+id/revert_note"
+        android:title="Revert"
+        app:showAsAction="never" />
+
+    <item
         android:id="@+id/edit_priority"
         android:title=""
+        android:enabled="false"
         app:showAsAction="always" />
 
     <item
         android:id="@+id/detail_share_note"
         android:icon="@drawable/ic_share"
         android:title="Share"
-        app:showAsAction="ifRoom" />
+        app:showAsAction="always" />
 
     <item
         android:id="@+id/edit_note"

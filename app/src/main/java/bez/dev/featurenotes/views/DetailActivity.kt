@@ -42,6 +42,7 @@ class DetailActivity : BaseActivity(), OnPrioritySaveClickListener, DetailEditTe
     private var editTextDialog: DetailEditTextDialog? = null
     private var itemList: MutableList<NoteItem> = mutableListOf()
     private lateinit var currentNote: Note
+    private lateinit var revertedNote: Note
     private var isExistingNote: Boolean = false
     private lateinit var touchHelper: ItemTouchHelper
 
@@ -231,8 +232,8 @@ class DetailActivity : BaseActivity(), OnPrioritySaveClickListener, DetailEditTe
 
             currentNote = intent.getParcelableExtra(EXTRA_NOTE) as Note
 
-            val itemsStr = currentNote.items
-            itemList = itemsStr
+            revertedNote = Note(currentNote.title, currentNote.priority, currentNote.items)
+            itemList = currentNote.items
 
             edit_text_title.setText(currentNote.title)
             mPriority = currentNote.priority
@@ -240,8 +241,17 @@ class DetailActivity : BaseActivity(), OnPrioritySaveClickListener, DetailEditTe
             initNoteViewModel()
 
         } else { //NEW
+            currentNote = Note("", 3, mutableListOf())
             enterEditMode()
         }
+    }
+
+    private fun revertNote(){
+        itemList = revertedNote.items
+        mPriority = revertedNote.priority
+        menuPriorityItem?.title = mPriority.toString()
+        edit_text_title.setText(revertedNote.title)
+        exitEditMode()
     }
 
 
@@ -261,7 +271,7 @@ class DetailActivity : BaseActivity(), OnPrioritySaveClickListener, DetailEditTe
 
     private fun saveNote() {
 
-        var title = getNoteTitle().toString()
+        val title = getNoteTitle().toString()
         val priority = mPriority
 
         if (isExistingNote) {
@@ -327,6 +337,8 @@ class DetailActivity : BaseActivity(), OnPrioritySaveClickListener, DetailEditTe
         bottom_add_item_btn.visibility = View.VISIBLE
 
         menuEditItem?.setIcon(drawable.ic_close)
+        menuPriorityItem?.isVisible = true
+        menuPriorityItem?.isEnabled = true
         menuPriorityItem?.title = mPriority.toString()
         menuShare?.isVisible = false
         refreshRecyclerView(itemList)
@@ -344,8 +356,13 @@ class DetailActivity : BaseActivity(), OnPrioritySaveClickListener, DetailEditTe
         bottom_add_item_btn.visibility = View.GONE
 
         menuEditItem?.setIcon(drawable.ic_edit_24dp)
-        mPriority = Integer.parseInt(menuPriorityItem?.title.toString())
-        menuPriorityItem?.title = ""
+
+        val priorityStr = menuPriorityItem?.title.toString()
+        if(priorityStr.isNotEmpty()) {
+            mPriority = Integer.parseInt(priorityStr)
+        }
+        menuPriorityItem?.isVisible = false
+        menuPriorityItem?.isEnabled = false
         menuShare?.isVisible = true
 
         refreshRecyclerView(itemList)
@@ -362,6 +379,8 @@ class DetailActivity : BaseActivity(), OnPrioritySaveClickListener, DetailEditTe
         if (!isExistingNote) { //NEW note - init menu icons
             menuEditItem?.setIcon(drawable.ic_close)
             mPriority = resources.getInteger(integer.default_priority)
+            menuPriorityItem?.isVisible = true
+            menuPriorityItem?.isEnabled = true
             menuPriorityItem?.title = mPriority.toString()
             menuShare?.isVisible = false
         }
@@ -379,6 +398,9 @@ class DetailActivity : BaseActivity(), OnPrioritySaveClickListener, DetailEditTe
             id.detail_share_note -> {
                 shareNote(currentNote)
             }
+            id.revert_note -> {
+                revertNote()
+            }
             id.edit_note -> {
                 if (!isEditMode) {
                     enterEditMode()
@@ -387,7 +409,7 @@ class DetailActivity : BaseActivity(), OnPrioritySaveClickListener, DetailEditTe
                 }
             }
             id.edit_priority -> {
-                val priority = Integer.parseInt(item.title.toString())
+                val priority = Integer.parseInt(currentNote.priority.toString())
 
                 val priorityDialog = DetailPriorityDialog(this, priority)
                 priorityDialog.show()
