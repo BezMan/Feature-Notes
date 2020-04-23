@@ -37,7 +37,6 @@ class DetailActivity : BaseActivity(), OnPrioritySaveClickListener, DetailEditTe
     private var menuEditItem: MenuItem? = null
     private var menuPriorityItem: MenuItem? = null
     private var menuShare: MenuItem? = null
-    private var mPriority: Int = 0
     private lateinit var detailListAdapter: DetailListAdapter
     private var editTextDialog: DetailEditTextDialog? = null
     private var itemList: MutableList<NoteItem> = mutableListOf()
@@ -236,7 +235,6 @@ class DetailActivity : BaseActivity(), OnPrioritySaveClickListener, DetailEditTe
             itemList = currentNote.items
 
             edit_text_title.setText(currentNote.title)
-            mPriority = currentNote.priority
 
             initNoteViewModel()
 
@@ -248,8 +246,8 @@ class DetailActivity : BaseActivity(), OnPrioritySaveClickListener, DetailEditTe
 
     private fun revertNote(){
         itemList = revertedNote.items
-        mPriority = revertedNote.priority
-        menuPriorityItem?.title = mPriority.toString()
+        currentNote.priority = revertedNote.priority
+        menuPriorityItem?.title = currentNote.priority.toString()
         edit_text_title.setText(revertedNote.title)
         exitEditMode()
     }
@@ -272,23 +270,19 @@ class DetailActivity : BaseActivity(), OnPrioritySaveClickListener, DetailEditTe
     private fun saveNote() {
 
         val title = getNoteTitle().toString()
-        val priority = mPriority
 
         if (isExistingNote) {
             currentNote.title = title
-            currentNote.priority = priority
             currentNote.items = itemList
+            repoViewModel.update(currentNote)
         } else { // create new note
-            currentNote = Note(title, priority, itemList)
+            currentNote = Note(title, currentNote.priority, itemList)
 
             CoroutineScope(Dispatchers.IO).launch {
                 currentNote.id = repoViewModel.insert(currentNote)
             }
             isExistingNote = true
         }
-        //update, whether an existing/new note
-        repoViewModel.update(currentNote)
-
     }
 
     private fun checkDiscardEmpty() {
@@ -339,7 +333,7 @@ class DetailActivity : BaseActivity(), OnPrioritySaveClickListener, DetailEditTe
         menuEditItem?.setIcon(drawable.ic_close)
         menuPriorityItem?.isVisible = true
         menuPriorityItem?.isEnabled = true
-        menuPriorityItem?.title = mPriority.toString()
+        menuPriorityItem?.title = currentNote.priority.toString()
         menuShare?.isVisible = false
         refreshRecyclerView(itemList)
     }
@@ -359,7 +353,7 @@ class DetailActivity : BaseActivity(), OnPrioritySaveClickListener, DetailEditTe
 
         val priorityStr = menuPriorityItem?.title.toString()
         if(priorityStr.isNotEmpty()) {
-            mPriority = Integer.parseInt(priorityStr)
+            currentNote.priority = Integer.parseInt(priorityStr)
         }
         menuPriorityItem?.isVisible = false
         menuPriorityItem?.isEnabled = false
@@ -378,10 +372,10 @@ class DetailActivity : BaseActivity(), OnPrioritySaveClickListener, DetailEditTe
 
         if (!isExistingNote) { //NEW note - init menu icons
             menuEditItem?.setIcon(drawable.ic_close)
-            mPriority = resources.getInteger(integer.default_priority)
+            currentNote.priority = resources.getInteger(integer.default_priority)
             menuPriorityItem?.isVisible = true
             menuPriorityItem?.isEnabled = true
-            menuPriorityItem?.title = mPriority.toString()
+            menuPriorityItem?.title = currentNote.priority.toString()
             menuShare?.isVisible = false
         }
         return super.onPrepareOptionsMenu(menu)
@@ -409,9 +403,7 @@ class DetailActivity : BaseActivity(), OnPrioritySaveClickListener, DetailEditTe
                 }
             }
             id.edit_priority -> {
-                val priority = Integer.parseInt(currentNote.priority.toString())
-
-                val priorityDialog = DetailPriorityDialog(this, priority)
+                val priorityDialog = DetailPriorityDialog(this, currentNote.priority)
                 priorityDialog.show()
             }
             else -> super.onOptionsItemSelected(item)
@@ -421,9 +413,8 @@ class DetailActivity : BaseActivity(), OnPrioritySaveClickListener, DetailEditTe
 
 
     override fun onPrioritySaveBtnClick(newPriority: Int) {
-        val priorityStr = newPriority.toString()
-        menuPriorityItem?.title = priorityStr
-        mPriority = Integer.parseInt(priorityStr)
+        currentNote.priority = newPriority
+        menuPriorityItem?.title = newPriority.toString()
     }
 
 
