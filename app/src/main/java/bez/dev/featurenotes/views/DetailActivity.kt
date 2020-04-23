@@ -329,7 +329,6 @@ class DetailActivity : BaseActivity(), OnPrioritySaveClickListener, DetailEditTe
 
         menuEditItem?.setIcon(drawable.ic_close)
         menuPriorityItem?.isVisible = true
-        menuPriorityItem?.isEnabled = true
         menuPriorityItem?.title = currentNote.priority.toString()
         menuShare?.isVisible = false
         refreshRecyclerView(currentNote.items)
@@ -353,7 +352,6 @@ class DetailActivity : BaseActivity(), OnPrioritySaveClickListener, DetailEditTe
             currentNote.priority = Integer.parseInt(priorityStr)
         }
         menuPriorityItem?.isVisible = false
-        menuPriorityItem?.isEnabled = false
         menuShare?.isVisible = true
 
         refreshRecyclerView(currentNote.items)
@@ -370,10 +368,12 @@ class DetailActivity : BaseActivity(), OnPrioritySaveClickListener, DetailEditTe
         if (!isExistingNote) { //NEW note - init menu icons
             menuEditItem?.setIcon(drawable.ic_close)
             currentNote.priority = resources.getInteger(integer.default_priority)
-            menuPriorityItem?.isVisible = true
-            menuPriorityItem?.isEnabled = true
             menuPriorityItem?.title = currentNote.priority.toString()
+            menuPriorityItem?.isVisible = true
             menuShare?.isVisible = false
+        }
+        else{
+            menuPriorityItem?.isVisible = false
         }
         return super.onPrepareOptionsMenu(menu)
     }
