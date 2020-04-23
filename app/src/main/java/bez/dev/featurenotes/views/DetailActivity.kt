@@ -39,15 +39,14 @@ class DetailActivity : BaseActivity(), OnPrioritySaveClickListener, DetailEditTe
     private var menuShare: MenuItem? = null
     private lateinit var detailListAdapter: DetailListAdapter
     private var editTextDialog: DetailEditTextDialog? = null
-    private var itemList: MutableList<NoteItem> = mutableListOf()
     private lateinit var currentNote: Note
     private lateinit var revertedNote: Note
     private var isExistingNote: Boolean = false
     private lateinit var touchHelper: ItemTouchHelper
 
     private val observer = Observer<Note> {
-        itemList = it.items
-        refreshRecyclerView(itemList)
+        currentNote.items = it.items
+        refreshRecyclerView(currentNote.items)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -96,7 +95,7 @@ class DetailActivity : BaseActivity(), OnPrioritySaveClickListener, DetailEditTe
 
     override fun onDeleteItemClick(position: Int) {
         val strText = deleteItemAtPosition(position)
-        refreshRecyclerView(itemList)
+        refreshRecyclerView(currentNote.items)
         detailListAdapter.notifyItemRemoved(position)
         showUndoDelete(position, strText)
     }
@@ -123,8 +122,8 @@ class DetailActivity : BaseActivity(), OnPrioritySaveClickListener, DetailEditTe
                 nested_scroll_view.post { nested_scroll_view.fullScroll(ScrollView.FOCUS_DOWN) }
             }
         } else { // EDIT
-            itemList[position] = NoteItem(newText)
-            refreshRecyclerView(itemList)
+            currentNote.items[position] = NoteItem(newText)
+            refreshRecyclerView(currentNote.items)
             detailListAdapter.notifyItemChanged(position)
 
         }
@@ -136,13 +135,13 @@ class DetailActivity : BaseActivity(), OnPrioritySaveClickListener, DetailEditTe
     }
 
     private fun addItemAtPosition(position: Int, str: String) {
-        itemList.add(position, NoteItem(str))
-        refreshRecyclerView(itemList)
+        currentNote.items.add(position, NoteItem(str))
+        refreshRecyclerView(currentNote.items)
         detailListAdapter.notifyItemInserted(position)
     }
 
     private fun deleteItemAtPosition(position: Int): String {
-        return itemList.removeAt(position).itemText
+        return currentNote.items.removeAt(position).itemText
     }
 
     private fun openEditTextDialog(position: Int = 0, text: String = "") {
@@ -155,7 +154,7 @@ class DetailActivity : BaseActivity(), OnPrioritySaveClickListener, DetailEditTe
         setSupportActionBar(note_detail_toolbar)    //merges the custom TOOLBAR with the existing MENU
 
         top_add_item_btn.setOnClickListener { openEditTextDialog(0) }
-        bottom_add_item_btn.setOnClickListener { openEditTextDialog(itemList.size) }
+        bottom_add_item_btn.setOnClickListener { openEditTextDialog(currentNote.items.size) }
 
         recycler_view_detail.addItemDecoration(DividerItemDecoration(this, DividerItemDecoration.VERTICAL))
         recycler_view_detail.layoutManager = LinearLayoutManager(this)
@@ -178,7 +177,7 @@ class DetailActivity : BaseActivity(), OnPrioritySaveClickListener, DetailEditTe
                     dragFrom = fromPosition
                 }
                 dragTo = toPosition
-                Collections.swap(itemList, fromPosition, toPosition)
+                Collections.swap(currentNote.items, fromPosition, toPosition)
                 detailListAdapter.notifyItemMoved(fromPosition, toPosition)
                 return true
             }
@@ -230,9 +229,7 @@ class DetailActivity : BaseActivity(), OnPrioritySaveClickListener, DetailEditTe
         if (isExistingNote) { //EXISTING
 
             currentNote = intent.getParcelableExtra(EXTRA_NOTE) as Note
-
             revertedNote = Note(currentNote.title, currentNote.priority, currentNote.items)
-            itemList = currentNote.items
 
             edit_text_title.setText(currentNote.title)
 
@@ -240,12 +237,13 @@ class DetailActivity : BaseActivity(), OnPrioritySaveClickListener, DetailEditTe
 
         } else { //NEW
             currentNote = Note("", 3, mutableListOf())
+            revertedNote = Note("", 3, mutableListOf())
             enterEditMode()
         }
     }
 
     private fun revertNote(){
-        itemList = revertedNote.items
+        currentNote.items = revertedNote.items
         currentNote.priority = revertedNote.priority
         menuPriorityItem?.title = currentNote.priority.toString()
         edit_text_title.setText(revertedNote.title)
@@ -273,10 +271,9 @@ class DetailActivity : BaseActivity(), OnPrioritySaveClickListener, DetailEditTe
 
         if (isExistingNote) {
             currentNote.title = title
-            currentNote.items = itemList
             repoViewModel.update(currentNote)
         } else { // create new note
-            currentNote = Note(title, currentNote.priority, itemList)
+            currentNote = Note(title, currentNote.priority, currentNote.items)
 
             CoroutineScope(Dispatchers.IO).launch {
                 currentNote.id = repoViewModel.insert(currentNote)
@@ -306,7 +303,7 @@ class DetailActivity : BaseActivity(), OnPrioritySaveClickListener, DetailEditTe
         finish()
     }
 
-    private fun isNoteEmpty() = getNoteTitle().isBlank() && itemList.isNullOrEmpty()
+    private fun isNoteEmpty() = getNoteTitle().isBlank() && currentNote.items.isNullOrEmpty()
 
     private fun isTitleBlank() = getNoteTitle().isBlank()
 
@@ -335,7 +332,7 @@ class DetailActivity : BaseActivity(), OnPrioritySaveClickListener, DetailEditTe
         menuPriorityItem?.isEnabled = true
         menuPriorityItem?.title = currentNote.priority.toString()
         menuShare?.isVisible = false
-        refreshRecyclerView(itemList)
+        refreshRecyclerView(currentNote.items)
     }
 
 
@@ -359,7 +356,7 @@ class DetailActivity : BaseActivity(), OnPrioritySaveClickListener, DetailEditTe
         menuPriorityItem?.isEnabled = false
         menuShare?.isVisible = true
 
-        refreshRecyclerView(itemList)
+        refreshRecyclerView(currentNote.items)
         //saving frequently so we can SHARE most updated note items
         saveNote()
     }
