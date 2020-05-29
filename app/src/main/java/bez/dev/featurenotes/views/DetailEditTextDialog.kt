@@ -6,10 +6,11 @@ import android.os.Bundle
 import android.view.ViewGroup
 import android.view.Window
 import bez.dev.featurenotes.R
+import bez.dev.featurenotes.data.NoteItem
 import bez.dev.featurenotes.misc.Utils
 import kotlinx.android.synthetic.main.detail_activity_dialog_edit_text.*
 
-class DetailEditTextDialog(context: Context, listener: OnItemSaveClickListener, private val itemText: String = "", myPosition: Int = 0) : Dialog(context) {
+class DetailEditTextDialog(context: Context, listener: OnItemSaveClickListener, private val noteItem: NoteItem, myPosition: Int = 0) : Dialog(context) {
 
     private var myListener: OnItemSaveClickListener = listener
     private var isAddedItem: Boolean = false
@@ -22,10 +23,10 @@ class DetailEditTextDialog(context: Context, listener: OnItemSaveClickListener, 
 
         initUI()
 
-        if (itemText.isEmpty()) {
+        if (noteItem.itemText.isEmpty()) {
             isAddedItem = true //is new item?
         } else {
-            dialogEditText.append(itemText)
+            dialogEditText.append(noteItem.itemText)
         }
 
         dialogSaveTextBtn.setOnClickListener {
@@ -40,7 +41,8 @@ class DetailEditTextDialog(context: Context, listener: OnItemSaveClickListener, 
     }
 
     fun saveMe() {
-        myListener.onTextSaveDialogBtnClick(dialogEditText.text.toString().trim(), position, isAddedItem)
+        val newNoteItem = NoteItem(dialogEditText.text.toString().trim(), noteItem.isDone)
+        myListener.onTextSaveDialogBtnClick(newNoteItem, position, isAddedItem)
     }
 
 
@@ -50,6 +52,6 @@ class DetailEditTextDialog(context: Context, listener: OnItemSaveClickListener, 
     }
 
     interface OnItemSaveClickListener {
-        fun onTextSaveDialogBtnClick(newText: String, position: Int, isAddedItem: Boolean)
+        fun onTextSaveDialogBtnClick(noteItem: NoteItem, position: Int, isAddedItem: Boolean)
     }
 }

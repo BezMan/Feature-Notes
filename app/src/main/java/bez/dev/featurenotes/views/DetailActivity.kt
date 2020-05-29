@@ -83,8 +83,8 @@ class DetailActivity : BaseActivity(), OnPrioritySaveClickListener, DetailEditTe
         saveNote()
     }
 
-    override fun onDetailItemClick(text: String, position: Int) {
-        openEditTextDialog(position, text)
+    override fun onDetailItemClick(noteItem: NoteItem, position: Int) {
+        openEditTextDialog(position, noteItem)
     }
 
     override fun onDetailItemLongClick(text: String, position: Int): Boolean {
@@ -120,22 +120,22 @@ class DetailActivity : BaseActivity(), OnPrioritySaveClickListener, DetailEditTe
 
 
 
-    override fun onTextSaveDialogBtnClick(newText: String, position: Int, isAddedItem: Boolean) {
+    override fun onTextSaveDialogBtnClick(noteItem: NoteItem, position: Int, isAddedItem: Boolean) {
         if (isAddedItem) { //NEW
-            addItemAtPosition(position, newText)
+            addItemAtPosition(position, noteItem.itemText)
 
             //scroll to show bottom , if we added to bottom
             if (position > 1) {
                 nested_scroll_view.post { nested_scroll_view.fullScroll(ScrollView.FOCUS_DOWN) }
             }
         } else { // EDIT
-            currentNote.items[position] = NoteItem(newText)
+            currentNote.items[position] = noteItem
             refreshRecyclerView(currentNote.items)
             detailListAdapter.notifyItemChanged(position)
 
         }
         //remove item if empty
-        if (newText.isBlank()) {
+        if (noteItem.itemText.isBlank()) {
             deleteItemAtPosition(position)
         }
 
@@ -151,8 +151,8 @@ class DetailActivity : BaseActivity(), OnPrioritySaveClickListener, DetailEditTe
         return currentNote.items.removeAt(position).itemText
     }
 
-    private fun openEditTextDialog(position: Int = 0, text: String = "") {
-        editTextDialog = DetailEditTextDialog(this, this, text, position)
+    private fun openEditTextDialog(position: Int = 0, noteItem: NoteItem) {
+        editTextDialog = DetailEditTextDialog(this, this, noteItem, position)
         editTextDialog?.show()
     }
 
@@ -160,8 +160,8 @@ class DetailActivity : BaseActivity(), OnPrioritySaveClickListener, DetailEditTe
     private fun initUI() {
         setSupportActionBar(note_detail_toolbar)    //merges the custom TOOLBAR with the existing MENU
 
-        top_add_item_btn.setOnClickListener { openEditTextDialog(0) }
-        bottom_add_item_btn.setOnClickListener { openEditTextDialog(currentNote.items.size) }
+        top_add_item_btn.setOnClickListener { openEditTextDialog(0, NoteItem("")) }
+        bottom_add_item_btn.setOnClickListener { openEditTextDialog(currentNote.items.size, NoteItem("")) }
 
         recycler_view_detail.addItemDecoration(DividerItemDecoration(this, DividerItemDecoration.VERTICAL))
         recycler_view_detail.layoutManager = LinearLayoutManager(this)

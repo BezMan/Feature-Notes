@@ -51,7 +51,7 @@ class DetailListAdapter internal constructor(myListener: OnDetailItemClickListen
             detailItemHolder.itemText.setTextColor(ContextCompat.getColor(listener as Context, R.color.black))
 
             detailItemHolder.itemText.setOnClickListener {
-                listener.onDetailItemClick(currentItem.itemText, position)
+                listener.onDetailItemClick(currentItem, position)
             }
             detailItemHolder.deleteItem.setOnClickListener {
                 listener.onDeleteItemClick(position)
@@ -82,7 +82,7 @@ class DetailListAdapter internal constructor(myListener: OnDetailItemClickListen
 
     interface OnDetailItemClickListener {
         fun onDetailItemClickToggleDone(isItemDone: Boolean, position: Int)
-        fun onDetailItemClick(text: String, position: Int)
+        fun onDetailItemClick(noteItem: NoteItem, position: Int)
         fun onDetailItemLongClick(text: String, position: Int): Boolean
         fun onDeleteItemClick(position: Int)
     }
