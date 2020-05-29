@@ -12,8 +12,8 @@ where the user can add items while other apps are in foreground (playing a video
 - Dependency Injection with Koin: injecting Repository, NotificationManager and ViewModel.
 - Using Kotlin Coroutines for necessary asynchronous DB operations.
 - Parcelable Note data class, so we can pass it between Activities.
-- TypeConverter for converting List of objects to a String and back.
-- Database ViewModel - mutual data access through all activities.
+- TypeConverter for storing non-primitive object types in Room Database.
+- Database ViewModel - a single data entry point for all activities.
 - ItemTouchHelper callbacks for gesture detection: drag & drop items.
 - Custom Views (AlertDialog) managing their own UI setup and lifecycle.
 - Setting a priority for each note, influences the order in the main list.
@@ -24,6 +24,7 @@ where the user can add items while other apps are in foreground (playing a video
 - RESTORE deleted notes and items, through SnackBar action.
 - REVERT CHANGES menu item, during note editing session.
 - Share notes easily + quick text copy of individual note items.
+- click to ~~Strike Through note items~~ and mark them as DONE.
 - Espresso Instrumentation tests across both activities.
 
 <br/>
