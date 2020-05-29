@@ -10,6 +10,7 @@ import android.graphics.Typeface
 import android.os.Build
 import android.text.Spannable
 import android.text.SpannableString
+import android.text.style.StrikethroughSpan
 import android.text.style.StyleSpan
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
@@ -128,7 +129,12 @@ class NotificationManager(context: Context) {
         val list = note.items
 
         for (i in 0 until list.size) {
-            inboxStyle.addLine(list[i].itemText)
+            val itemText = list[i].itemText
+            if (list[i].isDone){
+                inboxStyle.addLine(strikeThroughText(itemText))
+            }else{
+                inboxStyle.addLine(itemText)
+            }
         }
 
         return setBodyNotification(note, replyAction, inboxStyle)
@@ -150,6 +156,12 @@ class NotificationManager(context: Context) {
     private fun boldText(text: String): CharSequence {
         val sp = SpannableString(text)
         sp.setSpan(StyleSpan(Typeface.BOLD), 0, text.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+        return sp
+    }
+
+    private fun strikeThroughText(text: String): CharSequence {
+        val sp = SpannableString(text)
+        sp.setSpan(StrikethroughSpan(), 0, text.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
         return sp
     }
 

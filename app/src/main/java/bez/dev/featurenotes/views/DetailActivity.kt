@@ -76,6 +76,13 @@ class DetailActivity : BaseActivity(), OnPrioritySaveClickListener, DetailEditTe
         repoViewModel.getNoteById(currentNote.id).observe(this, observer)
     }
 
+
+    override fun onDetailItemClickToggleDone(isItemDone: Boolean, position: Int) {
+        currentNote.items[position].isDone = isItemDone
+        detailListAdapter.notifyItemChanged(position)
+        saveNote()
+    }
+
     override fun onDetailItemClick(text: String, position: Int) {
         openEditTextDialog(position, text)
     }

@@ -2,6 +2,9 @@ package bez.dev.featurenotes.views
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.text.Spannable
+import android.text.SpannableString
+import android.text.style.StrikethroughSpan
 import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.View
@@ -24,10 +27,6 @@ class DetailListAdapter internal constructor(myListener: OnDetailItemClickListen
     private var listener: OnDetailItemClickListener = myListener
 
 
-    internal fun getDetailItemAt(position: Int): NoteItem {
-        return getItem(position)
-    }
-
     override fun onCreateViewHolder(viewGroup: ViewGroup, i: Int): DetailItemHolder {
         val itemView = LayoutInflater.from(viewGroup.context)
                 .inflate(R.layout.detail_activity_list_item, viewGroup, false)
@@ -36,22 +35,23 @@ class DetailListAdapter internal constructor(myListener: OnDetailItemClickListen
 
     @SuppressLint("ClickableViewAccessibility")
     override fun onBindViewHolder(detailItemHolder: DetailItemHolder, position: Int) {
-        val currentNote = getDetailItemAt(position)
-        detailItemHolder.itemText.text = currentNote.itemText.trim()
+        val currentItem = getItem(position)
+        detailItemHolder.itemText.text = currentItem.itemText.trim()
 
         //do regardless of mode
         detailItemHolder.deleteItem.showOnEditMode(mIsEditMode)
         detailItemHolder.dragItem.showOnEditMode(mIsEditMode)
+        detailItemHolder.itemText.showItemIsDone(currentItem.isDone)
 
         detailItemHolder.itemText.setOnLongClickListener {
-            listener.onDetailItemLongClick(currentNote.itemText, position)
+            listener.onDetailItemLongClick(currentItem.itemText, position)
         }
 
         if (mIsEditMode) { //ONLY edit mode
             detailItemHolder.itemText.setTextColor(ContextCompat.getColor(listener as Context, R.color.black))
 
             detailItemHolder.itemText.setOnClickListener {
-                listener.onDetailItemClick(currentNote.itemText, position)
+                listener.onDetailItemClick(currentItem.itemText, position)
             }
             detailItemHolder.deleteItem.setOnClickListener {
                 listener.onDeleteItemClick(position)
@@ -65,7 +65,9 @@ class DetailListAdapter internal constructor(myListener: OnDetailItemClickListen
         } else {  //NOT edit mode
             detailItemHolder.itemText.setTextColor(ContextCompat.getColor(listener as Context, R.color.gray))
 
-            detailItemHolder.itemText.setOnClickListener { }
+            detailItemHolder.itemText.setOnClickListener {
+                listener.onDetailItemClickToggleDone(!currentItem.isDone, position)
+            }
 
         }
     }
@@ -79,6 +81,7 @@ class DetailListAdapter internal constructor(myListener: OnDetailItemClickListen
 
 
     interface OnDetailItemClickListener {
+        fun onDetailItemClickToggleDone(isItemDone: Boolean, position: Int)
         fun onDetailItemClick(text: String, position: Int)
         fun onDetailItemLongClick(text: String, position: Int): Boolean
         fun onDeleteItemClick(position: Int)
@@ -100,6 +103,15 @@ class DetailListAdapter internal constructor(myListener: OnDetailItemClickListen
 
 
 }
+
+private fun TextView.showItemIsDone(done: Boolean) {
+    val sp = SpannableString(text)
+    if (done) {
+        sp.setSpan(StrikethroughSpan(), 0, text.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+    }
+    text = sp
+}
+
 
 fun View.showOnEditMode(show: Boolean) {
     visibility = if (show) {
