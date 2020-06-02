@@ -35,12 +35,28 @@ class MainActivity : BaseActivity(), MainListAdapter.OnItemClickListener {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        if (isCalledFromSummaryNotification()) return
+
         setContentView(R.layout.main_activity)
 
         initUI()
 
         initNoteViewModel()
 
+    }
+
+    /**
+     * summary notification click - should RESUME app and not start another MainActivity
+     */
+    private fun isCalledFromSummaryNotification(): Boolean {
+        if (!isTaskRoot
+    //                && intent.hasCategory(Intent.CATEGORY_LAUNCHER) && intent.action != null && intent.action.equals(Intent.ACTION_MAIN)
+        ) {
+            finish()
+            return true
+        }
+        return false
     }
 
     private fun initUI() {
