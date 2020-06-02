@@ -15,10 +15,14 @@ import android.text.style.StyleSpan
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import androidx.core.app.RemoteInput
+import androidx.core.app.TaskStackBuilder
 import androidx.core.content.ContextCompat
 import bez.dev.featurenotes.data.Note
 import bez.dev.featurenotes.services.AddFromNotificationIntentService
+import bez.dev.featurenotes.views.DetailActivity
 import bez.dev.featurenotes.views.MainActivity
+import bez.dev.featurenotes.views.MainActivity.Companion.EXTRA_NOTE
+import kotlin.random.Random
 
 class NotificationManager(context: Context) {
 
@@ -28,6 +32,8 @@ class NotificationManager(context: Context) {
 
     private val mainPendingIntent = PendingIntent.getActivity(mContext,
             0, Intent(mContext, MainActivity::class.java), 0)
+
+    private val detailIntent = Intent(mContext, DetailActivity::class.java)
 
     init {
 
@@ -39,17 +45,16 @@ class NotificationManager(context: Context) {
                     NotificationManager.IMPORTANCE_LOW))
         }
 
-        mNotificationBuilder
-                .setSmallIcon(bez.dev.featurenotes.R.mipmap.ic_app_launcher)
-                .setColor(ContextCompat.getColor(context, bez.dev.featurenotes.R.color.colorPrimary))
-                .setGroup(KEY_NOTIFICATION_GROUP)
-                .setGroupSummary(true)
-                .setContentIntent(mainPendingIntent)
-
     }
 
     private fun setSummaryBuilder(): Notification {
-        return mNotificationBuilder.build()
+        return mNotificationBuilder
+                .setSmallIcon(bez.dev.featurenotes.R.mipmap.ic_app_launcher)
+                .setColor(ContextCompat.getColor(mContext, bez.dev.featurenotes.R.color.colorPrimary))
+                .setGroup(KEY_NOTIFICATION_GROUP)
+                .setGroupSummary(true)
+                .setContentIntent(mainPendingIntent)
+                .build()
     }
 
 
@@ -100,7 +105,7 @@ class NotificationManager(context: Context) {
         // Pending intent =
         //      API <24 (M and below): activity so the lock-screen presents the auth challenge.
         //      API 24+ (N and above): this should be a Service or BroadcastReceiver.
-        val replyActionPendingIntent: PendingIntent
+        val replyActionPendingIntent: PendingIntent?
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             val intent = Intent(mContext, AddFromNotificationIntentService::class.java)
@@ -146,7 +151,13 @@ class NotificationManager(context: Context) {
                 .setContentTitle(boldText(note.title))
                 .setGroup(KEY_NOTIFICATION_GROUP)
                 .setOngoing(true)
-                .setContentIntent(mainPendingIntent)
+                .setContentIntent(TaskStackBuilder.create(mContext).run {
+                    // Add the intent, which inflates the back stack
+                    detailIntent.putExtra(EXTRA_NOTE, note)
+                    addNextIntentWithParentStack(detailIntent)
+                    // Get the PendingIntent containing the entire back stack
+                    getPendingIntent(Random.nextInt(), PendingIntent.FLAG_UPDATE_CURRENT)
+                })
                 .addAction(replyAction)
                 .setStyle(inboxStyle)
 
