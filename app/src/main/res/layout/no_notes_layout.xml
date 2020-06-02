@@ -4,7 +4,7 @@
     android:id="@+id/no_notes_view"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="30dp"
+    android:layout_margin="90dp"
     android:drawableBottom="@mipmap/ic_app_launcher"
     android:drawablePadding="30dp"
     android:gravity="center"
