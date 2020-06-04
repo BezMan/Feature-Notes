@@ -12,6 +12,7 @@ import android.text.Spannable
 import android.text.SpannableString
 import android.text.style.StrikethroughSpan
 import android.text.style.StyleSpan
+import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import androidx.core.app.RemoteInput
@@ -66,6 +67,10 @@ class NotificationManager(context: Context) {
         mNotificationManager.cancel(noteId.toInt())
     }
 
+    @RequiresApi(Build.VERSION_CODES.M)
+    fun getNotificationCount(): Int {
+        return mNotificationManager.activeNotifications.size
+    }
 
     fun updateSpecificNotification(note: Note) {
         NotificationManagerCompat.from(mContext).apply {
