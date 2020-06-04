@@ -1,17 +1,15 @@
 package bez.dev.featurenotes.services
 
-import android.app.Service
+import android.app.IntentService
 import android.content.Intent
-import android.os.IBinder
 import bez.dev.featurenotes.misc.NotificationManager
 import org.koin.android.ext.android.get
 
 
-class OnClearFromRecentService : Service() {
+class OnClearFromRecentService : IntentService("OnClearFromRecentService") {
 
 
-    override fun onBind(intent: Intent): IBinder? {
-        return null
+    override fun onHandleIntent(intent: Intent?) {
     }
 
     override fun onStartCommand(intent: Intent, flags: Int, startId: Int): Int {
