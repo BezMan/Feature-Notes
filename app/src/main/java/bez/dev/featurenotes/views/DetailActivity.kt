@@ -45,8 +45,8 @@ class DetailActivity : BaseActivity(), OnPrioritySaveClickListener, DetailEditTe
     private lateinit var touchHelper: ItemTouchHelper
 
     private val observer = Observer<Note> {
-        currentNote.items = it.items
-        refreshRecyclerView(currentNote.items)
+        currentNote = it
+        refreshRecyclerView(currentNote)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -102,7 +102,7 @@ class DetailActivity : BaseActivity(), OnPrioritySaveClickListener, DetailEditTe
 
     override fun onDeleteItemClick(position: Int) {
         val strText = deleteItemAtPosition(position)
-        refreshRecyclerView(currentNote.items)
+        refreshRecyclerView(currentNote)
         detailListAdapter.notifyItemRemoved(position)
         showUndoDelete(position, strText)
     }
@@ -130,7 +130,7 @@ class DetailActivity : BaseActivity(), OnPrioritySaveClickListener, DetailEditTe
             }
         } else { // EDIT
             currentNote.items[position] = noteItem
-            refreshRecyclerView(currentNote.items)
+            refreshRecyclerView(currentNote)
             detailListAdapter.notifyItemChanged(position)
 
         }
@@ -143,7 +143,7 @@ class DetailActivity : BaseActivity(), OnPrioritySaveClickListener, DetailEditTe
 
     private fun addItemAtPosition(position: Int, str: String) {
         currentNote.items.add(position, NoteItem(str))
-        refreshRecyclerView(currentNote.items)
+        refreshRecyclerView(currentNote)
         detailListAdapter.notifyItemInserted(position)
     }
 
@@ -219,14 +219,13 @@ class DetailActivity : BaseActivity(), OnPrioritySaveClickListener, DetailEditTe
     }
 
 
-    private fun refreshRecyclerView(notes: MutableList<NoteItem>?) {
+    private fun refreshRecyclerView(note: Note) {
         detailListAdapter = DetailListAdapter(this, touchHelper, isEditMode)
         recycler_view_detail.adapter = detailListAdapter
-        detailListAdapter.submitList(notes)
+        detailListAdapter.submitList(note.items)
 
-        if (!isNoteEmpty() && isExistingNote && currentNote.isNotification) {
-            currentNote.items = notes as MutableList<NoteItem>
-            notificationManager.updateSpecificNotification(currentNote)
+        if (!isNoteEmpty() && isExistingNote && note.isNotification) {
+            notificationManager.updateSpecificNotification(note)
         }
 
     }
@@ -338,7 +337,7 @@ class DetailActivity : BaseActivity(), OnPrioritySaveClickListener, DetailEditTe
         menuPriorityItem?.isVisible = true
         menuPriorityItem?.title = currentNote.priority.toString()
         menuShare?.isVisible = false
-        refreshRecyclerView(currentNote.items)
+        refreshRecyclerView(currentNote)
     }
 
 
@@ -361,7 +360,7 @@ class DetailActivity : BaseActivity(), OnPrioritySaveClickListener, DetailEditTe
         menuPriorityItem?.isVisible = false
         menuShare?.isVisible = true
 
-        refreshRecyclerView(currentNote.items)
+        refreshRecyclerView(currentNote)
         //saving frequently so we can SHARE most updated note items
         saveNote()
     }

@@ -95,35 +95,45 @@ class NotificationManager(context: Context) {
 
 
     private fun createNotificationBuilder(note: Note): Notification {
+        if(!note.isNotification) cancelNotificationById(note.id)
 
         // Create the RemoteInput specifying this key.
-        val replyLabel = "ADD"
+        val labelADD = "ADD"
+        val labelDISMISS = "DISMISS"
         val remoteInput = RemoteInput.Builder(AddFromNotificationIntentService.EXTRA_REPLY)
-                .setLabel(replyLabel)
+                .setLabel(labelADD)
                 .build()
 
         // Pending intent =
         //      API <24 (M and below): activity so the lock-screen presents the auth challenge.
         //      API 24+ (N and above): this should be a Service or BroadcastReceiver.
-        val replyActionPendingIntent: PendingIntent?
+        var replyActionPendingIntent: PendingIntent? = null
+        var dismissActionPendingIntent: PendingIntent? = null
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            val intent = Intent(mContext, AddFromNotificationIntentService::class.java)
-            intent.action = AddFromNotificationIntentService.ACTION_REPLY
-            intent.putExtra(AddFromNotificationIntentService.NOTIFICATION_NOTE, note)
-            replyActionPendingIntent = PendingIntent.getService(mContext, note.id.toInt(), intent, PendingIntent.FLAG_UPDATE_CURRENT)
+            val intentAdd = Intent(mContext, AddFromNotificationIntentService::class.java)
+            intentAdd.action = AddFromNotificationIntentService.ACTION_REPLY
+            intentAdd.putExtra(AddFromNotificationIntentService.NOTIFICATION_NOTE, note)
+            replyActionPendingIntent = PendingIntent.getService(mContext, note.id.toInt(), intentAdd, PendingIntent.FLAG_UPDATE_CURRENT)
 
-        } else {
-            replyActionPendingIntent = mainPendingIntent
+            val intentDismiss = Intent(mContext, AddFromNotificationIntentService::class.java)
+            intentDismiss.action = AddFromNotificationIntentService.ACTION_DISMISS
+            intentDismiss.putExtra(AddFromNotificationIntentService.NOTIFICATION_NOTE, note)
+            dismissActionPendingIntent = PendingIntent.getService(mContext, note.id.toInt(), intentDismiss, PendingIntent.FLAG_UPDATE_CURRENT)
+
         }
 
         val replyAction = NotificationCompat.Action.Builder(
                 bez.dev.featurenotes.R.drawable.ic_add,
-                replyLabel,
+                labelADD,
                 replyActionPendingIntent)
                 .addRemoteInput(remoteInput)
-                // Informs system we aren't bringing up our own custom UI for a reply
-                .setShowsUserInterface(false)
+                .build()
+
+        val dismissAction = NotificationCompat.Action.Builder(
+                bez.dev.featurenotes.R.drawable.ic_close,
+                labelDISMISS,
+                dismissActionPendingIntent)
                 .build()
 
 
@@ -142,10 +152,10 @@ class NotificationManager(context: Context) {
             }
         }
 
-        return setBodyNotification(note, replyAction, inboxStyle)
+        return setBodyNotification(note, replyAction, dismissAction, inboxStyle)
     }
 
-    private fun setBodyNotification(note: Note, replyAction: NotificationCompat.Action?, inboxStyle: NotificationCompat.InboxStyle): Notification {
+    private fun setBodyNotification(note: Note, replyAction: NotificationCompat.Action?, dismissAction: NotificationCompat.Action?, inboxStyle: NotificationCompat.InboxStyle): Notification {
         return NotificationCompat.Builder(mContext, CHANNEL_ID)
                 .setSmallIcon(bez.dev.featurenotes.R.mipmap.ic_app_launcher)
                 .setContentTitle(boldText(note.title))
@@ -159,6 +169,7 @@ class NotificationManager(context: Context) {
                     getPendingIntent(Random.nextInt(), PendingIntent.FLAG_UPDATE_CURRENT)
                 })
                 .addAction(replyAction)
+                .addAction(dismissAction)
                 .setStyle(inboxStyle)
 
                 .build()
