@@ -99,6 +99,7 @@ dependencies {
     debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.0-beta-3'
 
     implementation 'com.google.firebase:firebase-core:17.4.2'
+    implementation 'com.google.firebase:firebase-ml-vision:24.0.3'
 
     implementation 'com.crashlytics.sdk.android:crashlytics:2.10.1'
 

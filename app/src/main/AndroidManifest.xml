@@ -1,7 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     package="bez.dev.featurenotes">
 
+    <uses-permission android:name="android.permission.INTERNET" />
 
     <application
         android:name=".misc.App"
@@ -11,12 +13,11 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.Light.NoActionBar"
         tools:ignore="GoogleAppIndexingWarning">
-
+        <activity android:name=".views.ImageActivity"></activity>
         <activity
             android:name=".views.DetailActivity"
             android:parentActivityName=".views.MainActivity"
             android:windowSoftInputMode="stateHidden" />
-
         <activity
             android:name=".views.MainActivity"
             android:launchMode="singleTop"
@@ -31,10 +32,13 @@
         <service
             android:name=".services.AddFromNotificationIntentService"
             android:exported="false" />
-
         <service
             android:name=".services.OnClearFromRecentService"
             android:stopWithTask="false" />
 
+        <meta-data
+            android:name="com.google.mlkit.vision.DEPENDENCIES"
+            android:value="ocr" />
     </application>
+
 </manifest>

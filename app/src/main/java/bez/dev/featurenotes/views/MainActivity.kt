@@ -104,6 +104,10 @@ class MainActivity : BaseActivity(), MainListAdapter.OnItemClickListener {
             R.id.main_menu_delete_all_notes -> {
                 checkDeleteAllNotes()
             }
+            R.id.main_menu_open_image -> {
+                val intent = Intent(this, ImageActivity::class.java)
+                startActivity(intent)
+            }
             else -> super.onOptionsItemSelected(item)
         }
         return true

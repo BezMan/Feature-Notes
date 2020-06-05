@@ -18,5 +18,10 @@
         android:title="Delete all notes"
         app:showAsAction="never" />
 
+    <item
+        android:id="@+id/main_menu_open_image"
+        android:title="Open Image"
+        app:showAsAction="always" />
+
 
 </menu>
