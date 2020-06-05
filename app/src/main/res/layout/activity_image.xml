@@ -1,46 +1,47 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:padding="15dp">
 
-    <ImageView
-        android:id="@+id/imageView"
-        android:layout_width="match_parent"
-        android:layout_height="250dp"
-        android:layout_centerHorizontal="true" />
-
-    <LinearLayout
-        android:id="@+id/actionContainer"
+    <Button
+        android:id="@+id/imageToText_btn_select"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/imageView"
-        android:orientation="horizontal">
+        android:onClick="selectImage"
+        android:padding="20dp"
+        android:text="Select Image from gallery"
+        app:layout_constraintTop_toTopOf="parent" />
 
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:onClick="selectImage"
-            android:text="Select Image" />
-
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:onClick="startRecognizing"
-            android:text="Recognize Text" />
-    </LinearLayout>
+    <ImageView
+        android:id="@+id/imageToText_image"
+        android:layout_width="match_parent"
+        android:layout_height="300dp"
+        android:layout_centerHorizontal="true"
+        app:layout_constraintTop_toBottomOf="@id/imageToText_btn_select" />
 
 
     <EditText
-        android:id="@+id/editText"
+        android:id="@+id/imageToText_text"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_below="@+id/actionContainer"
+        android:layout_height="0dp"
         android:background="@android:color/transparent"
         android:gravity="top"
-        android:hint="Detected text will appear here."
+        android:hint="Detected text will appear here"
         android:inputType="textMultiLine"
-        android:padding="10dp" />
+        android:padding="10dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/imageToText_image" />
 
-</RelativeLayout>
+    <ImageButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:alpha="0.5"
+
+        android:src="@drawable/ic_copy"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/imageToText_image" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

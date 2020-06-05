@@ -20,8 +20,8 @@ class ImageActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_image)
 
-        imageView = findViewById(R.id.imageView)
-        editText = findViewById(R.id.editText)
+        imageView = findViewById(R.id.imageToText_image)
+        editText = findViewById(R.id.imageToText_text)
     }
 
 
@@ -40,24 +40,22 @@ class ImageActivity : AppCompatActivity() {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == 1 && resultCode == Activity.RESULT_OK) {
             imageView.setImageURI(data!!.data)
+            startRecognizing()
         }
     }
 
-    fun startRecognizing(v: View) {
+    private fun startRecognizing() {
         if (imageView.drawable != null) {
             editText.setText("")
-            v.isEnabled = false
             val bitmap = (imageView.drawable as BitmapDrawable).bitmap
             val image = FirebaseVisionImage.fromBitmap(bitmap)
             val detector = FirebaseVision.getInstance().onDeviceTextRecognizer
 
             detector.processImage(image)
                     .addOnSuccessListener { firebaseVisionText ->
-                        v.isEnabled = true
                         processResultText(firebaseVisionText)
                     }
                     .addOnFailureListener {
-                        v.isEnabled = true
                         editText.setText("Failed")
                     }
         } else {
