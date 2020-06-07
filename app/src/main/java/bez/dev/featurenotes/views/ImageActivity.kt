@@ -5,6 +5,8 @@ import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
 import android.content.Intent
+import android.graphics.Bitmap
+import android.graphics.Matrix
 import android.graphics.drawable.BitmapDrawable
 import android.os.Bundle
 import android.view.View
@@ -18,7 +20,9 @@ import kotlinx.android.synthetic.main.activity_image.*
 
 class ImageActivity : AppCompatActivity() {
 
-    companion object{
+    private lateinit var bitmap: Bitmap
+
+    companion object {
         const val REQUEST_IMAGE = 123
     }
 
@@ -28,7 +32,7 @@ class ImageActivity : AppCompatActivity() {
     }
 
 
-    fun selectImage(v: View) {
+    fun imageAdd(v: View) {
         val intent = Intent()
         intent.type = "image/*"
         intent.action = Intent.ACTION_GET_CONTENT
@@ -46,16 +50,17 @@ class ImageActivity : AppCompatActivity() {
     private fun startRecognizing() {
         if (imageToText_image.drawable != null) {
             imageToText_text.setText("")
-            val bitmap = (imageToText_image.drawable as BitmapDrawable).bitmap
+            bitmap = (imageToText_image.drawable as BitmapDrawable).bitmap
             val image = FirebaseVisionImage.fromBitmap(bitmap)
             val detector = FirebaseVision.getInstance().onDeviceTextRecognizer
 
             detector.processImage(image)
                     .addOnSuccessListener { firebaseVisionText ->
                         processResultText(firebaseVisionText)
+                        imageToText_btn_rotate.visibility = View.VISIBLE
                     }
                     .addOnFailureListener {
-                        imageToText_text.setText("Failed")
+                        imageToText_text.hint = "Failed"
                     }
         } else {
             Toast.makeText(this, "Select an Image First", Toast.LENGTH_LONG).show()
@@ -66,7 +71,7 @@ class ImageActivity : AppCompatActivity() {
 
     private fun processResultText(resultText: FirebaseVisionText) {
         if (resultText.textBlocks.size == 0) {
-            imageToText_text.setText("No Text Found")
+            imageToText_text.hint = "No Text Found"
             return
         }
         for (block in resultText.textBlocks) {
@@ -87,6 +92,18 @@ class ImageActivity : AppCompatActivity() {
 
             Toast.makeText(this, "copied to clipboard", Toast.LENGTH_SHORT).show()
         }
+    }
+
+
+    private fun Bitmap.rotate(degrees: Float): Bitmap {
+        val matrix = Matrix().apply { postRotate(degrees) }
+        return Bitmap.createBitmap(this, 0, 0, width, height, matrix, true)
+    }
+
+    fun imageRotate(view: View) {
+        bitmap = bitmap.rotate(90F) // value must be float
+        imageToText_image.setImageBitmap(bitmap)
+        startRecognizing()
     }
 
 
