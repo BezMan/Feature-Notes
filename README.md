@@ -37,6 +37,7 @@ where the user can add items while other apps are in foreground (playing a video
 <img src="images/screenshots/scr3.jpeg" width="150">
 <img src="images/screenshots/scr4.jpeg" width="150">
 <img src="images/screenshots/scr5.jpeg" width="150">
+<img src="images/screenshots/scr6.jpeg" width="150">
 </div>
 
 <br/>
