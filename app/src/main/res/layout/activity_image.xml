@@ -7,6 +7,17 @@
     android:orientation="vertical"
     android:padding="15dp">
 
+    <TextView
+        android:id="@+id/imageToText_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="TEXT RECOGNITION \n Select Image"
+        android:textColor="@color/Black"
+        android:textSize="16sp"
+        app:layout_constraintTop_toTopOf="parent" />
+
+
     <ImageButton
         android:id="@+id/imageToText_rotate_right"
         android:layout_width="wrap_content"
@@ -43,7 +54,7 @@
         android:layout_centerHorizontal="true"
         android:onClick="imageAdd"
         android:src="@drawable/ic_add_circle"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@id/imageToText_title" />
 
 
     <EditText
@@ -63,6 +74,7 @@
         android:layout_height="wrap_content"
         android:alpha="0.5"
         android:onClick="clickCopyText"
+        android:padding="20dp"
         android:src="@drawable/ic_copy"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/imageToText_image" />

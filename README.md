@@ -32,12 +32,13 @@ where the user can add items while other apps are in foreground (playing a video
 <br/>
 
 <div class="row">
-<img src="images/screenshots/scr1.jpeg" width="150">
-<img src="images/screenshots/scr2.jpeg" width="150">
-<img src="images/screenshots/scr3.jpeg" width="150">
-<img src="images/screenshots/scr4.jpeg" width="150">
-<img src="images/screenshots/scr5.jpeg" width="150">
-<img src="images/screenshots/scr6.jpeg" width="150">
+<img src="images/screenshots/scr1.jpeg" width="170">
+<img src="images/screenshots/scr2.jpeg" width="170">
+<img src="images/screenshots/scr3.jpeg" width="170">
+<img src="images/screenshots/scr4.jpeg" width="170">
+<img src="images/screenshots/scr5.jpeg" width="170">
+<img src="images/screenshots/scr6.jpeg" width="170">
+<img src="images/screenshots/scr7.jpeg" width="170">
 </div>
 
 <br/>
@@ -49,6 +50,6 @@ I do plan on adding interesting features, so please let me know what similar app
 <br/>
 
 <a href="https://play.google.com/store/apps/details?id=bez.dev.featurenotes">
-<img src="images/badge-google-play.png" width="150" title="Feature Notes" 
+<img src="images/badge-google-play.png" width="170" title="Feature Notes"
 alt="Feature Notes">
 </a>
