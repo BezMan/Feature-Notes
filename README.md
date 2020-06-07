@@ -20,14 +20,14 @@ where the user can add items while other apps are in foreground (playing a video
 - Toolbar layouts containing menu items in conjunction with custom menu layouts.
 - Data persistence, so we don’t lose data, even when app task is removed.
 - auto generated primary key, where insert() provides us a unique ID val.
-- Nested ScrollView with auto scroll when adding new note items.
-- Machine Learning Text Recognition - extract latin words and numbers from your photos.
+- Nested ScrollView with auto scroll when adding bottom note items.
+- Text Recognition - extract words and numbers from your photos (Firebase Machine Learning API).
 - Setting notes as Notifications, for quick add, even while watching a video.
 - RESTORE deleted notes and items, through SnackBar action.
 - REVERT CHANGES menu item, during note editing session.
 - Share notes easily + quick text copy of individual note items.
 - click to ~~Strike Through note items~~ and mark them as DONE.
-- Espresso Instrumentation tests across both activities.
+- Espresso Instrumentation tests across multiple activities.
 
 <br/>
 

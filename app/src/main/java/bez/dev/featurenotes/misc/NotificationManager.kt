@@ -129,7 +129,7 @@ class NotificationManager(context: Context) {
         }
 
         val replyAction = NotificationCompat.Action.Builder(
-                bez.dev.featurenotes.R.drawable.ic_add,
+                bez.dev.featurenotes.R.drawable.ic_add_white,
                 labelADD,
                 replyActionPendingIntent)
                 .addRemoteInput(remoteInput)
