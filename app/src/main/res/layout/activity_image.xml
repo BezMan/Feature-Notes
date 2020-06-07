@@ -8,29 +8,31 @@
     android:padding="15dp">
 
     <ImageButton
-        android:id="@+id/imageToText_btn_add"
+        android:id="@+id/imageToText_rotate_right"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:alpha="0.8"
         android:elevation="2dp"
-        android:onClick="imageAdd"
+        android:onClick="imageRotateRight"
         android:padding="20dp"
-        android:src="@drawable/ic_add_black"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:src="@drawable/ic_rotate_right"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:visibility="visible" />
 
     <ImageButton
-        android:id="@+id/imageToText_btn_rotate"
+        android:id="@+id/imageToText_rotate_left"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:alpha="0.8"
         android:elevation="2dp"
-        android:onClick="imageRotate"
+        android:onClick="imageRotateLeft"
         android:padding="20dp"
-        android:src="@drawable/ic_rotate"
+        android:src="@drawable/ic_rotate_left"
         android:visibility="gone"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/imageToText_btn_add"
+        app:layout_constraintTop_toTopOf="parent"
         tools:visibility="visible" />
 
 
@@ -39,6 +41,8 @@
         android:layout_width="match_parent"
         android:layout_height="300dp"
         android:layout_centerHorizontal="true"
+        android:onClick="imageAdd"
+        android:src="@drawable/ic_add_circle"
         app:layout_constraintTop_toTopOf="parent" />
 
 
