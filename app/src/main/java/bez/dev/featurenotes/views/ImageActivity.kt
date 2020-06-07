@@ -57,7 +57,8 @@ class ImageActivity : AppCompatActivity() {
             detector.processImage(image)
                     .addOnSuccessListener { firebaseVisionText ->
                         processResultText(firebaseVisionText)
-                        imageToText_btn_rotate.visibility = View.VISIBLE
+                        imageToText_rotate_left.visibility = View.VISIBLE
+                        imageToText_rotate_right.visibility = View.VISIBLE
                     }
                     .addOnFailureListener {
                         imageToText_text.hint = "Failed"
@@ -100,8 +101,14 @@ class ImageActivity : AppCompatActivity() {
         return Bitmap.createBitmap(this, 0, 0, width, height, matrix, true)
     }
 
-    fun imageRotate(view: View) {
+    fun imageRotateRight(view: View) {
         bitmap = bitmap.rotate(90F) // value must be float
+        imageToText_image.setImageBitmap(bitmap)
+        startRecognizing()
+    }
+
+    fun imageRotateLeft(view: View) {
+        bitmap = bitmap.rotate(270F) // value must be float
         imageToText_image.setImageBitmap(bitmap)
         startRecognizing()
     }
