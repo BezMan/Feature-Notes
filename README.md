@@ -1,11 +1,12 @@
 <img src="images/feature-graphic.png" >
 
 # Feature-Notes
-I was motivated to add features I haven’t seen in other note apps, such as adding notes through notification actions, 
-where the user can add items while other apps are in foreground (playing a video for example).
+Wouldn't it be great to detect and copy text from within our photos?  
+How about adding note items while OTHER apps are in the foreground?
 
+These are some useful features you'll find in this app and I can't wait to add more!
 
- This sample project contains and showcases these concepts:
+ This project contains and showcases these concepts:
 
 - Kotlin language + Kotlin extension functions.
 - Architecture Components: MVVM, Room, Live Data, Observing DB changes.
@@ -43,9 +44,8 @@ where the user can add items while other apps are in foreground (playing a video
 
 <br/>
 
-I know there are many basic features I haven’t included yet, my focus was getting familiar with Kotlin.
-figured I'll open-source, to hear tips on how to improve code structure and modularity, so be my guest :)
-I do plan on adding interesting features, so please let me know what similar apps are missing.
+I know there are some basic features I haven’t included, I can't do everything on my own...  
+Feel free to join the coding ⭐ and I'm open to hearing your thoughts and suggestions 🤙🏽
 
 <br/>
 

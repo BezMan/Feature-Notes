@@ -11,8 +11,8 @@ android {
         applicationId "bez.dev.featurenotes"
         minSdkVersion 21
         targetSdkVersion 29
-        versionCode 9
-        versionName "6.03"
+        versionCode 10
+        versionName "6.04"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
