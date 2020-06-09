@@ -7,4 +7,5 @@
     android:gravity="start"
     android:padding="16dp"
     android:text="Add Item"
+    android:layout_margin="5dp"
     android:textAppearance="@style/TextAppearance.AppCompat.Large" />

@@ -34,8 +34,9 @@
 
         <ImageView
             android:id="@+id/overflow_image_note_item"
-            android:src="@drawable/ic_expand_more"
+            android:src="@drawable/ic_menu_overflow"
             android:layout_width="0dp"
+            android:padding="8dp"
             android:layout_height="wrap_content"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"

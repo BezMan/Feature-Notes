@@ -45,7 +45,7 @@ These are some useful features you'll find in this app and I can't wait to add m
 <br/>
 
 I know there are some basic features I haven’t included, I can't do everything on my own...  
-Feel free to join the coding ⭐ and I'm open to hearing your thoughts and suggestions 🤙🏽
+Feel free to support ⭐ and join the coding! I can't wait to hear your thoughts and suggestions 👍
 
 <br/>
 
