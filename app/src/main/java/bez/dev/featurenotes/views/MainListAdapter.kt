@@ -30,6 +30,18 @@ class MainListAdapter internal constructor(context: OnItemClickListener) : ListA
         return NoteHolder(itemView)
     }
 
+
+    //methods preventing click on an item affecting different items//
+    override fun getItemViewType(position: Int): Int {
+        return getNoteAt(position).id.toInt()
+    }
+
+    override fun getItemId(position: Int): Long {
+        return getNoteAt(position).id
+    }
+    //methods preventing click on an item affecting different items//
+
+
     override fun onBindViewHolder(noteHolder: NoteHolder, position: Int) {
         val currentNote = getNoteAt(position)
         noteHolder.tvTitle.text = currentNote.title
@@ -78,6 +90,12 @@ class MainListAdapter internal constructor(context: OnItemClickListener) : ListA
                 return oldNote.title == newNote.title
                         && oldNote.items == newNote.items
                         && oldNote.priority == newNote.priority
+                        && oldNote.isNotification == newNote.isNotification
+                        && oldNote.color == newNote.color
+                        && oldNote.numItems == newNote.numItems
+                        && oldNote.isArchived == newNote.isArchived
+                        && oldNote.timeCreated == newNote.timeCreated
+                        && oldNote.timeModified == newNote.timeModified
             }
         }
     }

@@ -29,7 +29,7 @@ class MainActivity : BaseActivity(), MainListAdapter.OnItemClickListener {
 
     private val observer = Observer<List<Note>> {
         noteList = it
-        this.refreshUI(noteList)
+        refreshUI()
     }
 
 
@@ -66,6 +66,8 @@ class MainActivity : BaseActivity(), MainListAdapter.OnItemClickListener {
         //RECYCLER
         recycler_view.layoutManager = LinearLayoutManager(this)
         recycler_view.setHasFixedSize(true)
+        mainListAdapter = MainListAdapter(this)
+        recycler_view.adapter = mainListAdapter
     }
 
 
@@ -74,14 +76,11 @@ class MainActivity : BaseActivity(), MainListAdapter.OnItemClickListener {
     }
 
 
-    private fun refreshUI(notes: List<Note>?) {
-        //RecyclerView
-        mainListAdapter = MainListAdapter(this)
-        recycler_view.adapter = mainListAdapter
-        mainListAdapter.submitList(notes)  //reads the adapter DIFF we created, and displays list
+    private fun refreshUI() {
+        mainListAdapter.submitList(noteList)  //reads the adapter DIFF we created, and displays list
 
         //no notes layout
-        no_notes_view.toggleShowView(notes.isNullOrEmpty())
+        no_notes_view.toggleShowView(noteList.isNullOrEmpty())
 
         //Notification
         notificationManager.updateNotification(noteList)
