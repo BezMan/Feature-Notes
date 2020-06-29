@@ -42,7 +42,7 @@ class NotificationManager(context: Context) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             mNotificationManager.createNotificationChannel(NotificationChannel(
                     CHANNEL_ID,
-                    mContext.getString(bez.dev.featurenotes.R.string.channel_name),
+                    mContext.getString(bez.dev.featurenotes.R.string.app_name),
                     NotificationManager.IMPORTANCE_LOW))
         }
 

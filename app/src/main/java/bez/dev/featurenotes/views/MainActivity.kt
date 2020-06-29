@@ -6,12 +6,16 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.widget.ImageView
+import android.widget.Toast
+import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.widget.PopupMenu
+import androidx.core.view.GravityCompat
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import bez.dev.featurenotes.R
 import bez.dev.featurenotes.data.Note
+import com.google.android.material.navigation.NavigationView
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.main_activity.*
 import kotlinx.android.synthetic.main.main_activity_toolbar.*
@@ -21,7 +25,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 
-class MainActivity : BaseActivity(), MainListAdapter.OnItemClickListener {
+class MainActivity : BaseActivity(), MainListAdapter.OnItemClickListener, NavigationView.OnNavigationItemSelectedListener {
 
     private lateinit var mainListAdapter: MainListAdapter
     private var noteList: List<Note> = ArrayList()
@@ -51,7 +55,7 @@ class MainActivity : BaseActivity(), MainListAdapter.OnItemClickListener {
      */
     private fun isCalledFromSummaryNotification(): Boolean {
         if (!isTaskRoot
-    //                && intent.hasCategory(Intent.CATEGORY_LAUNCHER) && intent.action != null && intent.action.equals(Intent.ACTION_MAIN)
+        //                && intent.hasCategory(Intent.CATEGORY_LAUNCHER) && intent.action != null && intent.action.equals(Intent.ACTION_MAIN)
         ) {
             finish()
             return true
@@ -68,6 +72,12 @@ class MainActivity : BaseActivity(), MainListAdapter.OnItemClickListener {
         recycler_view.setHasFixedSize(true)
         mainListAdapter = MainListAdapter(this)
         recycler_view.adapter = mainListAdapter
+
+        //NAVIGATION DRAWER
+        val toggle = ActionBarDrawerToggle(this, drawer_layout, main_list_toolbar, 0, 0)
+        drawer_layout.addDrawerListener(toggle)
+        toggle.syncState()
+        nav_view.setNavigationItemSelectedListener(this)
     }
 
 
@@ -111,6 +121,33 @@ class MainActivity : BaseActivity(), MainListAdapter.OnItemClickListener {
         }
         return true
     }
+
+
+    override fun onNavigationItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            R.id.nav_notes -> {
+                Toast.makeText(this, "nav_notes clicked", Toast.LENGTH_SHORT).show()
+            }
+            R.id.nav_archive -> {
+                Toast.makeText(this, "nav_archive clicked", Toast.LENGTH_SHORT).show()
+            }
+            R.id.nav_settings -> {
+                Toast.makeText(this, "nav_settings clicked", Toast.LENGTH_SHORT).show()
+            }
+        }
+        drawer_layout.closeDrawer(GravityCompat.START)
+        return true
+    }
+
+
+    override fun onBackPressed() {
+        if (drawer_layout.isDrawerOpen(GravityCompat.START)) {
+            drawer_layout.closeDrawer(GravityCompat.START)
+        } else {
+            super.onBackPressed()
+        }
+    }
+
 
     private fun resetAllNotifications() {
         if (noteList.isNotEmpty()) {
