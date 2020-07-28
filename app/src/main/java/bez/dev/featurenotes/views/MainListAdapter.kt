@@ -14,11 +14,7 @@ import bez.dev.featurenotes.data.Note
 import kotlinx.android.synthetic.main.main_activity_list_item.view.*
 
 class MainListAdapter internal constructor(context: OnItemClickListener) : ListAdapter<Note, MainListAdapter.NoteHolder>(DIFF_CALLBACK) {
-    private lateinit var listener: OnItemClickListener
-
-    init {
-        setOnItemClickListener(context)
-    }
+    private var listener: OnItemClickListener = context
 
     internal fun getNoteAt(position: Int): Note {
         return getItem(position)
@@ -58,11 +54,6 @@ class MainListAdapter internal constructor(context: OnItemClickListener) : ListA
             listener.onToggleNotificationClick(currentNote, isChecked)
         }
 
-    }
-
-
-    private fun setOnItemClickListener(listener: OnItemClickListener) {
-        this.listener = listener
     }
 
 

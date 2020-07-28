@@ -46,7 +46,7 @@ class DetailActivity : BaseActivity(), OnPrioritySaveClickListener, DetailEditTe
 
     private val observer = Observer<Note> {
         currentNote = it
-        refreshRecyclerView(currentNote)
+        refreshRecyclerView()
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -102,7 +102,7 @@ class DetailActivity : BaseActivity(), OnPrioritySaveClickListener, DetailEditTe
 
     override fun onDeleteItemClick(position: Int) {
         val strText = deleteItemAtPosition(position)
-        refreshRecyclerView(currentNote)
+        refreshRecyclerView()
         detailListAdapter.notifyItemRemoved(position)
         showUndoDelete(position, strText)
     }
@@ -130,7 +130,7 @@ class DetailActivity : BaseActivity(), OnPrioritySaveClickListener, DetailEditTe
             }
         } else { // EDIT
             currentNote.items[position] = noteItem
-            refreshRecyclerView(currentNote)
+            refreshRecyclerView()
             detailListAdapter.notifyItemChanged(position)
 
         }
@@ -143,7 +143,7 @@ class DetailActivity : BaseActivity(), OnPrioritySaveClickListener, DetailEditTe
 
     private fun addItemAtPosition(position: Int, str: String) {
         currentNote.items.add(position, NoteItem(str))
-        refreshRecyclerView(currentNote)
+        refreshRecyclerView()
         detailListAdapter.notifyItemInserted(position)
     }
 
@@ -219,13 +219,13 @@ class DetailActivity : BaseActivity(), OnPrioritySaveClickListener, DetailEditTe
     }
 
 
-    private fun refreshRecyclerView(note: Note) {
+    private fun refreshRecyclerView() {
         detailListAdapter = DetailListAdapter(this, touchHelper, isEditMode)
         recycler_view_detail.adapter = detailListAdapter
-        detailListAdapter.submitList(note.items)
+        detailListAdapter.submitList(currentNote.items)
 
-        if (!isNoteEmpty() && isExistingNote && note.isNotification) {
-            notificationManager.updateSpecificNotification(note)
+        if (!isNoteEmpty() && isExistingNote && currentNote.isNotification) {
+            notificationManager.updateSpecificNotification(currentNote)
         }
 
     }
@@ -337,7 +337,7 @@ class DetailActivity : BaseActivity(), OnPrioritySaveClickListener, DetailEditTe
         menuPriorityItem?.isVisible = true
         menuPriorityItem?.title = currentNote.priority.toString()
         menuShare?.isVisible = false
-        refreshRecyclerView(currentNote)
+        refreshRecyclerView()
     }
 
 
@@ -360,7 +360,7 @@ class DetailActivity : BaseActivity(), OnPrioritySaveClickListener, DetailEditTe
         menuPriorityItem?.isVisible = false
         menuShare?.isVisible = true
 
-        refreshRecyclerView(currentNote)
+        refreshRecyclerView()
         //saving frequently so we can SHARE most updated note items
         saveNote()
     }

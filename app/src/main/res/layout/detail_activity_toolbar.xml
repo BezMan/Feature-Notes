@@ -14,8 +14,7 @@
     app:contentInsetRight="0dp"
     app:contentInsetStart="0dp"
     android:background="@color/colorPrimary"
-    app:contentInsetStartWithNavigation="0dp"
-    tools:showIn="@layout/detail_activity">
+    app:contentInsetStartWithNavigation="0dp">
 
     <EditText
         android:id="@+id/edit_text_title"
