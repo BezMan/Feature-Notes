@@ -12,9 +12,6 @@ import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import bez.dev.featurenotes.R
 import bez.dev.featurenotes.data.Note
-import bez.dev.featurenotes.misc.NotificationManager
-import bez.dev.featurenotes.view_models.RepoViewModel
-import bez.dev.featurenotes.views.BaseActivity.Companion.EXTRA_NOTE
 import bez.dev.featurenotes.views.BaseActivity.Companion.toggleShowView
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.fragment_notes.*
@@ -22,7 +19,6 @@ import kotlinx.android.synthetic.main.no_notes_layout.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import org.koin.android.ext.android.get
 
 class NotesFragment : Fragment(), MainListAdapter.OnItemClickListener {
 
@@ -30,9 +26,7 @@ class NotesFragment : Fragment(), MainListAdapter.OnItemClickListener {
     private var noteList: List<Note> = ArrayList()
     private lateinit var restorePoint: List<Note>
     private lateinit var mContext: Context
-
-    private var repoViewModel = get<RepoViewModel>()
-    private val notificationManager = get<NotificationManager>()
+    private lateinit var baseActivity: BaseActivity
 
 
     private val observer = Observer<List<Note>> {
@@ -49,9 +43,6 @@ class NotesFragment : Fragment(), MainListAdapter.OnItemClickListener {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
-
-        initNoteViewModel()
-
     }
 
 
@@ -62,14 +53,19 @@ class NotesFragment : Fragment(), MainListAdapter.OnItemClickListener {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        initUI()
+        baseActivity = activity as BaseActivity
 
+        initNoteViewModel()
+
+        initUI()
     }
+
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.notes_fragment_menu, menu)
         super.onCreateOptionsMenu(menu, inflater)
     }
+
 
     private fun initUI() {
         //RECYCLER
@@ -79,12 +75,12 @@ class NotesFragment : Fragment(), MainListAdapter.OnItemClickListener {
         recycler_view.adapter = mainListAdapter
 
         //FAB
-        fab_add_note.setOnClickListener { addNote() }
-
+        fab_add_note.setOnClickListener { baseActivity.addNote() }
     }
 
+
     private fun initNoteViewModel() {
-        repoViewModel.allNotes.observe(this, observer)
+        baseActivity.repoViewModel.allNotes.observe(this, observer)
     }
 
 
@@ -95,14 +91,14 @@ class NotesFragment : Fragment(), MainListAdapter.OnItemClickListener {
         no_notes_view.toggleShowView(noteList.isNullOrEmpty())
 
         //Notification
-        notificationManager.updateNotification(noteList)
+        baseActivity.notificationManager.updateNotification(noteList)
     }
 
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.main_menu_add_note -> {
-                addNote()
+                baseActivity.addNote()
             }
             R.id.main_menu_reset_all_notifications -> {
                 resetAllNotifications()
@@ -122,13 +118,13 @@ class NotesFragment : Fragment(), MainListAdapter.OnItemClickListener {
 
     private fun resetAllNotifications() {
         if (noteList.isNotEmpty()) {
-            repoViewModel.resetAllNotifications()
+            baseActivity.repoViewModel.resetAllNotifications()
         }
     }
 
 
     override fun onNoteItemTextClick(note: Note) {
-        editNote(note)
+        baseActivity.editNote(note)
     }
 
     override fun onNoteItemOverflowClick(note: Note, overflow: ImageView, noteHolder: MainListAdapter.NoteHolder) {
@@ -140,14 +136,18 @@ class NotesFragment : Fragment(), MainListAdapter.OnItemClickListener {
         popup.setOnMenuItemClickListener {
             when (it.itemId) {
                 R.id.main_overflow_note_edit -> {
-                    editNote(note)
+                    baseActivity.editNote(note)
                 }
                 R.id.main_overflow_note_share -> {
-                    shareNote(note)
+                    baseActivity.shareNote(note)
                 }
                 R.id.main_overflow_note_delete -> {
-                    deleteNote(note)
+                    baseActivity.deleteNote(note)
                     showUndoDelete(note)
+                }
+                R.id.main_overflow_note_archive -> {
+                    baseActivity.archiveNote(note)
+                    showUndoArchive(note)
                 }
                 R.id.main_overflow_note_notification -> {
                     noteHolder.checkboxToggleNotification.performClick()
@@ -161,43 +161,16 @@ class NotesFragment : Fragment(), MainListAdapter.OnItemClickListener {
     }
 
 
-    private fun deleteNote(note: Note) {
-        notificationManager.cancelNotificationById(note.id)
-        repoViewModel.delete(note)
-    }
-
-
-    protected fun shareNote(note: Note) {
-        val sendIntent: Intent = Intent().apply {
-            action = Intent.ACTION_SEND
-            putExtra(Intent.EXTRA_TEXT, note.toString())
-            type = "text/plain"
-        }
-        val shareIntent = Intent.createChooser(sendIntent, null)
-        startActivity(shareIntent)
-    }
 
 
     override fun onToggleNotificationClick(note: Note, isChecked: Boolean) {
         if (isChecked != note.isNotification) {
-            notificationManager.cancelNotificationById(note.id)
+            baseActivity.notificationManager.cancelNotificationById(note.id)
 
             note.isNotification = isChecked
-            repoViewModel.update(note)
+            baseActivity.repoViewModel.update(note)
         }
 
-    }
-
-
-    private fun addNote() {
-        val intent = Intent(activity, DetailActivity::class.java)
-        startActivity(intent)
-    }
-
-    private fun editNote(note: Note) {
-        val intent = Intent(activity, DetailActivity::class.java)
-        intent.putExtra(EXTRA_NOTE, note)
-        startActivity(intent)
     }
 
 
@@ -208,7 +181,7 @@ class NotesFragment : Fragment(), MainListAdapter.OnItemClickListener {
             val builder = AlertDialog.Builder(mContext)
             builder.setMessage("All notes will be deleted.. \n Are you sure?")
                     .setPositiveButton("Yes") { dialog, id ->
-                        repoViewModel.deleteAllNotes()
+                        baseActivity.repoViewModel.deleteAllNotes()
                         showUndoDeleteAllNotes(restorePoint)
                     }
                     .setNegativeButton("Cancel") { dialog, id ->
@@ -228,7 +201,20 @@ class NotesFragment : Fragment(), MainListAdapter.OnItemClickListener {
                 .setAction("UNDO") {
                     // execute when UNDO is clicked
                     CoroutineScope(Dispatchers.IO).launch {
-                        repoViewModel.insert(note)
+                        baseActivity.repoViewModel.insert(note)
+                    }
+                }
+        snack.show()
+    }
+
+    private fun showUndoArchive(note: Note) {
+        val snack = Snackbar.make(notes_layout, note.title + " - note deleted", Snackbar.LENGTH_INDEFINITE)
+
+        snack.setDuration(8000)
+                .setAction("UNDO") {
+                    // execute when UNDO is clicked
+                    CoroutineScope(Dispatchers.IO).launch {
+                        baseActivity.repoViewModel.insert(note)
                     }
                 }
         snack.show()
@@ -243,7 +229,7 @@ class NotesFragment : Fragment(), MainListAdapter.OnItemClickListener {
                     // execute when UNDO is clicked
                     for (note: Note in restorePoint) {
                         CoroutineScope(Dispatchers.IO).launch {
-                            repoViewModel.insert(note)
+                            baseActivity.repoViewModel.insert(note)
                         }
                     }
                 }

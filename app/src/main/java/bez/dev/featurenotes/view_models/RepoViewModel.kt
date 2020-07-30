@@ -16,6 +16,16 @@ class RepoViewModel(private val repository: NoteRepository) : ViewModel() {
         repository.update(note)
     }
 
+    fun archive(note: Note) {
+        note.isArchived = true
+        repository.update(note)
+    }
+
+    fun unArchive(note: Note) {
+        note.isArchived = false
+        repository.update(note)
+    }
+
     fun delete(note: Note) {
         repository.delete(note)
     }
@@ -30,5 +40,13 @@ class RepoViewModel(private val repository: NoteRepository) : ViewModel() {
 
     fun getNoteById(noteId: Long): LiveData<Note> {
         return repository.getNoteById(noteId)
+    }
+
+    fun getAllNotes(){
+        repository.getArchivedNotes()
+    }
+
+    fun getArchivedNotes(){
+        repository.getArchivedNotes()
     }
 }

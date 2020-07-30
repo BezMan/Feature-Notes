@@ -12,7 +12,7 @@ const val KEY_FIRST_RUN = "KEY_FIRST_RUN"
 open class NoteRepository : IRepository {
     private val noteDatabase: NoteDatabase = App.database
     private val noteDao: NoteDao = noteDatabase.noteDao()
-    val allNotes: LiveData<List<Note>>
+    var allNotes: LiveData<List<Note>>
     private val repoScope = CoroutineScope(Dispatchers.IO)
 
     init {
@@ -46,6 +46,14 @@ open class NoteRepository : IRepository {
 
     override fun getNoteById(noteId: Long): LiveData<Note> {
         return noteDao.getNoteById(noteId)
+    }
+
+    override fun getAllNotes() {
+        allNotes = noteDao.getAllNotesByPriority()
+    }
+
+    override fun getArchivedNotes() {
+        allNotes = noteDao.getAllArchivedNotesByPriority()
     }
 
 }

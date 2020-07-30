@@ -11,7 +11,7 @@ import org.koin.android.ext.android.get
 
 abstract class BaseActivity : AppCompatActivity() {
 
-    protected var repoViewModel = get<RepoViewModel>()
+    val repoViewModel = get<RepoViewModel>()
     val notificationManager = get<NotificationManager>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -26,13 +26,30 @@ abstract class BaseActivity : AppCompatActivity() {
     }
 
 
-    protected fun deleteNote(note: Note) {
+    fun deleteNote(note: Note) {
         notificationManager.cancelNotificationById(note.id)
         repoViewModel.delete(note)
     }
 
 
-    protected fun shareNote(note: Note) {
+    fun archiveNote(note: Note) {
+        repoViewModel.archive(note)
+    }
+
+
+    fun addNote() {
+        val intent = Intent(this, DetailActivity::class.java)
+        startActivity(intent)
+    }
+
+    fun editNote(note: Note) {
+        val intent = Intent(this, DetailActivity::class.java)
+        intent.putExtra(EXTRA_NOTE, note)
+        startActivity(intent)
+    }
+
+
+    fun shareNote(note: Note) {
         val sendIntent: Intent = Intent().apply {
             action = Intent.ACTION_SEND
             putExtra(Intent.EXTRA_TEXT, note.toString())

@@ -6,7 +6,7 @@
     android:layout_height="wrap_content"
     android:layout_margin="60dp"
     android:drawableBottom="@mipmap/ic_app_launcher"
-    android:drawablePadding="30dp"
+    android:drawablePadding="10dp"
     android:gravity="center"
     android:text="note list is empty"
     android:textAppearance="@style/TextAppearance.AppCompat.Large"
