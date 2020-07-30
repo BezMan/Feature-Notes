@@ -20,9 +20,9 @@ import androidx.core.app.TaskStackBuilder
 import androidx.core.content.ContextCompat
 import bez.dev.featurenotes.data.Note
 import bez.dev.featurenotes.services.AddFromNotificationIntentService
+import bez.dev.featurenotes.views.BaseActivity.Companion.EXTRA_NOTE
 import bez.dev.featurenotes.views.DetailActivity
 import bez.dev.featurenotes.views.MainActivity
-import bez.dev.featurenotes.views.MainActivity.Companion.EXTRA_NOTE
 import kotlin.random.Random
 
 class NotificationManager(context: Context) {

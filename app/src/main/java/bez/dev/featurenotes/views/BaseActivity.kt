@@ -2,6 +2,7 @@ package bez.dev.featurenotes.views
 
 import android.content.Intent
 import android.os.Bundle
+import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import bez.dev.featurenotes.data.Note
 import bez.dev.featurenotes.misc.NotificationManager
@@ -31,7 +32,6 @@ abstract class BaseActivity : AppCompatActivity() {
     }
 
 
-
     protected fun shareNote(note: Note) {
         val sendIntent: Intent = Intent().apply {
             action = Intent.ACTION_SEND
@@ -40,6 +40,19 @@ abstract class BaseActivity : AppCompatActivity() {
         }
         val shareIntent = Intent.createChooser(sendIntent, null)
         startActivity(shareIntent)
+    }
+
+
+    companion object {
+        const val EXTRA_NOTE = "EXTRA_NOTE"
+
+        fun View.toggleShowView(show: Boolean) {
+            visibility = if (show) {
+                View.VISIBLE
+            } else {
+                View.GONE
+            }
+        }
     }
 
 

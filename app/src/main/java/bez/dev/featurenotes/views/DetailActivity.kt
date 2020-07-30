@@ -20,7 +20,6 @@ import bez.dev.featurenotes.R.*
 import bez.dev.featurenotes.data.Note
 import bez.dev.featurenotes.data.NoteItem
 import bez.dev.featurenotes.views.DetailPriorityDialog.OnPrioritySaveClickListener
-import bez.dev.featurenotes.views.MainActivity.Companion.EXTRA_NOTE
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.detail_activity.*
 import kotlinx.android.synthetic.main.detail_activity_toolbar.*
@@ -117,7 +116,6 @@ class DetailActivity : BaseActivity(), OnPrioritySaveClickListener, DetailEditTe
                 }
         snack.show()
     }
-
 
 
     override fun onTextSaveDialogBtnClick(noteItem: NoteItem, position: Int, isAddedItem: Boolean) {
@@ -248,7 +246,7 @@ class DetailActivity : BaseActivity(), OnPrioritySaveClickListener, DetailEditTe
         }
     }
 
-    private fun revertNote(){
+    private fun revertNote() {
         currentNote.items = revertedNote.items
         currentNote.priority = revertedNote.priority
         menuPriorityItem?.title = currentNote.priority.toString()
@@ -354,7 +352,7 @@ class DetailActivity : BaseActivity(), OnPrioritySaveClickListener, DetailEditTe
         menuEditItem?.setIcon(drawable.ic_edit_24dp)
 
         val priorityStr = menuPriorityItem?.title.toString()
-        if(priorityStr.isNotEmpty()) {
+        if (priorityStr.isNotEmpty()) {
             currentNote.priority = Integer.parseInt(priorityStr)
         }
         menuPriorityItem?.isVisible = false
@@ -377,8 +375,7 @@ class DetailActivity : BaseActivity(), OnPrioritySaveClickListener, DetailEditTe
             menuPriorityItem?.title = currentNote.priority.toString()
             menuPriorityItem?.isVisible = true
             menuShare?.isVisible = false
-        }
-        else{
+        } else {
             menuPriorityItem?.isVisible = false
         }
         return super.onPrepareOptionsMenu(menu)

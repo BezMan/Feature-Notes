@@ -20,8 +20,8 @@
 
     <item
         android:id="@+id/main_menu_open_image"
-        android:title="Scan Image"
         android:icon="@drawable/ic_img"
+        android:title="Scan Image"
         app:showAsAction="ifRoom" />
 
 

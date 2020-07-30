@@ -8,44 +8,26 @@
     android:fitsSystemWindows="true"
     tools:openDrawer="start">
 
-    <androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        android:id="@+id/main_layout"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layoutDirection="ltr"
-        tools:context=".views.MainActivity">
+        android:orientation="vertical">
 
         <include layout="@layout/main_activity_toolbar" />
 
-        <include layout="@layout/no_notes_layout" />
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recycler_view"
+        <FrameLayout
+            android:id="@+id/fragment_container"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginTop="?attr/actionBarSize"
-            tools:listitem="@layout/main_activity_list_item" />
+            android:layout_height="match_parent" />
 
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/fab_add_note"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="bottom|end"
-            android:layout_margin="32dp"
-            android:onClick="addNote"
-            android:src="@drawable/ic_add_white"
-            app:backgroundTint="@color/colorPrimary"
-            app:rippleColor="@color/colorPrimaryDark" />
-
-
-    </androidx.coordinatorlayout.widget.CoordinatorLayout>
+    </LinearLayout>
 
     <com.google.android.material.navigation.NavigationView
         android:id="@+id/nav_view"
-        app:menu="@menu/main_activity_drawer"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:layout_gravity="start"
-        android:fitsSystemWindows="true"/>
+        android:fitsSystemWindows="true"
+        app:menu="@menu/main_activity_drawer" />
 
 </androidx.drawerlayout.widget.DrawerLayout>
