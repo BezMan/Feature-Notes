@@ -27,6 +27,7 @@ class NotesFragment : Fragment(), MainListAdapter.OnItemClickListener {
     private lateinit var restorePoint: List<Note>
     private lateinit var mContext: Context
     private lateinit var baseActivity: BaseActivity
+    private var filterType: Int = 0
 
 
     private val observer = Observer<List<Note>> {
@@ -42,6 +43,9 @@ class NotesFragment : Fragment(), MainListAdapter.OnItemClickListener {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        arguments?.let {
+            filterType = it.getInt(FILTER_TYPE)
+        }
         setHasOptionsMenu(true)
     }
 
@@ -62,7 +66,10 @@ class NotesFragment : Fragment(), MainListAdapter.OnItemClickListener {
 
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        inflater.inflate(R.menu.notes_fragment_menu, menu)
+        when (filterType){
+            NOTES_ARCHIVED -> inflater.inflate(R.menu.archive_fragment_menu, menu)
+            else -> inflater.inflate(R.menu.notes_fragment_menu, menu)
+        }
         super.onCreateOptionsMenu(menu, inflater)
     }
 
@@ -234,6 +241,20 @@ class NotesFragment : Fragment(), MainListAdapter.OnItemClickListener {
                     }
                 }
         snack.show()
+    }
+
+
+    companion object {
+        const val NOTES_ALL = 0
+        const val NOTES_ARCHIVED = 1
+
+        private const val FILTER_TYPE = "FILTER_TYPE"
+
+        fun newInstance(filterType: Int) = NotesFragment().apply {
+            arguments = Bundle().apply {
+                putInt(FILTER_TYPE, filterType) }
+        }
+
     }
 
 
