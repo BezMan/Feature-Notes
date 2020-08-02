@@ -22,4 +22,16 @@ class ArchiveFragment : Fragment() {
         inflater.inflate(R.menu.archive_fragment_menu, menu)
         super.onCreateOptionsMenu(menu, inflater)
     }
+
+
+    companion object {
+
+        fun newInstance() = ArchiveFragment().apply {
+//            arguments = Bundle().apply {
+//                putInt(FRAGMENT_DATA, filterType) }
+        }
+
+    }
+
+
 }

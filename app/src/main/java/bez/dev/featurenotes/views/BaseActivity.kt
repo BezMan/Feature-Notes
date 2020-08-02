@@ -61,6 +61,8 @@ abstract class BaseActivity : AppCompatActivity() {
 
 
     companion object {
+        const val FRAGMENT_DATA = "FRAGMENT_DATA"
+
         const val EXTRA_NOTE = "EXTRA_NOTE"
 
         fun View.toggleShowView(show: Boolean) {

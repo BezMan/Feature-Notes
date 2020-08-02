@@ -52,7 +52,7 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
 
 
         if (savedInstanceState == null) { //don't do on device rotation
-            replaceFragment(R.id.fragment_container, NotesFragment.newInstance(NotesFragment.NOTES_ALL))
+            replaceFragment(R.id.fragment_container, NotesFragment.newInstance())
             nav_view.setCheckedItem(R.id.nav_notes)
         }
     }
@@ -61,10 +61,10 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.nav_notes -> {
-                replaceFragment(R.id.fragment_container, NotesFragment.newInstance(NotesFragment.NOTES_ALL))
+                replaceFragment(R.id.fragment_container, NotesFragment.newInstance())
             }
             R.id.nav_archive -> {
-                replaceFragment(R.id.fragment_container, NotesFragment.newInstance(NotesFragment.NOTES_ARCHIVED))
+                replaceFragment(R.id.fragment_container, ArchiveFragment.newInstance())
             }
             R.id.nav_settings -> {
                 openSettings()
@@ -108,7 +108,7 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
             drawer_layout.closeDrawer(GravityCompat.START)
         } else if (!nav_view.menu.getItem(0).isChecked){
             // if (R.id.nav_notes) NOT selected, go to it:
-            replaceFragment(R.id.fragment_container, NotesFragment.newInstance(NotesFragment.NOTES_ALL))
+            replaceFragment(R.id.fragment_container, NotesFragment.newInstance())
             nav_view.setCheckedItem(R.id.nav_notes)
         } else {
             super.onBackPressed()
