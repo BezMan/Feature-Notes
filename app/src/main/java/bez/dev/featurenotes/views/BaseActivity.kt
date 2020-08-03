@@ -36,6 +36,10 @@ abstract class BaseActivity : AppCompatActivity() {
         repoViewModel.archive(note)
     }
 
+    fun unArchiveNote(note: Note) {
+        repoViewModel.unArchive(note)
+    }
+
 
     fun addNote() {
         val intent = Intent(this, DetailActivity::class.java)

@@ -11,8 +11,12 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import bez.dev.featurenotes.R
 import bez.dev.featurenotes.data.Note
 import bez.dev.featurenotes.views.BaseActivity.Companion.toggleShowView
+import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.fragment_archive.*
 import kotlinx.android.synthetic.main.no_notes_layout.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 class ArchiveFragment : Fragment(), ArchiveListAdapter.OnItemClickListener {
 
@@ -90,25 +94,25 @@ class ArchiveFragment : Fragment(), ArchiveListAdapter.OnItemClickListener {
     override fun onNoteItemOverflowClick(note: Note, overflow: ImageView, noteHolder: ArchiveListAdapter.NoteHolder) {
         val popup = PopupMenu(mContext, overflow)
         //Inflating the Popup using xml file
-        popup.menuInflater.inflate(R.menu.overflow_note_popup, popup.menu)
+        popup.menuInflater.inflate(R.menu.overflow_note_popup_archived, popup.menu)
 
         //registering popup with OnMenuItemClickListener
         popup.setOnMenuItemClickListener {
             when (it.itemId) {
                 R.id.main_overflow_note_edit -> {
-                    baseActivity.editNote(note)
+                    baseActivity.editNote(note) // add param to diff the archived state
                 }
                 R.id.main_overflow_note_share -> {
                     baseActivity.shareNote(note)
                 }
-//                R.id.main_overflow_note_delete -> {
-//                    baseActivity.deleteNote(note)
-//                    showUndoDelete(note)
-//                }
-//                R.id.main_overflow_note_archive -> {
-//                    baseActivity.archiveNote(note)
-//                    showUndoArchive(note)
-//                }
+                R.id.main_overflow_note_delete -> {
+                    baseActivity.deleteNote(note)
+                    showUndoDelete(note)
+                }
+                R.id.main_overflow_note_unarchive -> {
+                    baseActivity.unArchiveNote(note)
+                    showUndoArchiveRestore(note)
+                }
 
             }
             false
@@ -118,6 +122,32 @@ class ArchiveFragment : Fragment(), ArchiveListAdapter.OnItemClickListener {
     }
 
 
+    private fun showUndoDelete(note: Note) {
+        val snack = Snackbar.make(notes_layout, note.title + " - note deleted", Snackbar.LENGTH_INDEFINITE)
+
+        snack.setDuration(8000)
+                .setAction("UNDO") {
+                    // execute when UNDO is clicked
+                    CoroutineScope(Dispatchers.IO).launch {
+                        baseActivity.repoViewModel.insert(note)
+                    }
+                }
+        snack.show()
+    }
+
+
+    private fun showUndoArchiveRestore(note: Note) {
+        val snack = Snackbar.make(notes_layout, note.title + " - note unarchived", Snackbar.LENGTH_INDEFINITE)
+
+        snack.setDuration(8000)
+                .setAction("UNDO") {
+                    // execute when UNDO is clicked
+                    CoroutineScope(Dispatchers.IO).launch {
+                        baseActivity.repoViewModel.archive(note)
+                    }
+                }
+        snack.show()
+    }
 
 
     companion object {

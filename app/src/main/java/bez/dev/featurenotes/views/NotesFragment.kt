@@ -207,18 +207,20 @@ class NotesFragment : Fragment(), MainListAdapter.OnItemClickListener {
         snack.show()
     }
 
+
     private fun showUndoArchive(note: Note) {
-        val snack = Snackbar.make(notes_layout, note.title + " - note deleted", Snackbar.LENGTH_INDEFINITE)
+        val snack = Snackbar.make(notes_layout, note.title + " - note archived", Snackbar.LENGTH_INDEFINITE)
 
         snack.setDuration(8000)
                 .setAction("UNDO") {
                     // execute when UNDO is clicked
                     CoroutineScope(Dispatchers.IO).launch {
-                        baseActivity.repoViewModel.insert(note)
+                        baseActivity.repoViewModel.unArchive(note)
                     }
                 }
         snack.show()
     }
+
 
 
     private fun showUndoDeleteAllNotes(restorePoint: List<Note>) {

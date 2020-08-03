@@ -17,6 +17,7 @@ class RepoViewModel(private val repository: NoteRepository) : ViewModel() {
 
     fun archive(note: Note) {
         note.isArchived = true
+        note.isNotification = false
         repository.update(note)
     }
 
