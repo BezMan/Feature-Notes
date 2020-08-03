@@ -15,6 +15,7 @@ import bez.dev.featurenotes.data.Note
 import bez.dev.featurenotes.views.BaseActivity.Companion.toggleShowView
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.fragment_notes.*
+import kotlinx.android.synthetic.main.main_activity_toolbar.*
 import kotlinx.android.synthetic.main.no_notes_layout.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -68,11 +69,17 @@ class NotesFragment : Fragment(), MainListAdapter.OnItemClickListener {
 
 
     private fun initUI() {
+        //TOOLBAR
+        activity?.toolbar_main_text?.text = resources.getText(R.string.app_name)
+
         //RECYCLER
         recycler_view.layoutManager = LinearLayoutManager(context)
         recycler_view.setHasFixedSize(true)
         mainListAdapter = MainListAdapter(this)
         recycler_view.adapter = mainListAdapter
+
+        //TEXT WHEN EMPTY LIST
+        no_notes_view.text = resources.getText(R.string.empty_notes)
 
         //FAB
         fab_add_note.setOnClickListener { baseActivity.addNote() }

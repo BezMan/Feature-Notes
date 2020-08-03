@@ -3,23 +3,28 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
-        android:id="@+id/revert_note"
+        android:id="@+id/menu_detail_revert"
         android:title="Revert Changes"
         app:showAsAction="never" />
 
     <item
-        android:id="@+id/edit_priority"
+        android:id="@+id/menu_detail_unarchive"
+        android:title="Unarchive"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/menu_detail_priority"
         android:title=""
         app:showAsAction="always" />
 
     <item
-        android:id="@+id/detail_share_note"
+        android:id="@+id/menu_detail_share"
         android:icon="@drawable/ic_share"
         android:title="Share"
         app:showAsAction="always" />
 
     <item
-        android:id="@+id/edit_note"
+        android:id="@+id/menu_detail_edit_note"
         android:icon="@drawable/ic_edit_24dp"
         android:title="Edit"
         app:showAsAction="always" />

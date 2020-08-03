@@ -13,6 +13,7 @@ import bez.dev.featurenotes.data.Note
 import bez.dev.featurenotes.views.BaseActivity.Companion.toggleShowView
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.fragment_archive.*
+import kotlinx.android.synthetic.main.main_activity_toolbar.*
 import kotlinx.android.synthetic.main.no_notes_layout.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -66,11 +67,17 @@ class ArchiveFragment : Fragment(), ArchiveListAdapter.OnItemClickListener {
 
 
     private fun initUI() {
+        //TOOLBAR
+        activity?.toolbar_main_text?.text = resources.getText(R.string.nav_archive)
+
         //RECYCLER
         recycler_view_archive.layoutManager = LinearLayoutManager(context)
         recycler_view_archive.setHasFixedSize(true)
         archiveListAdapter = ArchiveListAdapter(this)
         recycler_view_archive.adapter = archiveListAdapter
+
+        //TEXT WHEN EMPTY LIST
+        no_notes_view.text = resources.getText(R.string.empty_archive)
     }
 
 
@@ -88,7 +95,7 @@ class ArchiveFragment : Fragment(), ArchiveListAdapter.OnItemClickListener {
 
 
     override fun onNoteItemTextClick(note: Note) {
-        baseActivity.editNote(note)
+        baseActivity.editNote(note, true)
     }
 
     override fun onNoteItemOverflowClick(note: Note, overflow: ImageView, noteHolder: ArchiveListAdapter.NoteHolder) {
@@ -100,7 +107,7 @@ class ArchiveFragment : Fragment(), ArchiveListAdapter.OnItemClickListener {
         popup.setOnMenuItemClickListener {
             when (it.itemId) {
                 R.id.main_overflow_note_edit -> {
-                    baseActivity.editNote(note) // add param to diff the archived state
+                    baseActivity.editNote(note, true) // add param to diff the archived state
                 }
                 R.id.main_overflow_note_share -> {
                     baseActivity.shareNote(note)

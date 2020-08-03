@@ -46,9 +46,10 @@ abstract class BaseActivity : AppCompatActivity() {
         startActivity(intent)
     }
 
-    fun editNote(note: Note) {
+    fun editNote(note: Note, isArchived: Boolean = false) {
         val intent = Intent(this, DetailActivity::class.java)
         intent.putExtra(EXTRA_NOTE, note)
+        intent.putExtra(EXTRA_IS_ARCHIVED, isArchived)
         startActivity(intent)
     }
 
@@ -68,6 +69,7 @@ abstract class BaseActivity : AppCompatActivity() {
         const val FRAGMENT_DATA = "FRAGMENT_DATA"
 
         const val EXTRA_NOTE = "EXTRA_NOTE"
+        const val EXTRA_IS_ARCHIVED = "EXTRA_IS_ARCHIVED"
 
         fun View.toggleShowView(show: Boolean) {
             visibility = if (show) {

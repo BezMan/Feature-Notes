@@ -36,6 +36,7 @@ class DetailActivity : BaseActivity(), OnPrioritySaveClickListener, DetailEditTe
     private var menuEditItem: MenuItem? = null
     private var menuPriorityItem: MenuItem? = null
     private var menuShare: MenuItem? = null
+    private var menuUnarchive: MenuItem? = null
     private lateinit var detailListAdapter: DetailListAdapter
     private var editTextDialog: DetailEditTextDialog? = null
     private lateinit var currentNote: Note
@@ -365,9 +366,10 @@ class DetailActivity : BaseActivity(), OnPrioritySaveClickListener, DetailEditTe
 
 
     override fun onPrepareOptionsMenu(menu: Menu): Boolean {
-        menuEditItem = menu.findItem(id.edit_note)
-        menuPriorityItem = menu.findItem(id.edit_priority)
-        menuShare = menu.findItem(id.detail_share_note)
+        menuEditItem = menu.findItem(id.menu_detail_edit_note)
+        menuPriorityItem = menu.findItem(id.menu_detail_priority)
+        menuShare = menu.findItem(id.menu_detail_share)
+        menuUnarchive = menu.findItem(id.menu_detail_unarchive)
 
         if (!isExistingNote) { //NEW note - init menu icons
             menuEditItem?.setIcon(drawable.ic_close)
@@ -377,6 +379,7 @@ class DetailActivity : BaseActivity(), OnPrioritySaveClickListener, DetailEditTe
             menuShare?.isVisible = false
         } else {
             menuPriorityItem?.isVisible = false
+            menuUnarchive?.isVisible = intent.getBooleanExtra(EXTRA_IS_ARCHIVED, false)
         }
         return super.onPrepareOptionsMenu(menu)
     }
@@ -389,20 +392,24 @@ class DetailActivity : BaseActivity(), OnPrioritySaveClickListener, DetailEditTe
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
-            id.detail_share_note -> {
+            id.menu_detail_share -> {
                 shareNote(currentNote)
             }
-            id.revert_note -> {
+            id.menu_detail_revert -> {
                 revertNote()
             }
-            id.edit_note -> {
+            id.menu_detail_unarchive -> {
+                unArchiveNote(currentNote)
+                finish()
+            }
+            id.menu_detail_edit_note -> {
                 if (!isEditMode) {
                     enterEditMode()
                 } else {
                     exitEditMode()
                 }
             }
-            id.edit_priority -> {
+            id.menu_detail_priority -> {
                 val priorityDialog = DetailPriorityDialog(this, currentNote.priority)
                 priorityDialog.show()
             }
