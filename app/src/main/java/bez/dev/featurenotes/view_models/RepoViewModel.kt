@@ -6,7 +6,6 @@ import bez.dev.featurenotes.data.Note
 import bez.dev.featurenotes.data.NoteRepository
 
 class RepoViewModel(private val repository: NoteRepository) : ViewModel() {
-    val allNotes: LiveData<List<Note>> = repository.allNotes
 
     suspend fun insert(note: Note): Long {
         return repository.insert(note)
@@ -42,11 +41,11 @@ class RepoViewModel(private val repository: NoteRepository) : ViewModel() {
         return repository.getNoteById(noteId)
     }
 
-    fun getAllNotes(){
-        repository.getArchivedNotes()
+    fun getAllNotes(): LiveData<List<Note>>{
+        return repository.getAllNotes()
     }
 
-    fun getArchivedNotes(){
-        repository.getArchivedNotes()
+    fun getArchivedNotes(): LiveData<List<Note>>{
+        return repository.getArchivedNotes()
     }
 }

@@ -12,12 +12,11 @@ const val KEY_FIRST_RUN = "KEY_FIRST_RUN"
 open class NoteRepository : IRepository {
     private val noteDatabase: NoteDatabase = App.database
     private val noteDao: NoteDao = noteDatabase.noteDao()
-    var allNotes: LiveData<List<Note>>
     private val repoScope = CoroutineScope(Dispatchers.IO)
 
     init {
         DInjector.setInitNotes()
-        allNotes = noteDao.getAllNotesByPriority()
+        noteDao.getAllNotesByPriority()
     }
 
     override suspend fun insert(note: Note): Long {
@@ -48,12 +47,12 @@ open class NoteRepository : IRepository {
         return noteDao.getNoteById(noteId)
     }
 
-    override fun getAllNotes() {
-        allNotes = noteDao.getAllNotesByPriority()
+    override fun getAllNotes(): LiveData<List<Note>> {
+        return noteDao.getAllNotesByPriority()
     }
 
-    override fun getArchivedNotes() {
-        allNotes = noteDao.getAllArchivedNotesByPriority()
+    override fun getArchivedNotes(): LiveData<List<Note>> {
+        return noteDao.getAllArchivedNotesByPriority()
     }
 
 }

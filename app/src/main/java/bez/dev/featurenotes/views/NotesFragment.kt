@@ -80,7 +80,7 @@ class NotesFragment : Fragment(), MainListAdapter.OnItemClickListener {
 
 
     private fun initNoteViewModel() {
-        baseActivity.repoViewModel.allNotes.observe(viewLifecycleOwner, observer)
+        baseActivity.repoViewModel.getAllNotes().observe(viewLifecycleOwner, observer)
     }
 
 

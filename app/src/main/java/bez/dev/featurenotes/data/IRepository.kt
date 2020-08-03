@@ -11,7 +11,7 @@ interface IRepository {
     fun clearAllData()
     fun resetAllNotifications()
     fun getNoteById(noteId: Long): LiveData<Note>
-    fun getAllNotes()
-    fun getArchivedNotes()
+    fun getAllNotes(): LiveData<List<Note>>
+    fun getArchivedNotes(): LiveData<List<Note>>
 
 }

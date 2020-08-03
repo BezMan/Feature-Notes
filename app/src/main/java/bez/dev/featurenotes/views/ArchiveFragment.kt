@@ -71,7 +71,7 @@ class ArchiveFragment : Fragment(), ArchiveListAdapter.OnItemClickListener {
 
 
     private fun initNoteViewModel() {
-        baseActivity.repoViewModel.allNotes.observe(viewLifecycleOwner, observer)
+        baseActivity.repoViewModel.getArchivedNotes().observe(viewLifecycleOwner, observer)
     }
 
 
@@ -80,9 +80,6 @@ class ArchiveFragment : Fragment(), ArchiveListAdapter.OnItemClickListener {
 
         //no notes layout
         no_notes_view.toggleShowView(archivedList.isNullOrEmpty())
-
-        //Notification
-        baseActivity.notificationManager.updateNotification(archivedList)
     }
 
 
