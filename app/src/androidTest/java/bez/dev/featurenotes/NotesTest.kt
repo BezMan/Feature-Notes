@@ -55,7 +55,7 @@ class NotesTest {
         for (i in 1..notesToAdd) {
             clickFab_openNewNote_addItems()
         }
-        onView(withId(R.id.recycler_view)).check(RecyclerViewItemCountAssertion(noteCount + notesToAdd));
+        onView(withId(R.id.recycler_view)).check(RecyclerViewItemCountAssertion(noteCount + notesToAdd))
     }
 
 
@@ -106,7 +106,7 @@ class NotesTest {
             onView(withId(R.id.dialogSaveTextBtn))
                     .perform(click())
         }
-        onView(withId(R.id.recycler_view_detail)).check(RecyclerViewItemCountAssertion(itemCount + numItems));
+        onView(withId(R.id.recycler_view_detail)).check(RecyclerViewItemCountAssertion(itemCount + numItems))
     }
 
 

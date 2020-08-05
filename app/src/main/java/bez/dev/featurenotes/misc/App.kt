@@ -19,7 +19,7 @@ class App : Application() {
 
     override fun onCreate() {
         super.onCreate()
-        Thread.setDefaultUncaughtExceptionHandler(OnUncaughtException);
+        Thread.setDefaultUncaughtExceptionHandler(OnUncaughtException)
         initAsync()
         initKoin()
     }

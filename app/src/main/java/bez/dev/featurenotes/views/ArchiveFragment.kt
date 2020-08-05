@@ -23,7 +23,6 @@ class ArchiveFragment : Fragment(), ArchiveListAdapter.OnItemClickListener {
 
     private lateinit var archiveListAdapter: ArchiveListAdapter
     private var archivedList: List<Note> = ArrayList()
-    private lateinit var restorePoint: List<Note>
     private lateinit var mContext: Context
     private lateinit var baseActivity: BaseActivity
 
