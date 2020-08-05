@@ -52,7 +52,7 @@ class DetailActivity : BaseActivity(), OnPrioritySaveClickListener, DetailEditTe
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(layout.detail_activity)
+        setContentView(R.layout.detail_activity)
 
         initUI()
 
@@ -325,7 +325,7 @@ class DetailActivity : BaseActivity(), OnPrioritySaveClickListener, DetailEditTe
 
     private fun enterEditMode() {
         isEditMode = true
-        edit_text_title.setBackgroundColor(ContextCompat.getColor(baseContext, color.white))
+        edit_text_title.setBackgroundColor(ContextCompat.getColor(baseContext, R.color.white))
         edit_text_title.isEnabled = true
         edit_text_title.isFocusableInTouchMode = true
         edit_text_title.isFocusable = true
@@ -333,7 +333,7 @@ class DetailActivity : BaseActivity(), OnPrioritySaveClickListener, DetailEditTe
         top_add_item_btn.visibility = View.VISIBLE
         bottom_add_item_btn.visibility = View.VISIBLE
 
-        menuEditItem?.setIcon(drawable.ic_close)
+        menuEditItem?.setIcon(R.drawable.ic_close)
         menuPriorityItem?.isVisible = true
         menuPriorityItem?.title = currentNote.priority.toString()
         menuShare?.isVisible = false
@@ -351,7 +351,7 @@ class DetailActivity : BaseActivity(), OnPrioritySaveClickListener, DetailEditTe
         top_add_item_btn.visibility = View.GONE
         bottom_add_item_btn.visibility = View.GONE
 
-        menuEditItem?.setIcon(drawable.ic_edit_white)
+        menuEditItem?.setIcon(R.drawable.ic_edit_white)
 
         val priorityStr = menuPriorityItem?.title.toString()
         if (priorityStr.isNotEmpty()) {
@@ -367,10 +367,10 @@ class DetailActivity : BaseActivity(), OnPrioritySaveClickListener, DetailEditTe
 
 
     override fun onPrepareOptionsMenu(menu: Menu): Boolean {
-        menuEditItem = menu.findItem(id.menu_detail_edit_note)
-        menuPriorityItem = menu.findItem(id.menu_detail_priority)
-        menuShare = menu.findItem(id.menu_detail_share)
-        menuUnarchive = menu.findItem(id.menu_detail_unarchive)
+        menuEditItem = menu.findItem(R.id.menu_detail_edit_note)
+        menuPriorityItem = menu.findItem(R.id.menu_detail_priority)
+        menuShare = menu.findItem(R.id.menu_detail_share)
+        menuUnarchive = menu.findItem(R.id.menu_detail_unarchive)
 
         if (!isExistingNote) { //NEW note - init menu icons
             val defaultSharedPreferences = PreferenceManager.getDefaultSharedPreferences(this)
@@ -390,30 +390,30 @@ class DetailActivity : BaseActivity(), OnPrioritySaveClickListener, DetailEditTe
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         val menuInflater = menuInflater
-        menuInflater.inflate(bez.dev.featurenotes.R.menu.detail_activity_menu, menu)
+        menuInflater.inflate(R.menu.detail_activity_menu, menu)
         return true
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
-            id.menu_detail_share -> {
+            R.id.menu_detail_share -> {
                 shareNote(currentNote)
             }
-            id.menu_detail_revert -> {
+            R.id.menu_detail_revert -> {
                 revertNote()
             }
-            id.menu_detail_unarchive -> {
+            R.id.menu_detail_unarchive -> {
                 unArchiveNote(currentNote)
                 finish()
             }
-            id.menu_detail_edit_note -> {
+            R.id.menu_detail_edit_note -> {
                 if (!isEditMode) {
                     enterEditMode()
                 } else {
                     exitEditMode()
                 }
             }
-            id.menu_detail_priority -> {
+            R.id.menu_detail_priority -> {
                 val priorityDialog = DetailPriorityDialog(this, currentNote.priority)
                 priorityDialog.show()
             }
