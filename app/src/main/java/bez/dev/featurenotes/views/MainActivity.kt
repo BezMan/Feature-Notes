@@ -59,15 +59,17 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
 
 
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
-        when (item.itemId) {
-            R.id.nav_notes -> {
-                replaceFragment(R.id.fragment_container, NotesFragment.newInstance())
-            }
-            R.id.nav_archive -> {
-                replaceFragment(R.id.fragment_container, ArchiveFragment.newInstance())
-            }
-            R.id.nav_settings -> {
-                openSettings()
+        if(item.itemId != nav_view.checkedItem?.itemId) {
+            when (item.itemId) {
+                R.id.nav_notes -> {
+                    replaceFragment(R.id.fragment_container, NotesFragment.newInstance())
+                }
+                R.id.nav_archive -> {
+                    replaceFragment(R.id.fragment_container, ArchiveFragment.newInstance())
+                }
+                R.id.nav_settings -> {
+                    openSettings()
+                }
             }
         }
         drawer_layout.closeDrawer(GravityCompat.START)
