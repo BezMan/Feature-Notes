@@ -19,13 +19,13 @@
 
     <item
         android:id="@+id/menu_detail_share"
-        android:icon="@drawable/ic_share"
+        android:icon="@drawable/ic_share_white"
         android:title="Share"
         app:showAsAction="always" />
 
     <item
         android:id="@+id/menu_detail_edit_note"
-        android:icon="@drawable/ic_edit_24dp"
+        android:icon="@drawable/ic_edit_white"
         android:title="Edit"
         app:showAsAction="always" />
 

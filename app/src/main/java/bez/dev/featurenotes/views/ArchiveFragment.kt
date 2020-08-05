@@ -99,12 +99,12 @@ class ArchiveFragment : Fragment(), ArchiveListAdapter.OnItemClickListener {
     }
 
     override fun onNoteItemOverflowClick(note: Note, overflow: ImageView, noteHolder: ArchiveListAdapter.NoteHolder) {
-        val popup = PopupMenu(mContext, overflow)
-        //Inflating the Popup using xml file
-        popup.menuInflater.inflate(R.menu.overflow_note_popup_archived, popup.menu)
+        val popupMenu = PopupMenu(mContext, overflow)
+        popupMenu.inflate(R.menu.overflow_note_popup_archived)
 
-        //registering popup with OnMenuItemClickListener
-        popup.setOnMenuItemClickListener {
+        baseActivity.addIconsToMenu(popupMenu)
+
+        popupMenu.setOnMenuItemClickListener {
             when (it.itemId) {
                 R.id.main_overflow_note_edit -> {
                     baseActivity.editNote(note, true) // add param to diff the archived state
@@ -125,7 +125,7 @@ class ArchiveFragment : Fragment(), ArchiveListAdapter.OnItemClickListener {
             false
         }
 
-        popup.show() //showing popup menu
+        popupMenu.show() //showing popup menu
     }
 
 

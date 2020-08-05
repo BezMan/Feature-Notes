@@ -135,12 +135,12 @@ class NotesFragment : Fragment(), MainListAdapter.OnItemClickListener {
     }
 
     override fun onNoteItemOverflowClick(note: Note, overflow: ImageView, noteHolder: MainListAdapter.NoteHolder) {
-        val popup = PopupMenu(mContext, overflow)
-        //Inflating the Popup using xml file
-        popup.menuInflater.inflate(R.menu.overflow_note_popup, popup.menu)
+        val popupMenu = PopupMenu(mContext, overflow)
+        popupMenu.inflate(R.menu.overflow_note_popup)
 
-        //registering popup with OnMenuItemClickListener
-        popup.setOnMenuItemClickListener {
+        baseActivity.addIconsToMenu(popupMenu)
+
+        popupMenu.setOnMenuItemClickListener {
             when (it.itemId) {
                 R.id.main_overflow_note_edit -> {
                     baseActivity.editNote(note)
@@ -164,7 +164,7 @@ class NotesFragment : Fragment(), MainListAdapter.OnItemClickListener {
             false
         }
 
-        popup.show() //showing popup menu
+        popupMenu.show() //showing popup menu
     }
 
 

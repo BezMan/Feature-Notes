@@ -2,8 +2,10 @@ package bez.dev.featurenotes.views
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.PopupMenu
 import bez.dev.featurenotes.data.Note
 import bez.dev.featurenotes.misc.NotificationManager
 import bez.dev.featurenotes.view_models.RepoViewModel
@@ -62,6 +64,19 @@ abstract class BaseActivity : AppCompatActivity() {
         }
         val shareIntent = Intent.createChooser(sendIntent, null)
         startActivity(shareIntent)
+    }
+
+
+    fun addIconsToMenu(popupMenu: PopupMenu) {
+        try {
+            val declaredField = PopupMenu::class.java.getDeclaredField("mPopup")
+            declaredField.isAccessible = true
+            val mPopup = declaredField.get(popupMenu)
+            mPopup.javaClass.getDeclaredMethod("setForceShowIcon", Boolean::class.java)
+                    .invoke(mPopup, true)
+        } catch (e: Exception) {
+            Log.e("PopupMenu", "Error showing menu icons", e)
+        }
     }
 
 

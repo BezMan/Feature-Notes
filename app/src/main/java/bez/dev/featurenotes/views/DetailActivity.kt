@@ -350,7 +350,7 @@ class DetailActivity : BaseActivity(), OnPrioritySaveClickListener, DetailEditTe
         top_add_item_btn.visibility = View.GONE
         bottom_add_item_btn.visibility = View.GONE
 
-        menuEditItem?.setIcon(drawable.ic_edit_24dp)
+        menuEditItem?.setIcon(drawable.ic_edit_white)
 
         val priorityStr = menuPriorityItem?.title.toString()
         if (priorityStr.isNotEmpty()) {
