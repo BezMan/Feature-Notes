@@ -12,11 +12,12 @@ import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.Observer
+import androidx.preference.PreferenceManager
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import bez.dev.featurenotes.R.*
+import bez.dev.featurenotes.R
 import bez.dev.featurenotes.data.Note
 import bez.dev.featurenotes.data.NoteItem
 import bez.dev.featurenotes.views.DetailPriorityDialog.OnPrioritySaveClickListener
@@ -241,8 +242,8 @@ class DetailActivity : BaseActivity(), OnPrioritySaveClickListener, DetailEditTe
             initNoteViewModel()
 
         } else { //NEW
-            currentNote = Note("", 3, mutableListOf())
-            revertedNote = Note("", 3, mutableListOf())
+            currentNote = Note()
+            revertedNote = Note()
             enterEditMode()
         }
     }
@@ -372,8 +373,11 @@ class DetailActivity : BaseActivity(), OnPrioritySaveClickListener, DetailEditTe
         menuUnarchive = menu.findItem(id.menu_detail_unarchive)
 
         if (!isExistingNote) { //NEW note - init menu icons
-            menuEditItem?.setIcon(drawable.ic_close)
-            currentNote.priority = resources.getInteger(integer.default_priority)
+            val defaultSharedPreferences = PreferenceManager.getDefaultSharedPreferences(this)
+            val defPriority = defaultSharedPreferences.getString(resources.getString(R.string.note_preferences), "3")
+            currentNote.priority = Integer.parseInt(defPriority!!)
+
+            menuEditItem?.setIcon(R.drawable.ic_close)
             menuPriorityItem?.title = currentNote.priority.toString()
             menuPriorityItem?.isVisible = true
             menuShare?.isVisible = false

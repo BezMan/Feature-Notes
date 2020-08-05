@@ -4,14 +4,13 @@ package bez.dev.featurenotes.data
 import android.os.Parcelable
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import bez.dev.featurenotes.R
 import kotlinx.android.parcel.Parcelize
 
 @Parcelize
 @Entity(tableName = "note_table")
-data class Note(var title: String
-                , var priority: Int = R.integer.default_priority
-                , var items: MutableList<NoteItem>
+data class Note(var title: String = ""
+                , var priority: Int = -1
+                , var items: MutableList<NoteItem> = mutableListOf()
                 , var isNotification: Boolean = false
                 , var numItems: Int = 0
                 , var color: Int = 0

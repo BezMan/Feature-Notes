@@ -20,12 +20,12 @@
     <string name="title_activity_settings">Settings</string>
 
     <!-- Preference Titles -->
-    <string name="messages_header">Messages</string>
+    <string name="note_preferences">note_preferences</string>
     <string name="sync_header">Sync</string>
 
     <!-- Messages Preferences -->
     <string name="signature_title">Your signature</string>
-    <string name="reply_title">Default reply action</string>
+    <string name="settings_priority_default">Default Priority</string>
 
     <!-- Sync Preferences -->
     <string name="sync_title">Sync email periodically</string>
