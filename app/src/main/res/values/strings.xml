@@ -13,6 +13,7 @@
     <string name="nav_about_us">About Us</string>
 
     <string name="note_defaults">Note Defaults</string>
+    <string name="load_image">Load Image</string>
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>

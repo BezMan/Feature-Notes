@@ -4,25 +4,27 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layoutDirection="ltr"
-    android:orientation="vertical"
-    android:padding="15dp">
+    android:layoutDirection="ltr">
+
+    <include layout="@layout/main_activity_toolbar" />
 
     <TextView
         android:id="@+id/imageToText_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_margin="10dp"
         android:gravity="center"
         android:text="TEXT RECOGNITION \n (Latin based languages)\n "
         android:textColor="@color/Black"
         android:textSize="16sp"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/main_list_toolbar" />
 
 
     <ImageButton
         android:id="@+id/imageToText_rotate_right"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_margin="10dp"
         android:alpha="0.8"
         android:elevation="2dp"
         android:onClick="imageRotateRight"
@@ -30,13 +32,14 @@
         android:src="@drawable/ic_rotate_right"
         android:visibility="gone"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/main_list_toolbar"
         tools:visibility="visible" />
 
     <ImageButton
         android:id="@+id/imageToText_rotate_left"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_margin="10dp"
         android:alpha="0.8"
         android:elevation="2dp"
         android:onClick="imageRotateLeft"
@@ -44,7 +47,7 @@
         android:src="@drawable/ic_rotate_left"
         android:visibility="gone"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/main_list_toolbar"
         tools:visibility="visible" />
 
 
@@ -76,6 +79,7 @@
         android:id="@+id/imageToText_copy"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
         android:alpha="0.5"
         android:onClick="clickCopyText"
         android:src="@drawable/ic_copy"
