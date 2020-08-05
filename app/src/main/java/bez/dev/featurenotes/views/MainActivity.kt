@@ -111,7 +111,7 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
             replaceFragment(R.id.fragment_container, NotesFragment.newInstance())
             nav_view.setCheckedItem(R.id.nav_notes)
         } else {
-            super.onBackPressed()
+            moveTaskToBack(true)
         }
     }
 
