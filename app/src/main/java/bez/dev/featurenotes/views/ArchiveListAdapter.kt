@@ -3,6 +3,7 @@ package bez.dev.featurenotes.views
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.DiffUtil
@@ -10,7 +11,7 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import bez.dev.featurenotes.R
 import bez.dev.featurenotes.data.Note
-import kotlinx.android.synthetic.main.main_activity_list_item.view.*
+import kotlinx.android.synthetic.main.archive_list_item.view.*
 
 class ArchiveListAdapter internal constructor(context: OnItemClickListener) : ListAdapter<Note, ArchiveListAdapter.NoteHolder>(DIFF_CALLBACK) {
     private var listener: OnItemClickListener = context
@@ -45,6 +46,9 @@ class ArchiveListAdapter internal constructor(context: OnItemClickListener) : Li
         noteHolder.tvTitle.setOnClickListener {
             listener.onNoteItemTextClick(currentNote)
         }
+        noteHolder.btnUnarchive.setOnClickListener {
+            listener.onNoteItemUnArchive(currentNote)
+        }
         noteHolder.overflow.setOnClickListener {
             listener.onNoteItemOverflowClick(currentNote, noteHolder.overflow, noteHolder)
         }
@@ -53,12 +57,14 @@ class ArchiveListAdapter internal constructor(context: OnItemClickListener) : Li
 
     interface OnItemClickListener {
         fun onNoteItemTextClick(note: Note)
+        fun onNoteItemUnArchive(note: Note)
         fun onNoteItemOverflowClick(note: Note, overflow: ImageView, noteHolder: NoteHolder)
     }
 
     inner class NoteHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         internal val tvTitle: TextView = itemView.text_view_title
         internal val tvPriority: TextView = itemView.text_view_priority
+        internal val btnUnarchive: ImageButton = itemView.item_unarchive
         internal val overflow: ImageView = itemView.overflow_image_note_item
     }
 

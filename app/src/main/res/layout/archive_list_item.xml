@@ -19,6 +19,17 @@
             app:layout_constraintTop_toTopOf="parent"
             tools:text="5" />
 
+        <ImageButton
+            android:id="@+id/item_unarchive"
+            android:src="@drawable/ic_unarchive"
+            android:layout_width="0dp"
+            android:padding="8dp"
+            android:background="?android:selectableItemBackgroundBorderless"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/text_view_priority"
+            app:layout_constraintTop_toTopOf="parent" />
+
 
         <ImageView
             android:id="@+id/overflow_image_note_item"
@@ -42,7 +53,7 @@
             android:padding="8dp"
             android:textAppearance="@style/TextAppearance.AppCompat.Large"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/item_unarchive"
             app:layout_constraintStart_toEndOf="@+id/overflow_image_note_item"
             app:layout_constraintTop_toTopOf="parent"
             tools:text="שלום" />

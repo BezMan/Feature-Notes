@@ -24,11 +24,10 @@
             style="@android:style/Widget.DeviceDefault.CompoundButton.RadioButton"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:padding="4dp"
             tools:checked="true"
             android:buttonTint="@color/colorPrimary"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/text_view_priority"
             app:layout_constraintTop_toTopOf="parent" />
 
 

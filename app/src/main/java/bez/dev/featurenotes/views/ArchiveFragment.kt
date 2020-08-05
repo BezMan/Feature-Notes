@@ -98,6 +98,10 @@ class ArchiveFragment : Fragment(), ArchiveListAdapter.OnItemClickListener {
         baseActivity.editNote(note, true)
     }
 
+    override fun onNoteItemUnArchive(note: Note) {
+        showUndoArchiveRestore(note)
+    }
+
     override fun onNoteItemOverflowClick(note: Note, overflow: ImageView, noteHolder: ArchiveListAdapter.NoteHolder) {
         val popupMenu = PopupMenu(mContext, overflow)
         popupMenu.inflate(R.menu.overflow_note_popup_archived)
@@ -113,11 +117,9 @@ class ArchiveFragment : Fragment(), ArchiveListAdapter.OnItemClickListener {
                     baseActivity.shareNote(note)
                 }
                 R.id.main_overflow_note_delete -> {
-                    baseActivity.deleteNote(note)
                     showUndoDelete(note)
                 }
                 R.id.main_overflow_note_unarchive -> {
-                    baseActivity.unArchiveNote(note)
                     showUndoArchiveRestore(note)
                 }
 
@@ -130,6 +132,7 @@ class ArchiveFragment : Fragment(), ArchiveListAdapter.OnItemClickListener {
 
 
     private fun showUndoDelete(note: Note) {
+        baseActivity.deleteNote(note)
         val snack = Snackbar.make(notes_layout, note.title + " - note deleted", Snackbar.LENGTH_INDEFINITE)
 
         snack.setDuration(8000)
@@ -144,6 +147,7 @@ class ArchiveFragment : Fragment(), ArchiveListAdapter.OnItemClickListener {
 
 
     private fun showUndoArchiveRestore(note: Note) {
+        baseActivity.unArchiveNote(note)
         val snack = Snackbar.make(notes_layout, note.title + " - note unarchived", Snackbar.LENGTH_INDEFINITE)
 
         snack.setDuration(8000)
