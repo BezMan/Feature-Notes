@@ -12,7 +12,6 @@ import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.Observer
-import androidx.preference.PreferenceManager
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -373,9 +372,7 @@ class DetailActivity : BaseActivity(), OnPrioritySaveClickListener, DetailEditTe
         menuUnarchive = menu.findItem(R.id.menu_detail_unarchive)
 
         if (!isExistingNote) { //NEW note - init menu icons
-            val defaultSharedPreferences = PreferenceManager.getDefaultSharedPreferences(this)
-            val defPriority = defaultSharedPreferences.getString(resources.getString(R.string.note_preferences), "3")
-            currentNote.priority = Integer.parseInt(defPriority!!)
+            currentNote.priority = getSavedDefaultPriority()
 
             menuEditItem?.setIcon(R.drawable.ic_close)
             menuPriorityItem?.title = currentNote.priority.toString()

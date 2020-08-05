@@ -6,6 +6,8 @@ import android.util.Log
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.PopupMenu
+import androidx.preference.PreferenceManager
+import bez.dev.featurenotes.R
 import bez.dev.featurenotes.data.Note
 import bez.dev.featurenotes.misc.NotificationManager
 import bez.dev.featurenotes.view_models.RepoViewModel
@@ -79,6 +81,12 @@ abstract class BaseActivity : AppCompatActivity() {
         }
     }
 
+
+    fun getSavedDefaultPriority(): Int {
+        val defaultSharedPreferences = PreferenceManager.getDefaultSharedPreferences(this)
+        val defPriority = defaultSharedPreferences.getString(resources.getString(R.string.note_preferences), "3")
+        return Integer.parseInt(defPriority!!)
+    }
 
     companion object {
         const val FRAGMENT_DATA = "FRAGMENT_DATA"
