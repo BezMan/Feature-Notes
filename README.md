@@ -6,29 +6,27 @@ How about adding note items while OTHER apps are in the foreground?
 
 These are some useful features you'll find in this app and I can't wait to add more!
 
- This project contains and showcases these concepts:
+ This project is written in Kotlin and showcases these concepts:
 
-- Kotlin language + Kotlin extension functions.
 - Architecture Components: MVVM, Room, Live Data, Observing DB changes.
-- Dependency Injection with Koin: injecting Repository, NotificationManager and ViewModel.
+- Dependency Injection with Koin (Repository, NotificationManager and ViewModel).
 - Using Kotlin Coroutines for necessary asynchronous DB operations.
+- Transitioning between Fragments with Navigation Drawer layout.
 - Parcelable Note data class, so we can pass it between Activities.
 - TypeConverter for storing non-primitive object types in Room Database.
-- Database ViewModel - a single data entry point for all activities.
 - ItemTouchHelper callbacks for gesture detection: drag & drop items.
 - Custom Views (AlertDialog) managing their own UI setup and lifecycle.
-- Setting a priority for each note, influences the order in the main list.
-- Toolbar layouts containing menu items in conjunction with custom menu layouts.
-- Data persistence, so we don’t lose data, even when app task is removed.
-- auto generated primary key, where insert() provides us a unique ID val.
-- Nested ScrollView with auto scroll when adding bottom note items.
-- Text Recognition - extract words and numbers from your photos (Firebase Machine Learning API).
+- Note priority influences the order of notes displayed within list.
+- Generating primary key, where insert() provides us a unique ID val.
+- Auto-scroll to bottom of list when adding note items to the end.
 - Setting notes as Notifications, for quick add, even while watching a video.
-- RESTORE deleted notes and items, through SnackBar action.
-- REVERT CHANGES menu item, during note editing session.
+- Restore deleted/archived notes and items, through quick SnackBar action.
+- Revert changes is possible during note editing session.
 - Share notes easily + quick text copy of individual note items.
-- click to ~~Strike Through note items~~ and mark them as DONE.
+- Settings Activity - simple example using Jetpack Preferences
+- Click to ~~Strike Through note items~~ and mark them as DONE.
 - Espresso Instrumentation tests across multiple activities.
+- Text Recognition - extracting words and numbers from your photos.
 
 <br/>
 
