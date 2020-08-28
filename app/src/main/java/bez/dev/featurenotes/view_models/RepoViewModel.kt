@@ -7,7 +7,7 @@ import bez.dev.featurenotes.data.NoteRepository
 
 class RepoViewModel(private val repository: NoteRepository) : ViewModel() {
 
-    suspend fun insert(note: Note): Long {
+    fun insert(note: Note): Long {
         return repository.insert(note)
     }
 

@@ -38,6 +38,7 @@ These are some useful features you'll find in this app and I can't wait to add m
 <img src="images/screenshots/scr5.jpeg" width="170">
 <img src="images/screenshots/scr6.jpeg" width="170">
 <img src="images/screenshots/scr7.jpeg" width="170">
+<img src="images/screenshots/scr8.jpeg" width="170">
 </div>
 
 <br/>

@@ -19,7 +19,7 @@ open class NoteRepository : IRepository {
         noteDao.getAllNotesByPriority()
     }
 
-    override suspend fun insert(note: Note): Long {
+    override fun insert(note: Note): Long {
         return noteDao.insert(note)
     }
 
