@@ -1,6 +1,5 @@
 package bez.dev.featurenotes.views
 
-import android.content.Context
 import android.os.Bundle
 import android.view.*
 import android.widget.ImageView
@@ -23,7 +22,6 @@ class ArchiveFragment : Fragment(), ArchiveListAdapter.OnItemClickListener {
 
     private lateinit var archiveListAdapter: ArchiveListAdapter
     private var archivedList: List<Note> = ArrayList()
-    private lateinit var mContext: Context
     private lateinit var baseActivity: BaseActivity
 
     private val observer = Observer<List<Note>> {
@@ -31,11 +29,6 @@ class ArchiveFragment : Fragment(), ArchiveListAdapter.OnItemClickListener {
         refreshUI()
     }
 
-
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
-        mContext = context
-    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -102,7 +95,7 @@ class ArchiveFragment : Fragment(), ArchiveListAdapter.OnItemClickListener {
     }
 
     override fun onNoteItemOverflowClick(note: Note, overflow: ImageView, noteHolder: ArchiveListAdapter.NoteHolder) {
-        val popupMenu = PopupMenu(mContext, overflow)
+        val popupMenu = PopupMenu(baseActivity, overflow)
         popupMenu.inflate(R.menu.overflow_note_popup_archived)
 
         baseActivity.addIconsToMenu(popupMenu)
