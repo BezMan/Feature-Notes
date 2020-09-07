@@ -15,7 +15,6 @@ class DetailEditTextDialog(context: Context, listener: OnItemSaveClickListener, 
     private var myListener: OnItemSaveClickListener = listener
     private var isAddedItem: Boolean = false
     private var position: Int = myPosition
-    private var mContext = context
 
     public override fun onCreate(savedInstanceState: Bundle?) {
         requestWindowFeature(Window.FEATURE_NO_TITLE)
@@ -47,7 +46,7 @@ class DetailEditTextDialog(context: Context, listener: OnItemSaveClickListener, 
 
 
     override fun dismiss() {
-        Utils.hideKeyboard(mContext, window)
+        Utils.hideKeyboard(context, window)
         super.dismiss()
     }
 
