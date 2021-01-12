@@ -13,7 +13,7 @@ import kotlinx.android.synthetic.main.detail_activity_dialog_edit_text.*
 class DetailEditTextDialog(context: Context, listener: OnItemSaveClickListener, private val noteItem: NoteItem, myPosition: Int = 0) : Dialog(context) {
 
     private var myListener: OnItemSaveClickListener = listener
-    private var isAddedItem: Boolean = false
+    private var isNewItem: Boolean = false
     private var position: Int = myPosition
 
     public override fun onCreate(savedInstanceState: Bundle?) {
@@ -23,7 +23,7 @@ class DetailEditTextDialog(context: Context, listener: OnItemSaveClickListener, 
         initUI()
 
         if (noteItem.itemText.isEmpty()) {
-            isAddedItem = true //is new item?
+            isNewItem = true //is new item?
         } else {
             dialogEditText.append(noteItem.itemText)
         }
@@ -41,7 +41,7 @@ class DetailEditTextDialog(context: Context, listener: OnItemSaveClickListener, 
 
     fun saveMe() {
         val newNoteItem = NoteItem(dialogEditText.text.toString().trim(), noteItem.isDone)
-        myListener.onTextSaveDialogBtnClick(newNoteItem, position, isAddedItem)
+        myListener.onTextSaveDialogBtnClick(newNoteItem, position, isNewItem)
     }
 
 

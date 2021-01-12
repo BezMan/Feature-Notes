@@ -239,14 +239,14 @@ class NotesFragment : Fragment(), MainListAdapter.OnItemClickListener {
     }
 
 
-    companion object {
-
-        fun newInstance() = NotesFragment().apply {
+//    companion object {
+//
+//        fun newInstance() = NotesFragment().apply {
 //            arguments = Bundle().apply {
 //                putInt(FRAGMENT_DATA, filterType) }
-        }
-
-    }
+//        }
+//
+//    }
 
 
 }

@@ -51,9 +51,8 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
         nav_view.setNavigationItemSelectedListener(this)
 
 
-        if (savedInstanceState == null) { //don't do on device rotation
-            replaceFragment(R.id.fragment_container, NotesFragment.newInstance())
-            nav_view.setCheckedItem(R.id.nav_notes)
+        if (savedInstanceState == null) { //don't trigger on device rotation
+            showNotesFragment()
         }
     }
 
@@ -62,10 +61,10 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
         if(item.itemId != nav_view.checkedItem?.itemId) {
             when (item.itemId) {
                 R.id.nav_notes -> {
-                    replaceFragment(R.id.fragment_container, NotesFragment.newInstance())
+                    replaceFragment(R.id.fragment_container, NotesFragment())
                 }
                 R.id.nav_archive -> {
-                    replaceFragment(R.id.fragment_container, ArchiveFragment.newInstance())
+                    replaceFragment(R.id.fragment_container, ArchiveFragment())
                 }
                 R.id.nav_settings -> {
                     openSettings()
@@ -110,11 +109,15 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
             drawer_layout.closeDrawer(GravityCompat.START)
         } else if (!nav_view.menu.getItem(0).isChecked){
             // if (R.id.nav_notes) NOT selected, go to it:
-            replaceFragment(R.id.fragment_container, NotesFragment.newInstance())
-            nav_view.setCheckedItem(R.id.nav_notes)
+            showNotesFragment()
         } else {
             moveTaskToBack(true)
         }
+    }
+
+    private fun showNotesFragment() {
+        replaceFragment(R.id.fragment_container, NotesFragment())
+        nav_view.setCheckedItem(R.id.nav_notes)
     }
 
 }

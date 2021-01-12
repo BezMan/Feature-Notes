@@ -55,7 +55,7 @@ class DetailActivity : BaseActivity(), OnPrioritySaveClickListener, DetailEditTe
 
         initUI()
 
-        fillExistingData()
+        checkIsExistingNote()
 
     }
 
@@ -63,7 +63,6 @@ class DetailActivity : BaseActivity(), OnPrioritySaveClickListener, DetailEditTe
         super.onPause()
         if (editTextDialog != null && editTextDialog!!.isShowing) {
             editTextDialog?.saveMe()
-
         }
     }
 
@@ -72,7 +71,7 @@ class DetailActivity : BaseActivity(), OnPrioritySaveClickListener, DetailEditTe
         editTextDialog?.dismiss()
     }
 
-    private fun initNoteViewModel() {
+    private fun observeNote() {
         repoViewModel.getNoteById(currentNote.id).observe(this, observer)
     }
 
@@ -119,8 +118,8 @@ class DetailActivity : BaseActivity(), OnPrioritySaveClickListener, DetailEditTe
     }
 
 
-    override fun onTextSaveDialogBtnClick(noteItem: NoteItem, position: Int, isAddedItem: Boolean) {
-        if (isAddedItem) { //NEW
+    override fun onTextSaveDialogBtnClick(noteItem: NoteItem, position: Int, isNewItem: Boolean) {
+        if (isNewItem) { //NEW
             addItemAtPosition(position, noteItem.itemText)
 
             //scroll to show bottom , if we added to bottom
@@ -229,18 +228,18 @@ class DetailActivity : BaseActivity(), OnPrioritySaveClickListener, DetailEditTe
 
     }
 
-    private fun fillExistingData() {
+    private fun checkIsExistingNote() {
         isExistingNote = intent.hasExtra(EXTRA_NOTE)
-        if (isExistingNote) { //EXISTING
+        if (isExistingNote) {
 
             currentNote = intent.getParcelableExtra(EXTRA_NOTE) as Note
             revertedNote = Note(currentNote.title, currentNote.priority, currentNote.items)
 
             edit_text_title.setText(currentNote.title)
 
-            initNoteViewModel()
+            observeNote()
 
-        } else { //NEW
+        } else { //NEW NOTE
             currentNote = Note()
             revertedNote = Note()
             enterEditMode()

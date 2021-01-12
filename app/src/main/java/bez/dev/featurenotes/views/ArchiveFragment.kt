@@ -153,14 +153,14 @@ class ArchiveFragment : Fragment(), ArchiveListAdapter.OnItemClickListener {
     }
 
 
-    companion object {
-
-        fun newInstance() = ArchiveFragment().apply {
+//    companion object {
+//
+//        fun newInstance() = ArchiveFragment().apply {
 //            arguments = Bundle().apply {
 //                putInt(FRAGMENT_DATA, filterType) }
-        }
-
-    }
+//        }
+//
+//    }
 
 
 }

@@ -1,7 +1,6 @@
 package bez.dev.featurenotes.views
 
 import android.content.Intent
-import android.os.Bundle
 import android.util.Log
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
@@ -17,17 +16,6 @@ abstract class BaseActivity : AppCompatActivity() {
 
     val repoViewModel = get<RepoViewModel>()
     val notificationManager = get<NotificationManager>()
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-        doMutual()
-
-    }
-
-    private fun doMutual() {
-        supportActionBar?.setDisplayShowTitleEnabled(false)
-    }
 
 
     fun deleteNote(note: Note) {
