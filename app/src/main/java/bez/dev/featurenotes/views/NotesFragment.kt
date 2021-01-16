@@ -2,7 +2,10 @@ package bez.dev.featurenotes.views
 
 import android.content.Intent
 import android.os.Bundle
-import android.view.*
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
+import android.view.View
 import android.widget.ImageView
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.widget.PopupMenu
@@ -20,7 +23,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-class NotesFragment : Fragment(), MainListAdapter.OnItemClickListener {
+class NotesFragment : Fragment(R.layout.fragment_notes), MainListAdapter.OnItemClickListener {
 
     private lateinit var mainListAdapter: MainListAdapter
     private var noteList: List<Note> = ArrayList()
@@ -39,10 +42,6 @@ class NotesFragment : Fragment(), MainListAdapter.OnItemClickListener {
         setHasOptionsMenu(true)
     }
 
-
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.fragment_notes, container, false)
-    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
