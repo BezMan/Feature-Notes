@@ -11,6 +11,7 @@ import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.widget.PopupMenu
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import bez.dev.featurenotes.R
 import bez.dev.featurenotes.data.Note
@@ -19,8 +20,6 @@ import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.fragment_notes.*
 import kotlinx.android.synthetic.main.main_activity_toolbar.*
 import kotlinx.android.synthetic.main.no_notes_layout.*
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 class NotesFragment : Fragment(R.layout.fragment_notes), MainListAdapter.OnItemClickListener {
@@ -199,7 +198,7 @@ class NotesFragment : Fragment(R.layout.fragment_notes), MainListAdapter.OnItemC
         snack.setDuration(8000)
                 .setAction("UNDO") {
                     // execute when UNDO is clicked
-                    CoroutineScope(Dispatchers.IO).launch {
+                    lifecycleScope.launch {
                         baseActivity.repoViewModel.insert(note)
                     }
                 }
@@ -213,7 +212,7 @@ class NotesFragment : Fragment(R.layout.fragment_notes), MainListAdapter.OnItemC
         snack.setDuration(8000)
                 .setAction("UNDO") {
                     // execute when UNDO is clicked
-                    CoroutineScope(Dispatchers.IO).launch {
+                    lifecycleScope.launch {
                         baseActivity.repoViewModel.unArchive(note)
                     }
                 }
@@ -229,7 +228,7 @@ class NotesFragment : Fragment(R.layout.fragment_notes), MainListAdapter.OnItemC
                 .setAction("UNDO") {
                     // execute when UNDO is clicked
                     for (note: Note in restorePoint) {
-                        CoroutineScope(Dispatchers.IO).launch {
+                        lifecycleScope.launch {
                             baseActivity.repoViewModel.insert(note)
                         }
                     }

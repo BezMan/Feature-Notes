@@ -12,6 +12,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.Observer
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -23,8 +24,6 @@ import bez.dev.featurenotes.views.DetailPriorityDialog.OnPrioritySaveClickListen
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.detail_activity.*
 import kotlinx.android.synthetic.main.detail_activity_toolbar.*
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.*
@@ -279,7 +278,7 @@ class DetailActivity : BaseActivity(), OnPrioritySaveClickListener, DetailEditTe
         } else { // create new note
             currentNote = Note(title, currentNote.priority, currentNote.items)
 
-            CoroutineScope(Dispatchers.IO).launch {
+            lifecycleScope.launch {
                 currentNote.id = repoViewModel.insert(currentNote)
             }
             isExistingNote = true
