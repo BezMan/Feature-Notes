@@ -5,6 +5,7 @@ import androidx.lifecycle.LiveData
 interface IRepository {
 
     fun insert(note: Note): Long
+    fun insert(note: List<Note>): List<Long>
     fun update(note: Note)
     fun delete(note: Note)
     fun deleteAllNotes()

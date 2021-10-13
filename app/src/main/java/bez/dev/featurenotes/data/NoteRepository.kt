@@ -23,6 +23,10 @@ open class NoteRepository : IRepository {
         return noteDao.insert(note)
     }
 
+    override fun insert(note: List<Note>): List<Long> {
+        return noteDao.insert(note)
+    }
+
     override fun update(note: Note) {
         repoScope.launch { noteDao.update(note) }
     }

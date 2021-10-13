@@ -8,20 +8,22 @@ import org.koin.core.inject
 
 class InitNotesProd : KoinComponent {
 
+    private val repository: NoteRepository by inject()
+
     fun setInitNotes() {
         if (SharedPrefs.getBoolValue(KEY_FIRST_RUN, true)) {
 
+            val items = mutableListOf(
+                    NoteItem("long click to copy"),
+                    NoteItem("select edit, set priority"),
+                    NoteItem("drag and drop"))
+
+            val note = Note("This is a note", 1, items)
+
             CoroutineScope(Dispatchers.IO).launch {
-                val repository: NoteRepository by inject()
-                repository.clearAllData()
-                repository.insert(Note("This is a note", 1,
-                        mutableListOf(
-                                NoteItem("long click to copy"),
-                                NoteItem("select edit, set priority"),
-                                NoteItem("drag and drop"))))
-                //toggle to not first run anymore:
-                SharedPrefs.setBoolValue(KEY_FIRST_RUN, false)
+                repository.insert(note)
             }
+            SharedPrefs.setBoolValue(KEY_FIRST_RUN, false) //toggle to not first run anymore:
         }
 
     }

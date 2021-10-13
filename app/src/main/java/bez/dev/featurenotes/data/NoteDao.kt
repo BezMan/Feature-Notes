@@ -9,6 +9,9 @@ interface NoteDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insert(note: Note): Long
 
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    fun insert(note: List<Note>): List<Long>
+
     @Update(onConflict = OnConflictStrategy.REPLACE)
     fun update(note: Note)
 

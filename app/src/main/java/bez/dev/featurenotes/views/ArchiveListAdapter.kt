@@ -40,18 +40,22 @@ class ArchiveListAdapter internal constructor(context: OnItemClickListener) : Li
 
     override fun onBindViewHolder(noteHolder: NoteHolder, position: Int) {
         val currentNote = getNoteAt(position)
-        noteHolder.tvTitle.text = currentNote.title
-        noteHolder.tvPriority.text = currentNote.priority.toString()
 
-        noteHolder.tvTitle.setOnClickListener {
-            listener.onNoteItemTextClick(currentNote)
+        noteHolder.apply {
+            tvTitle.text = currentNote.title
+            tvPriority.text = currentNote.priority.toString()
+
+            tvTitle.setOnClickListener {
+                listener.onNoteItemTextClick(currentNote)
+            }
+            btnUnarchive.setOnClickListener {
+                listener.onNoteItemUnArchive(currentNote)
+            }
+            overflow.setOnClickListener {
+                listener.onNoteItemOverflowClick(currentNote, overflow, noteHolder)
+            }
         }
-        noteHolder.btnUnarchive.setOnClickListener {
-            listener.onNoteItemUnArchive(currentNote)
-        }
-        noteHolder.overflow.setOnClickListener {
-            listener.onNoteItemOverflowClick(currentNote, noteHolder.overflow, noteHolder)
-        }
+
     }
 
 

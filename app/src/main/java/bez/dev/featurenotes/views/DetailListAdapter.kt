@@ -36,40 +36,43 @@ class DetailListAdapter internal constructor(myListener: OnDetailItemClickListen
     @SuppressLint("ClickableViewAccessibility")
     override fun onBindViewHolder(detailItemHolder: DetailItemHolder, position: Int) {
         val currentItem = getItem(position)
-        detailItemHolder.itemText.text = currentItem.itemText.trim()
 
-        //do regardless of mode
-        detailItemHolder.deleteItem.showOnEditMode(mIsEditMode)
-        detailItemHolder.dragItem.showOnEditMode(mIsEditMode)
-        detailItemHolder.itemText.showItemIsDone(currentItem.isDone)
+        detailItemHolder.apply {
+            itemText.text = currentItem.itemText.trim()
 
-        detailItemHolder.itemText.setOnLongClickListener {
-            listener.onDetailItemLongClick(currentItem.itemText, position)
-        }
+            //do regardless of mode
+            deleteItem.showOnEditMode(mIsEditMode)
+            dragItem.showOnEditMode(mIsEditMode)
+            itemText.showItemIsDone(currentItem.isDone)
 
-        if (mIsEditMode) { //ONLY edit mode
-            detailItemHolder.itemText.setTextColor(ContextCompat.getColor(listener as Context, R.color.black))
-
-            detailItemHolder.itemText.setOnClickListener {
-                listener.onDetailItemClick(currentItem, position)
+            itemText.setOnLongClickListener {
+                listener.onDetailItemLongClick(currentItem.itemText, position)
             }
-            detailItemHolder.deleteItem.setOnClickListener {
-                listener.onDeleteItemClick(position)
-            }
-            detailItemHolder.dragItem.setOnTouchListener { _, event ->
-                if (event.actionMasked == MotionEvent.ACTION_DOWN) {
-                    touchHelper.startDrag(detailItemHolder)
+
+            if (mIsEditMode) { //ONLY edit mode
+                itemText.setTextColor(ContextCompat.getColor(listener as Context, R.color.black))
+
+                itemText.setOnClickListener {
+                    listener.onDetailItemClick(currentItem, position)
                 }
-                false
-            }
-        } else {  //NOT edit mode
-            detailItemHolder.itemText.setTextColor(ContextCompat.getColor(listener as Context, R.color.gray))
+                deleteItem.setOnClickListener {
+                    listener.onDeleteItemClick(position)
+                }
+                dragItem.setOnTouchListener { _, event ->
+                    if (event.actionMasked == MotionEvent.ACTION_DOWN) {
+                        touchHelper.startDrag(detailItemHolder)
+                    }
+                    false
+                }
+            } else {  //NOT edit mode
+                itemText.setTextColor(ContextCompat.getColor(listener as Context, R.color.gray))
 
-            detailItemHolder.itemText.setOnClickListener {
-                listener.onDetailItemClickToggleDone(!currentItem.isDone, position)
+                itemText.setOnClickListener {
+                    listener.onDetailItemClickToggleDone(!currentItem.isDone, position)
+                }
             }
-
         }
+
     }
 
     inner class DetailItemHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {

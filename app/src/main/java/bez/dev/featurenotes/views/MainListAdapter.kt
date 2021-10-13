@@ -40,18 +40,21 @@ class MainListAdapter internal constructor(context: OnItemClickListener) : ListA
 
     override fun onBindViewHolder(noteHolder: NoteHolder, position: Int) {
         val currentNote = getNoteAt(position)
-        noteHolder.tvTitle.text = currentNote.title
-        noteHolder.tvPriority.text = currentNote.priority.toString()
-        noteHolder.checkboxToggleNotification.isChecked = currentNote.isNotification
 
-        noteHolder.tvTitle.setOnClickListener {
-            listener.onNoteItemTextClick(currentNote)
-        }
-        noteHolder.overflow.setOnClickListener {
-            listener.onNoteItemOverflowClick(currentNote, noteHolder.overflow, noteHolder)
-        }
-        noteHolder.checkboxToggleNotification.setOnCheckedChangeListener { _, isChecked ->
-            listener.onToggleNotificationClick(currentNote, isChecked)
+        noteHolder.apply {
+            tvTitle.text = currentNote.title
+            tvPriority.text = currentNote.priority.toString()
+            checkboxToggleNotification.isChecked = currentNote.isNotification
+
+            tvTitle.setOnClickListener {
+                listener.onNoteItemTextClick(currentNote)
+            }
+            overflow.setOnClickListener {
+                listener.onNoteItemOverflowClick(currentNote, overflow, noteHolder)
+            }
+            checkboxToggleNotification.setOnCheckedChangeListener { _, isChecked ->
+                listener.onToggleNotificationClick(currentNote, isChecked)
+            }
         }
 
     }
