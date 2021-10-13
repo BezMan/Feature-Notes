@@ -21,10 +21,8 @@ data class Note(var title: String = ""
 
 ) : Parcelable {
 
+    override fun toString() = "$title:\n $items"
 
-    override fun toString(): String {
-        return "$title:\n $items"
-    }
 }
 
 

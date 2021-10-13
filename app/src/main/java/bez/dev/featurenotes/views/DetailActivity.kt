@@ -231,7 +231,7 @@ class DetailActivity : BaseActivity(), OnPrioritySaveClickListener, DetailEditTe
         isExistingNote = intent.hasExtra(EXTRA_NOTE)
         if (isExistingNote) {
 
-            currentNote = intent.getParcelableExtra(EXTRA_NOTE) as Note
+            currentNote = intent.getParcelableExtra(EXTRA_NOTE)!!
             revertedNote = Note(currentNote.title, currentNote.priority, currentNote.items)
 
             edit_text_title.setText(currentNote.title)

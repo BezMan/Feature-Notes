@@ -16,12 +16,16 @@ class AddFromNotificationIntentService : IntentService("AddFromNotificationInten
     private val notificationManager = get<NotificationManager>()
 
     override fun onHandleIntent(intent: Intent?) {
-        val note = intent?.getParcelableExtra(NOTIFICATION_NOTE) as Note
+        val note = intent?.let {
+            it.getParcelableExtra(NOTIFICATION_NOTE) as Note?
+        }
 
-        if (intent.action == ACTION_REPLY) {
-            handleActionAdd(note, intent)
-        } else if (intent.action == ACTION_DISMISS) {
-            handleActionDismiss(note)
+        note?.let {
+            if (intent.action == ACTION_REPLY) {
+                handleActionAdd(note, intent)
+            } else if (intent.action == ACTION_DISMISS) {
+                handleActionDismiss(note)
+            }
         }
     }
 
