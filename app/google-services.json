@@ -1,0 +1,69 @@
+{
+  "project_info": {
+    "project_number": "1004111840524",
+    "firebase_url": "https://feature-notes.firebaseio.com",
+    "project_id": "feature-notes",
+    "storage_bucket": "feature-notes.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1004111840524:android:770fa8ab8be2e68d",
+        "android_client_info": {
+          "package_name": "bez.dev.featurenotes"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1004111840524-1h87pr8jkipu5pse3sqtheinm6se7akm.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAi_ah77TVK6wMRYFXQ5A5rlc4udG6eMpU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1004111840524-1h87pr8jkipu5pse3sqtheinm6se7akm.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1004111840524:android:da2abe3489099156",
+        "android_client_info": {
+          "package_name": "bez.dev.featurenotes.mock"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1004111840524-1h87pr8jkipu5pse3sqtheinm6se7akm.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAi_ah77TVK6wMRYFXQ5A5rlc4udG6eMpU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1004111840524-1h87pr8jkipu5pse3sqtheinm6se7akm.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
