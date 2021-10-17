@@ -11,7 +11,6 @@ import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.widget.PopupMenu
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
-import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import bez.dev.featurenotes.R
 import bez.dev.featurenotes.data.Note
@@ -198,7 +197,7 @@ class NotesFragment : Fragment(R.layout.fragment_notes), MainListAdapter.OnItemC
         snack.setDuration(8000)
                 .setAction("UNDO") {
                     // execute when UNDO is clicked
-                    lifecycleScope.launch {
+                    baseActivity.baseCoroutineIO.launch {
                         baseActivity.repoViewModel.insert(note)
                     }
                 }
@@ -212,7 +211,7 @@ class NotesFragment : Fragment(R.layout.fragment_notes), MainListAdapter.OnItemC
         snack.setDuration(8000)
                 .setAction("UNDO") {
                     // execute when UNDO is clicked
-                    lifecycleScope.launch {
+                    baseActivity.baseCoroutineIO.launch {
                         baseActivity.repoViewModel.unArchive(note)
                     }
                 }
@@ -228,7 +227,7 @@ class NotesFragment : Fragment(R.layout.fragment_notes), MainListAdapter.OnItemC
                 .setAction("UNDO") {
                     // execute when UNDO is clicked
                     for (note: Note in restorePoint) {
-                        lifecycleScope.launch {
+                        baseActivity.baseCoroutineIO.launch {
                             baseActivity.repoViewModel.insert(note)
                         }
                     }

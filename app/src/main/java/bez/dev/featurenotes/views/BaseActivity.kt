@@ -12,12 +12,16 @@ import bez.dev.featurenotes.R
 import bez.dev.featurenotes.data.Note
 import bez.dev.featurenotes.misc.NotificationManager
 import bez.dev.featurenotes.view_models.RepoViewModel
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import org.koin.android.ext.android.get
 
 abstract class BaseActivity : AppCompatActivity() {
 
     val repoViewModel = get<RepoViewModel>()
     val notificationManager = get<NotificationManager>()
+
+    val baseCoroutineIO = CoroutineScope(Dispatchers.IO)
 
 
     override fun onCreate(savedInstanceState: Bundle?) {

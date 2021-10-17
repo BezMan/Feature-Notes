@@ -28,14 +28,13 @@ class App : Application() {
     object OnUncaughtException : Thread.UncaughtExceptionHandler {
         override fun uncaughtException(t: Thread, e: Throwable) {
             Log.e("App triggerRebirth", "DefaultUncaughtExceptionHandler")
-            val app = App()
-            app.triggerRebirth()
+            App().triggerRebirth()
         }
     }
 
 
     fun triggerRebirth() {
-        val intent = Intent(this, MainActivity::class.java)
+        val intent = Intent(this@App, MainActivity::class.java)
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
         startActivity(intent)
         Runtime.getRuntime().exit(0)

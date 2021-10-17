@@ -12,7 +12,6 @@ import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.Observer
-import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -278,7 +277,7 @@ class DetailActivity : BaseActivity(), OnPrioritySaveClickListener, DetailEditTe
         } else { // create new note
             currentNote = Note(title, currentNote.priority, currentNote.items)
 
-            lifecycleScope.launch {
+            baseCoroutineIO.launch {
                 currentNote.id = repoViewModel.insert(currentNote)
             }
             isExistingNote = true
