@@ -12,19 +12,16 @@ import androidx.test.espresso.action.ViewActions.typeText
 import androidx.test.espresso.matcher.ViewMatchers.*
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.rule.ActivityTestRule
-import androidx.test.runner.AndroidJUnit4
 import androidx.test.runner.lifecycle.ActivityLifecycleMonitorRegistry
 import androidx.test.runner.lifecycle.Stage
 import bez.dev.featurenotes.views.MainActivity
 import org.hamcrest.Matchers.`is`
 import org.junit.Rule
 import org.junit.Test
-import org.junit.runner.RunWith
 import java.text.SimpleDateFormat
 import java.util.*
 
 
-@RunWith(AndroidJUnit4::class)
 class NotesTest {
 
     @get:Rule
@@ -131,8 +128,8 @@ class NotesTest {
             if (noViewFoundException != null) {
                 throw noViewFoundException
             }
-            val recyclerView = view as RecyclerView
-            assertThat(recyclerView.adapter!!.itemCount, `is`(expectedCount))
+            view as RecyclerView
+            assertThat(view.adapter?.itemCount, `is`(expectedCount))
         }
     }
 
