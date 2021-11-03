@@ -81,11 +81,9 @@ class ArchiveListAdapter internal constructor(context: OnItemClickListener) : Li
 
             override fun areContentsTheSame(oldNote: Note, newNote: Note): Boolean {
                 return oldNote.title == newNote.title
-                        && oldNote.items == newNote.items
                         && oldNote.priority == newNote.priority
                         && oldNote.isNotification == newNote.isNotification
                         && oldNote.color == newNote.color
-                        && oldNote.numItems == newNote.numItems
                         && oldNote.isArchived == newNote.isArchived
                         && oldNote.timeCreated == newNote.timeCreated
                         && oldNote.timeModified == newNote.timeModified

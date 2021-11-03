@@ -16,6 +16,7 @@ import androidx.test.runner.lifecycle.ActivityLifecycleMonitorRegistry
 import androidx.test.runner.lifecycle.Stage
 import bez.dev.featurenotes.views.MainActivity
 import org.hamcrest.Matchers.`is`
+import org.junit.Ignore
 import org.junit.Rule
 import org.junit.Test
 import java.text.SimpleDateFormat
@@ -56,6 +57,7 @@ class NotesTest {
     }
 
 
+    @Ignore
     @Test
     fun clickNoteEdit_openDetailActivityEditItem() {
 //        val title = "test mock"
