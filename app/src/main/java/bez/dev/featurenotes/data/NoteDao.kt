@@ -1,7 +1,7 @@
 package bez.dev.featurenotes.data
 
-import androidx.lifecycle.LiveData
 import androidx.room.*
+import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface NoteDao {
@@ -25,12 +25,12 @@ interface NoteDao {
     fun resetAllNotifications()
 
     @Query("SELECT * FROM note_table WHERE isArchived = 0 ORDER BY priority DESC")
-    fun getAllNotesByPriority(): LiveData<List<Note>>
+    fun getAllNotesByPriority(): Flow<List<Note>>
 
     @Query("SELECT * FROM note_table WHERE isArchived = 1 ORDER BY priority DESC")
-    fun getAllArchivedNotesByPriority(): LiveData<List<Note>>
+    fun getAllArchivedNotesByPriority(): Flow<List<Note>>
 
     @Query("SELECT * FROM note_table WHERE id = :noteId")
-    fun getNoteById(noteId: Long): LiveData<Note>
+    fun getNoteById(noteId: Long): Flow<Note>
 }
 

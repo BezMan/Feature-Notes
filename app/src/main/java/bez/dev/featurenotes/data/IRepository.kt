@@ -1,6 +1,6 @@
 package bez.dev.featurenotes.data
 
-import androidx.lifecycle.LiveData
+import kotlinx.coroutines.flow.Flow
 
 interface IRepository {
 
@@ -11,8 +11,8 @@ interface IRepository {
     fun deleteAllNotes()
     fun clearAllData()
     fun resetAllNotifications()
-    fun getNoteById(noteId: Long): LiveData<Note>
-    fun getAllNotes(): LiveData<List<Note>>
-    fun getArchivedNotes(): LiveData<List<Note>>
+    fun getNoteById(noteId: Long): Flow<Note>
+    fun getAllNotes(): Flow<List<Note>>
+    fun getArchivedNotes(): Flow<List<Note>>
 
 }

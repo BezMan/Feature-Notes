@@ -1,22 +1,22 @@
 package bez.dev.featurenotes.data
 
-import androidx.lifecycle.LiveData
 import bez.dev.featurenotes.misc.App
 import bez.dev.featurenotes.misc.DInjector
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
 
 const val KEY_FIRST_RUN = "KEY_FIRST_RUN"
 
-open class NoteRepository : IRepository {
+class NoteRepository : IRepository {
     private val noteDatabase: NoteDatabase = App.database
     private val noteDao: NoteDao = noteDatabase.noteDao()
     private val repoScope = CoroutineScope(Dispatchers.IO)
 
     init {
         DInjector.setInitNotes()
-        noteDao.getAllNotesByPriority()
+        getAllNotes()
     }
 
     override fun insert(note: Note): Long {
@@ -32,30 +32,30 @@ open class NoteRepository : IRepository {
     }
 
     override fun delete(note: Note) {
-        repoScope.launch { noteDao.delete(note) }
+        noteDao.delete(note)
     }
 
     override fun deleteAllNotes() {
-        repoScope.launch { noteDao.deleteAllNotes() }
+        noteDao.deleteAllNotes()
     }
 
     override fun clearAllData() {
-        repoScope.launch { noteDatabase.clearAllTables() }
+        noteDatabase.clearAllTables()
     }
 
     override fun resetAllNotifications() {
-        repoScope.launch { noteDao.resetAllNotifications() }
+        noteDao.resetAllNotifications()
     }
 
-    override fun getNoteById(noteId: Long): LiveData<Note> {
+    override fun getNoteById(noteId: Long): Flow<Note> {
         return noteDao.getNoteById(noteId)
     }
 
-    override fun getAllNotes(): LiveData<List<Note>> {
+    override fun getAllNotes(): Flow<List<Note>> {
         return noteDao.getAllNotesByPriority()
     }
 
-    override fun getArchivedNotes(): LiveData<List<Note>> {
+    override fun getArchivedNotes(): Flow<List<Note>> {
         return noteDao.getAllArchivedNotesByPriority()
     }
 

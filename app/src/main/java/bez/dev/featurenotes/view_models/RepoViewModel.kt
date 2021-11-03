@@ -2,6 +2,7 @@ package bez.dev.featurenotes.view_models
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.asLiveData
 import bez.dev.featurenotes.data.Note
 import bez.dev.featurenotes.data.NoteRepository
 
@@ -26,27 +27,16 @@ class RepoViewModel(private val repository: NoteRepository) : ViewModel() {
         repository.update(note)
     }
 
-    fun delete(note: Note) {
-        repository.delete(note)
-    }
+    fun delete(note: Note) = repository.delete(note)
 
-    fun deleteAllNotes() {
-        repository.deleteAllNotes()
-    }
+    fun deleteAllNotes() = repository.deleteAllNotes()
 
-    fun resetAllNotifications() {
-        repository.resetAllNotifications()
-    }
+    fun resetAllNotifications() = repository.resetAllNotifications()
 
-    fun getNoteById(noteId: Long): LiveData<Note> {
-        return repository.getNoteById(noteId)
-    }
+    fun getNoteById(noteId: Long): LiveData<Note> = repository.getNoteById(noteId).asLiveData()
 
-    fun getAllNotes(): LiveData<List<Note>>{
-        return repository.getAllNotes()
-    }
+    fun getAllNotes(): LiveData<List<Note>> = repository.getAllNotes().asLiveData()
 
-    fun getArchivedNotes(): LiveData<List<Note>>{
-        return repository.getArchivedNotes()
-    }
+    fun getArchivedNotes(): LiveData<List<Note>> = repository.getArchivedNotes().asLiveData()
+
 }
