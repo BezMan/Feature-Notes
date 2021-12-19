@@ -148,7 +148,7 @@ class DetailActivity : BaseActivity(), OnPrioritySaveClickListener, DetailEditTe
     }
 
     private fun openEditTextDialog(position: Int = 0, noteItem: NoteItem) {
-        editTextDialog = DetailEditTextDialog(this, this, noteItem, position)
+        editTextDialog = DetailEditTextDialog(this, noteItem, position)
         editTextDialog?.show()
     }
 

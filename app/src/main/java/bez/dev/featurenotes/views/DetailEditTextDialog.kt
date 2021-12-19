@@ -10,9 +10,9 @@ import bez.dev.featurenotes.data.NoteItem
 import bez.dev.featurenotes.misc.Utils
 import kotlinx.android.synthetic.main.detail_activity_dialog_edit_text.*
 
-class DetailEditTextDialog(context: Context, listener: OnItemSaveClickListener, private val noteItem: NoteItem, myPosition: Int = 0) : Dialog(context) {
+class DetailEditTextDialog(context: Context, private val noteItem: NoteItem, myPosition: Int = 0) : Dialog(context) {
 
-    private var myListener: OnItemSaveClickListener = listener
+    private var myListener: OnItemSaveClickListener = context as OnItemSaveClickListener
     private var isNewItem: Boolean = false
     private var position: Int = myPosition
 

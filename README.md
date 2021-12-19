@@ -8,20 +8,19 @@ These are some useful features you'll find in this app and I can't wait to add m
 
  This project is written in Kotlin and showcases these concepts:
 
-- Architecture Components: MVVM, Room, Live Data, Observing DB changes.
+- Architecture Components: MVVM, Room, Kotlin Flow in conjunction with Live Data.
 - Dependency Injection with Koin (Repository, NotificationManager and ViewModel).
-- Using Kotlin Coroutines for necessary asynchronous DB operations.
 - Transitioning between Fragments with Navigation Drawer layout.
 - Parcelable Note data class, so we can pass it between Activities.
 - TypeConverter for storing non-primitive object types in Room Database.
 - ItemTouchHelper callbacks for gesture detection: drag & drop items.
 - Custom Views (AlertDialog) managing their own UI setup and lifecycle.
 - Note priority influences the order of notes displayed within list.
-- Generating primary key, where insert() provides us a unique ID val.
+- Generating primary key, where insert() provides us a unique note id.
 - Auto-scroll to bottom of list when adding note items to the end.
-- Setting notes as Notifications, for quick add, even while watching a video.
-- Restore deleted/archived notes and items, through quick SnackBar action.
-- Revert changes is possible during note editing session.
+- Displaying notes as Notifications, for quick add, even while watching a video.
+- Restore deleted/archived notes and items, through quick SnackBar undo action.
+- Reverting changes is possible during the note editing session.
 - Share notes easily + quick text copy of individual note items.
 - Settings Activity - simple example using Jetpack Preferences
 - Click to ~~Strike Through note items~~ and mark them as DONE.
