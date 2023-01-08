@@ -18,7 +18,7 @@ abstract class NoteDatabase : RoomDatabase() {
         @Volatile
         private var instance: NoteDatabase? = null
 
-        private val roomCallback = object : RoomDatabase.Callback() {
+        private val roomCallback = object : Callback() {
             override fun onCreate(db: SupportSQLiteDatabase) {
                 super.onCreate(db)
                 instance?.noteDao()

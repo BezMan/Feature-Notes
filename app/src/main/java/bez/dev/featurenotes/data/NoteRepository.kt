@@ -10,8 +10,8 @@ import kotlinx.coroutines.launch
 const val KEY_FIRST_RUN = "KEY_FIRST_RUN"
 
 class NoteRepository : IRepository {
-    private val noteDatabase: NoteDatabase = App.database
-    private val noteDao: NoteDao = noteDatabase.noteDao()
+
+    private val noteDao: NoteDao = App.database.noteDao()
     private val repoScope = CoroutineScope(Dispatchers.IO)
 
     init {
@@ -40,7 +40,7 @@ class NoteRepository : IRepository {
     }
 
     override fun clearAllData() {
-        noteDatabase.clearAllTables()
+        App.database.clearAllTables()
     }
 
     override fun resetAllNotifications() {
