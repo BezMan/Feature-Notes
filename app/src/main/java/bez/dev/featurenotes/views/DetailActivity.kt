@@ -9,6 +9,7 @@ import android.view.MenuItem
 import android.view.View
 import android.widget.ScrollView
 import android.widget.Toast
+import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.Observer
@@ -54,6 +55,26 @@ class DetailActivity : BaseActivity(), OnPrioritySaveClickListener, DetailEditTe
         initUI()
 
         checkIsExistingNote()
+
+        handleBackPress()
+
+    }
+
+    private fun handleBackPress() {
+        onBackPressedDispatcher.addCallback(this, object: OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                when {
+                    isEditMode ->
+                        exitEditMode()
+                    isNoteEmpty() ->
+                        checkDiscardEmpty()
+                    isTitleBlank() ->
+                        fillTitleWithTimestamp()
+                    else ->
+                        finish()
+                }
+            }
+        })
 
     }
 
@@ -250,21 +271,6 @@ class DetailActivity : BaseActivity(), OnPrioritySaveClickListener, DetailEditTe
         menuPriorityItem?.title = currentNote.priority.toString()
         edit_text_title.setText(revertedNote.title)
         exitEditMode()
-    }
-
-
-    @Deprecated("Deprecated in Java")
-    override fun onBackPressed() {
-        when {
-            isEditMode ->
-                exitEditMode()
-            isNoteEmpty() ->
-                checkDiscardEmpty()
-            isTitleBlank() ->
-                fillTitleWithTimestamp()
-            else ->
-                super.onBackPressed()
-        }
     }
 
 

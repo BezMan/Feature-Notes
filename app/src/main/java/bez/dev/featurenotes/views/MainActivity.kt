@@ -3,6 +3,7 @@ package bez.dev.featurenotes.views
 import android.content.Intent
 import android.os.Bundle
 import android.view.MenuItem
+import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.GravityCompat
@@ -24,6 +25,23 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
         setContentView(R.layout.main_activity)
 
         initUI(savedInstanceState)
+
+        handleBackPress()
+    }
+
+    private fun handleBackPress() {
+        onBackPressedDispatcher.addCallback(this, object: OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                if (drawer_layout.isDrawerOpen(GravityCompat.START)) {
+                    drawer_layout.closeDrawer(GravityCompat.START)
+                } else if (!nav_view.menu.getItem(0).isChecked){
+                    // if (R.id.nav_notes) NOT selected, go to it:
+                    showNotesFragment()
+                } else {
+                    moveTaskToBack(true)
+                }
+            }
+        })
 
     }
 
@@ -103,18 +121,6 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
         startActivity(intent)
     }
 
-
-    @Deprecated("Deprecated in Java")
-    override fun onBackPressed() {
-        if (drawer_layout.isDrawerOpen(GravityCompat.START)) {
-            drawer_layout.closeDrawer(GravityCompat.START)
-        } else if (!nav_view.menu.getItem(0).isChecked){
-            // if (R.id.nav_notes) NOT selected, go to it:
-            showNotesFragment()
-        } else {
-            moveTaskToBack(true)
-        }
-    }
 
     private fun showNotesFragment() {
         replaceFragment(R.id.fragment_container, NotesFragment())
