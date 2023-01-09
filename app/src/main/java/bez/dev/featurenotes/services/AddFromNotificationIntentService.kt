@@ -15,6 +15,7 @@ class AddFromNotificationIntentService : IntentService("AddFromNotificationInten
     private val noteRepository = get<NoteRepository>()
     private val notificationManager = get<NotificationManager>()
 
+    @Deprecated("Deprecated in Java")
     override fun onHandleIntent(intent: Intent?) {
         val note = intent?.let {
             it.getParcelableExtra(NOTIFICATION_NOTE) as Note?
@@ -48,7 +49,7 @@ class AddFromNotificationIntentService : IntentService("AddFromNotificationInten
     /**
      * Handles notification action for ADD items.
      */
-    private fun handleActionAdd(note: Note, intent: Intent?) {
+    private fun handleActionAdd(note: Note, intent: Intent) {
         val message = RemoteInput.getResultsFromIntent(intent)?.getCharSequence(EXTRA_REPLY)
         if (!message.isNullOrBlank()) {
             note.items.add(0, NoteItem(message.toString().trim()))

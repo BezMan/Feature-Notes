@@ -9,9 +9,11 @@ import org.koin.android.ext.android.get
 class OnClearFromRecentService : IntentService("OnClearFromRecentService") {
 
 
+    @Deprecated("Deprecated in Java")
     override fun onHandleIntent(intent: Intent?) {
     }
 
+    @Deprecated("Deprecated in Java")
     override fun onStartCommand(intent: Intent, flags: Int, startId: Int): Int {
         return START_NOT_STICKY
     }

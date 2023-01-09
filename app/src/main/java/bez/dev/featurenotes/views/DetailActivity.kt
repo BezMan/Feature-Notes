@@ -253,6 +253,7 @@ class DetailActivity : BaseActivity(), OnPrioritySaveClickListener, DetailEditTe
     }
 
 
+    @Deprecated("Deprecated in Java")
     override fun onBackPressed() {
         when {
             isEditMode ->
