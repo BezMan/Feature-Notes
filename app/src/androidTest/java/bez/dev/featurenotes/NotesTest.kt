@@ -30,14 +30,16 @@ class NotesTest {
     private var runningActivity: Activity? = null
 
     private val notesToAdd: Int = 3
-    private val itemsToAdd: Int = 1
+    private val maxItemsToAdd: Int = 2
 
     @Test
     fun clickFab_openNewNote_addItems() {
 
         onView(withId(R.id.fab_add_note)).perform(click())
 
-        addItems(itemsToAdd)
+        val numItems = Random().nextInt(maxItemsToAdd) + 1
+
+        addItems(numItems)
 
         pressBack()
         pressBack()
