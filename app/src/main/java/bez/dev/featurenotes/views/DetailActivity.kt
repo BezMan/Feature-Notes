@@ -312,7 +312,7 @@ class DetailActivity : BaseActivity(), OnPrioritySaveClickListener, DetailEditTe
         finish()
     }
 
-    private fun isNoteEmpty() = getNoteTitle().isBlank() && currentNote.items.isNullOrEmpty()
+    private fun isNoteEmpty() = getNoteTitle().isBlank() && currentNote.items.isEmpty()
 
     private fun isTitleBlank() = getNoteTitle().isBlank()
 

@@ -27,7 +27,7 @@ class NotesTest {
 
     @get:Rule
     var mainActivityTestRule = ActivityTestRule(MainActivity::class.java)
-    var runningActivity: Activity? = null
+    private var runningActivity: Activity? = null
 
     private val notesToAdd: Int = 3
     private val itemsToAdd: Int = 1

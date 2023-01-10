@@ -77,7 +77,7 @@ class ArchiveFragment : Fragment(R.layout.fragment_archive), ArchiveListAdapter.
         archiveListAdapter.submitList(archivedList)  //reads the adapter DIFF we created, and displays list
 
         //no notes layout
-        no_notes_view.toggleShowView(archivedList.isNullOrEmpty())
+        no_notes_view.toggleShowView(archivedList.isEmpty())
     }
 
 

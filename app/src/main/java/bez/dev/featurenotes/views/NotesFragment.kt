@@ -85,7 +85,7 @@ class NotesFragment : Fragment(R.layout.fragment_notes), MainListAdapter.OnItemC
         mainListAdapter.submitList(noteList)  //reads the adapter DIFF we created, and displays list
 
         //no notes layout
-        no_notes_view.toggleShowView(noteList.isNullOrEmpty())
+        no_notes_view.toggleShowView(noteList.isEmpty())
 
         //Notification
         baseActivity.notificationManager.updateNotification(noteList)
