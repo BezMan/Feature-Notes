@@ -29,12 +29,6 @@ class NotesFragment : Fragment(R.layout.fragment_notes), MainListAdapter.OnItemC
     private lateinit var baseActivity: BaseActivity
 
 
-    private val observer = Observer<List<Note>> {
-        noteList = it
-        refreshUI()
-    }
-
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
@@ -77,7 +71,10 @@ class NotesFragment : Fragment(R.layout.fragment_notes), MainListAdapter.OnItemC
 
 
     private fun initNoteViewModel() {
-        baseActivity.repoViewModel.getAllNotes().observe(viewLifecycleOwner, observer)
+        baseActivity.repoViewModel.getAllNotes().observe(viewLifecycleOwner) {
+            noteList = it
+            refreshUI()
+        }
     }
 
 

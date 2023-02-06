@@ -24,11 +24,6 @@ class ArchiveFragment : Fragment(R.layout.fragment_archive), ArchiveListAdapter.
     private var archivedList: List<Note> = ArrayList()
     private lateinit var baseActivity: BaseActivity
 
-    private val observer = Observer<List<Note>> {
-        archivedList = it
-        refreshUI()
-    }
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -69,7 +64,10 @@ class ArchiveFragment : Fragment(R.layout.fragment_archive), ArchiveListAdapter.
 
 
     private fun initNoteViewModel() {
-        baseActivity.repoViewModel.getArchivedNotes().observe(viewLifecycleOwner, observer)
+        baseActivity.repoViewModel.getArchivedNotes().observe(viewLifecycleOwner) {
+            archivedList = it
+            refreshUI()
+        }
     }
 
 

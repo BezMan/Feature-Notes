@@ -43,11 +43,6 @@ class DetailActivity : BaseActivity(), OnPrioritySaveClickListener, DetailEditTe
     private var isExistingNote: Boolean = false
     private lateinit var touchHelper: ItemTouchHelper
 
-    private val observer = Observer<Note> {
-        currentNote = it
-        refreshRecyclerView()
-    }
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.detail_activity)
@@ -91,7 +86,10 @@ class DetailActivity : BaseActivity(), OnPrioritySaveClickListener, DetailEditTe
     }
 
     private fun observeNote() {
-        repoViewModel.getNoteById(currentNote.id).observe(this, observer)
+        repoViewModel.getNoteById(currentNote.id).observe(this) {
+            currentNote = it
+            refreshRecyclerView()
+        }
     }
 
 
