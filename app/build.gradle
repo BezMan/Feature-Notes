@@ -62,12 +62,12 @@ android {
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-    implementation 'androidx.appcompat:appcompat:1.5.1'
+    implementation 'androidx.appcompat:appcompat:1.6.1'
     testImplementation 'com.android.support:support-annotations:29.0.0'
     testImplementation 'com.android.support.test:runner:1.0.2'
     testImplementation 'com.android.support.test:rules:1.0.2'
     testImplementation 'junit:junit:4.13.2'
-    testImplementation 'org.mockito:mockito-core:4.11.0'
+    testImplementation 'org.mockito:mockito-core:5.2.0'
     androidTestImplementation('androidx.test:core:1.5.0')
     androidTestImplementation 'androidx.test:runner:1.5.2'
     androidTestImplementation 'androidx.test:rules:1.5.0'
@@ -91,26 +91,24 @@ dependencies {
 
     //Lifecycle components
     implementation 'androidx.lifecycle:lifecycle-livedata-ktx:2.6.0-alpha03'
-    implementation 'androidx.lifecycle:lifecycle-extensions:2.2.0'
     implementation "androidx.lifecycle:lifecycle-common-java8:2.5.1"
-    implementation "android.arch.lifecycle:extensions:1.1.1"
     implementation "androidx.lifecycle:lifecycle-runtime-ktx:2.5.1"
     implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:2.5.1"
 
 
     //Room
-    annotationProcessor 'androidx.room:room-compiler:2.4.3'
-    implementation 'androidx.room:room-runtime:2.4.3'
+    annotationProcessor 'androidx.room:room-compiler:2.5.1'
+    implementation 'androidx.room:room-runtime:2.5.1'
     implementation "android.arch.persistence.room:runtime:1.1.1"
-    implementation "androidx.room:room-ktx:2.4.3"
-    kapt 'androidx.room:room-compiler:2.4.3'
+    implementation "androidx.room:room-ktx:2.5.1"
+    kapt 'androidx.room:room-compiler:2.5.1'
     kapt "android.arch.persistence.room:compiler:1.1.1"
 
     //Kotlin & Coroutines
-    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.1-native-mt'
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.4'
     implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.4'
 
-    debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.5'
+    debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.11'
 
     implementation 'com.google.firebase:firebase-core:21.1.1'
     implementation 'com.google.firebase:firebase-ml-vision'
@@ -123,7 +121,7 @@ dependencies {
     implementation 'com.google.firebase:firebase-crashlytics-ktx'
     implementation 'com.google.firebase:firebase-analytics-ktx'
 
-    implementation 'com.google.code.gson:gson:2.10'
+    implementation 'com.google.code.gson:gson:2.10.1'
 
 // Koin main features for Android
     def koin_android_version= "3.3.2"
