@@ -32,7 +32,7 @@ class NotificationManager(context: Context) {
     private var mNotificationBuilder: NotificationCompat.Builder = NotificationCompat.Builder(context, CHANNEL_ID)
 
     private val mainPendingIntent = PendingIntent.getActivity(mContext,
-            0, Intent(mContext, MainActivity::class.java), 0)
+            0, Intent(mContext, MainActivity::class.java), PendingIntent.FLAG_MUTABLE)
 
     private val detailIntent = Intent(mContext, DetailActivity::class.java)
 
@@ -119,12 +119,12 @@ class NotificationManager(context: Context) {
             val intentAdd = Intent(mContext, AddFromNotificationIntentService::class.java)
             intentAdd.action = AddFromNotificationIntentService.ACTION_REPLY
             intentAdd.putExtra(AddFromNotificationIntentService.NOTIFICATION_NOTE, note)
-            replyActionPendingIntent = PendingIntent.getService(mContext, note.id.toInt(), intentAdd, PendingIntent.FLAG_UPDATE_CURRENT)
+            replyActionPendingIntent = PendingIntent.getService(mContext, note.id.toInt(), intentAdd, PendingIntent.FLAG_MUTABLE)
 
             val intentDismiss = Intent(mContext, AddFromNotificationIntentService::class.java)
             intentDismiss.action = AddFromNotificationIntentService.ACTION_DISMISS
             intentDismiss.putExtra(AddFromNotificationIntentService.NOTIFICATION_NOTE, note)
-            dismissActionPendingIntent = PendingIntent.getService(mContext, note.id.toInt(), intentDismiss, PendingIntent.FLAG_UPDATE_CURRENT)
+            dismissActionPendingIntent = PendingIntent.getService(mContext, note.id.toInt(), intentDismiss, PendingIntent.FLAG_MUTABLE)
 
         }
 
@@ -171,7 +171,7 @@ class NotificationManager(context: Context) {
                     detailIntent.putExtra(EXTRA_NOTE, note)
                     addNextIntentWithParentStack(detailIntent)
                     // Get the PendingIntent containing the entire back stack
-                    getPendingIntent(Random.nextInt(), PendingIntent.FLAG_UPDATE_CURRENT)
+                    getPendingIntent(Random.nextInt(), PendingIntent.FLAG_MUTABLE)
                 })
                 .addAction(replyAction)
                 .addAction(dismissAction)

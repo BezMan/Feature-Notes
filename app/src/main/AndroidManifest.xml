@@ -36,9 +36,6 @@
         <service
             android:name=".services.AddFromNotificationIntentService"
             android:exported="false" />
-        <service
-            android:name=".services.OnClearFromRecentService"
-            android:stopWithTask="false" />
 
         <meta-data
             android:name="com.google.mlkit.vision.DEPENDENCIES"
