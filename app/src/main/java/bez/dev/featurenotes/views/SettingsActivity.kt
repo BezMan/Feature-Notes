@@ -17,7 +17,6 @@ class SettingsActivity : AppCompatActivity() {
         supportFragmentManager.beginTransaction().replace(R.id.settings, SettingsFragment()).commit()
 
         //TOOLBAR
-        //TOOLBAR
         setSupportActionBar(_binding.customToolbar.mainListToolbar)    //merges the custom TOOLBAR with the existing MENU
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.setDisplayShowHomeEnabled(true)

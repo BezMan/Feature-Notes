@@ -19,10 +19,9 @@ import androidx.recyclerview.widget.RecyclerView
 import bez.dev.featurenotes.R
 import bez.dev.featurenotes.data.Note
 import bez.dev.featurenotes.data.NoteItem
+import bez.dev.featurenotes.databinding.DetailActivityBinding
 import bez.dev.featurenotes.views.DetailPriorityDialog.OnPrioritySaveClickListener
 import com.google.android.material.snackbar.Snackbar
-import kotlinx.android.synthetic.main.detail_activity.*
-import kotlinx.android.synthetic.main.detail_activity_toolbar.*
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.*
@@ -42,9 +41,12 @@ class DetailActivity : BaseActivity(), OnPrioritySaveClickListener, DetailEditTe
     private var isExistingNote: Boolean = false
     private lateinit var touchHelper: ItemTouchHelper
 
+    private lateinit var _binding: DetailActivityBinding
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.detail_activity)
+        _binding = DetailActivityBinding.inflate(layoutInflater)
+        setContentView(_binding.root)
 
         initUI()
 
@@ -123,7 +125,7 @@ class DetailActivity : BaseActivity(), OnPrioritySaveClickListener, DetailEditTe
     }
 
     private fun showUndoDelete(position: Int, strText: String) {
-        val snack = Snackbar.make(detail_layout, "item deleted", Snackbar.LENGTH_INDEFINITE)
+        val snack = Snackbar.make(_binding.detailLayout, "item deleted", Snackbar.LENGTH_INDEFINITE)
 
         snack.setDuration(8000)
                 .setAction("UNDO") {
@@ -140,7 +142,7 @@ class DetailActivity : BaseActivity(), OnPrioritySaveClickListener, DetailEditTe
 
             //scroll to show bottom , if we added to bottom
             if (position > 1) {
-                nested_scroll_view.post { nested_scroll_view.fullScroll(ScrollView.FOCUS_DOWN) }
+                _binding.nestedScrollView.post { _binding.nestedScrollView.fullScroll(ScrollView.FOCUS_DOWN) }
             }
         } else { // EDIT
             currentNote.items[position] = noteItem
@@ -172,13 +174,14 @@ class DetailActivity : BaseActivity(), OnPrioritySaveClickListener, DetailEditTe
 
 
     private fun initUI() {
-        setSupportActionBar(note_detail_toolbar)    //merges the custom TOOLBAR with the existing MENU
+        //TOOLBAR
+        setSupportActionBar(_binding.detailActivityToolbar.noteDetailToolbar)    //merges the custom TOOLBAR with the existing MENU
 
-        top_add_item_btn.setOnClickListener { openEditTextDialog(0, NoteItem("")) }
-        bottom_add_item_btn.setOnClickListener { openEditTextDialog(currentNote.items.size, NoteItem("")) }
+        _binding.topAddItemBtn.btnAddItem.setOnClickListener { openEditTextDialog(0, NoteItem("")) }
+        _binding.bottomAddItemBtn.btnAddItem.setOnClickListener { openEditTextDialog(currentNote.items.size, NoteItem("")) }
 
-        recycler_view_detail.addItemDecoration(DividerItemDecoration(this, DividerItemDecoration.VERTICAL))
-        recycler_view_detail.layoutManager = LinearLayoutManager(this)
+        _binding.recyclerViewDetail.addItemDecoration(DividerItemDecoration(this, DividerItemDecoration.VERTICAL))
+        _binding.recyclerViewDetail.layoutManager = LinearLayoutManager(this)
 
         dragItemLogic()
     }
@@ -229,13 +232,13 @@ class DetailActivity : BaseActivity(), OnPrioritySaveClickListener, DetailEditTe
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {}
 
         })
-        touchHelper.attachToRecyclerView(recycler_view_detail)
+        touchHelper.attachToRecyclerView(_binding.recyclerViewDetail)
     }
 
 
     private fun refreshRecyclerView() {
         detailListAdapter = DetailListAdapter(this, touchHelper, isEditMode)
-        recycler_view_detail.adapter = detailListAdapter
+        _binding.recyclerViewDetail.adapter = detailListAdapter
         detailListAdapter.submitList(currentNote.items)
 
         if (!isNoteEmpty() && isExistingNote && currentNote.isNotification) {
@@ -251,7 +254,7 @@ class DetailActivity : BaseActivity(), OnPrioritySaveClickListener, DetailEditTe
             currentNote = intent.getParcelableExtra(EXTRA_NOTE)!!
             revertedNote = Note(currentNote.title, currentNote.priority, currentNote.items)
 
-            edit_text_title.setText(currentNote.title)
+            _binding.detailActivityToolbar.editTextTitle.setText(currentNote.title)
 
             observeNote()
 
@@ -266,7 +269,7 @@ class DetailActivity : BaseActivity(), OnPrioritySaveClickListener, DetailEditTe
         currentNote.items = revertedNote.items
         currentNote.priority = revertedNote.priority
         menuPriorityItem?.title = currentNote.priority.toString()
-        edit_text_title.setText(revertedNote.title)
+        _binding.detailActivityToolbar.editTextTitle.setText(revertedNote.title)
         exitEditMode()
     }
 
@@ -314,7 +317,7 @@ class DetailActivity : BaseActivity(), OnPrioritySaveClickListener, DetailEditTe
     private fun isTitleBlank() = getNoteTitle().isBlank()
 
     private fun getNoteTitle(): CharSequence {
-        return edit_text_title.text
+        return _binding.detailActivityToolbar.editTextTitle.text
     }
 
     private fun getTimeStamp(): String {
@@ -325,13 +328,13 @@ class DetailActivity : BaseActivity(), OnPrioritySaveClickListener, DetailEditTe
 
     private fun enterEditMode() {
         isEditMode = true
-        edit_text_title.setBackgroundColor(ContextCompat.getColor(baseContext, R.color.white))
-        edit_text_title.isEnabled = true
-        edit_text_title.isFocusableInTouchMode = true
-        edit_text_title.isFocusable = true
+        _binding.detailActivityToolbar.editTextTitle.setBackgroundColor(ContextCompat.getColor(baseContext, R.color.white))
+        _binding.detailActivityToolbar.editTextTitle.isEnabled = true
+        _binding.detailActivityToolbar.editTextTitle.isFocusableInTouchMode = true
+        _binding.detailActivityToolbar.editTextTitle.isFocusable = true
 
-        top_add_item_btn.visibility = View.VISIBLE
-        bottom_add_item_btn.visibility = View.VISIBLE
+        _binding.topAddItemBtn.btnAddItem.visibility = View.VISIBLE
+        _binding.bottomAddItemBtn.btnAddItem.visibility = View.VISIBLE
 
         menuEditItem?.setIcon(R.drawable.ic_close)
         menuPriorityItem?.isVisible = true
@@ -343,13 +346,13 @@ class DetailActivity : BaseActivity(), OnPrioritySaveClickListener, DetailEditTe
 
     private fun exitEditMode() {
         isEditMode = false
-        edit_text_title.setBackgroundColor(ContextCompat.getColor(baseContext, android.R.color.transparent))
-        edit_text_title.isEnabled = false
-        edit_text_title.isFocusableInTouchMode = false
-        edit_text_title.isFocusable = false
+        _binding.detailActivityToolbar.editTextTitle.setBackgroundColor(ContextCompat.getColor(baseContext, android.R.color.transparent))
+        _binding.detailActivityToolbar.editTextTitle.isEnabled = false
+        _binding.detailActivityToolbar.editTextTitle.isFocusableInTouchMode = false
+        _binding.detailActivityToolbar.editTextTitle.isFocusable = false
 
-        top_add_item_btn.visibility = View.GONE
-        bottom_add_item_btn.visibility = View.GONE
+        _binding.topAddItemBtn.btnAddItem.visibility = View.GONE
+        _binding.bottomAddItemBtn.btnAddItem.visibility = View.GONE
 
         menuEditItem?.setIcon(R.drawable.ic_edit_white)
 
