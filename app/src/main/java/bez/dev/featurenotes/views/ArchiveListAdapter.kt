@@ -70,19 +70,13 @@ class ArchiveListAdapter (context: OnItemClickListener) : ListAdapter<Note, Arch
     companion object {
 
         private val DIFF_CALLBACK = object : DiffUtil.ItemCallback<Note>() {
-            override fun areItemsTheSame(oldNote: Note, newNote: Note): Boolean {
-                return oldNote.id == newNote.id
-            }
 
-            override fun areContentsTheSame(oldNote: Note, newNote: Note): Boolean {
-                return oldNote.title == newNote.title
-                        && oldNote.priority == newNote.priority
-                        && oldNote.isNotification == newNote.isNotification
-                        && oldNote.color == newNote.color
-                        && oldNote.isArchived == newNote.isArchived
-                        && oldNote.timeCreated == newNote.timeCreated
-                        && oldNote.timeModified == newNote.timeModified
-            }
+            override fun areItemsTheSame(oldNote: Note, newNote: Note) =
+                oldNote.id == newNote.id
+
+            override fun areContentsTheSame(oldNote: Note, newNote: Note) =
+                oldNote == newNote
+
         }
     }
 }

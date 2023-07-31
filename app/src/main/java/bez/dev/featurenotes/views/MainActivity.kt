@@ -62,10 +62,10 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
 
     private fun initUI(savedInstanceState: Bundle?) {
         //TOOLBAR
-        setSupportActionBar(_binding.mainActivityToolbar.mainListToolbar)    //merges the custom TOOLBAR with the existing MENU
+        setSupportActionBar(_binding.customToolbar.mainListToolbar)    //merges the custom TOOLBAR with the existing MENU
 
         //NAVIGATION DRAWER
-        val toggle = ActionBarDrawerToggle(this, _binding.drawerLayout, _binding.mainActivityToolbar.mainListToolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close)
+        val toggle = ActionBarDrawerToggle(this, _binding.drawerLayout, _binding.customToolbar.mainListToolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close)
         _binding.drawerLayout.addDrawerListener(toggle)
         toggle.syncState()
         _binding.navView.setNavigationItemSelectedListener(this)
@@ -77,7 +77,7 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
     }
 
     fun setToolbarText(text: CharSequence){
-        _binding.mainActivityToolbar.toolbarMainText.text = text
+        _binding.customToolbar.toolbarMainText.text = text
     }
 
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
