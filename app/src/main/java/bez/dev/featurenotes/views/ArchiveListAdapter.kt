@@ -1,19 +1,15 @@
 package bez.dev.featurenotes.views
 
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageButton
 import android.widget.ImageView
-import android.widget.TextView
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import bez.dev.featurenotes.R
 import bez.dev.featurenotes.data.Note
-import kotlinx.android.synthetic.main.archive_list_item.view.*
+import bez.dev.featurenotes.databinding.ArchiveListItemBinding
 
-class ArchiveListAdapter internal constructor(context: OnItemClickListener) : ListAdapter<Note, ArchiveListAdapter.NoteHolder>(DIFF_CALLBACK) {
+class ArchiveListAdapter (context: OnItemClickListener) : ListAdapter<Note, ArchiveListAdapter.NoteHolder>(DIFF_CALLBACK) {
     private var listener: OnItemClickListener = context
 
     internal fun getNoteAt(position: Int): Note {
@@ -21,9 +17,9 @@ class ArchiveListAdapter internal constructor(context: OnItemClickListener) : Li
     }
 
     override fun onCreateViewHolder(viewGroup: ViewGroup, i: Int): NoteHolder {
-        val itemView = LayoutInflater.from(viewGroup.context)
-                .inflate(R.layout.archive_list_item, viewGroup, false)
-        return NoteHolder(itemView)
+        val layoutInflater = LayoutInflater.from(viewGroup.context)
+        val binding = ArchiveListItemBinding.inflate(layoutInflater, viewGroup, false)
+        return NoteHolder(binding)
     }
 
 
@@ -40,36 +36,35 @@ class ArchiveListAdapter internal constructor(context: OnItemClickListener) : Li
 
     override fun onBindViewHolder(noteHolder: NoteHolder, position: Int) {
         val currentNote = getNoteAt(position)
-
-        noteHolder.apply {
-            tvTitle.text = currentNote.title
-            tvPriority.text = currentNote.priority.toString()
-
-            tvTitle.setOnClickListener {
-                listener.onNoteItemTextClick(currentNote)
-            }
-            btnUnarchive.setOnClickListener {
-                listener.onNoteItemUnArchive(currentNote)
-            }
-            overflow.setOnClickListener {
-                listener.onNoteItemOverflowClick(currentNote, overflow, noteHolder)
-            }
-        }
-
+        noteHolder.bind(currentNote)
     }
 
 
     interface OnItemClickListener {
         fun onNoteItemTextClick(note: Note)
         fun onNoteItemUnArchive(note: Note)
-        fun onNoteItemOverflowClick(note: Note, overflow: ImageView, noteHolder: NoteHolder)
+        fun onNoteItemOverflowClick(note: Note, overflow: ImageView)
     }
 
-    inner class NoteHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        internal val tvTitle: TextView = itemView.text_view_title
-        internal val tvPriority: TextView = itemView.text_view_priority
-        internal val btnUnarchive: ImageButton = itemView.item_unarchive
-        internal val overflow: ImageView = itemView.overflow_image_note_item
+    inner class NoteHolder(private val binding: ArchiveListItemBinding) : RecyclerView.ViewHolder(binding.root) {
+        fun bind(currentNote: Note){
+            binding.apply {
+                textViewTitle.text = currentNote.title
+                textViewPriority.text = currentNote.priority.toString()
+
+                textViewTitle.setOnClickListener {
+                    listener.onNoteItemTextClick(currentNote)
+                }
+
+                itemUnarchive.setOnClickListener {
+                    listener.onNoteItemUnArchive(currentNote)
+                }
+
+                overflowImageNoteItem.setOnClickListener {
+                    listener.onNoteItemOverflowClick(currentNote, binding.overflowImageNoteItem)
+                }
+            }
+        }
     }
 
     companion object {

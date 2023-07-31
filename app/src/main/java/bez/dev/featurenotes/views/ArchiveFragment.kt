@@ -98,7 +98,7 @@ class ArchiveFragment : Fragment(), ArchiveListAdapter.OnItemClickListener {
         showUndoArchiveRestore(note)
     }
 
-    override fun onNoteItemOverflowClick(note: Note, overflow: ImageView, noteHolder: ArchiveListAdapter.NoteHolder) {
+    override fun onNoteItemOverflowClick(note: Note, overflow: ImageView) {
         val popupMenu = PopupMenu(baseActivity, overflow)
         popupMenu.inflate(R.menu.overflow_note_popup_archived)
 
