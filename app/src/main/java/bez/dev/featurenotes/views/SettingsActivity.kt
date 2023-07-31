@@ -4,20 +4,24 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.preference.PreferenceFragmentCompat
 import bez.dev.featurenotes.R
-import kotlinx.android.synthetic.main.main_activity_toolbar.*
+import bez.dev.featurenotes.databinding.SettingsActivityBinding
 
 class SettingsActivity : AppCompatActivity() {
 
+    private lateinit var _binding: SettingsActivityBinding
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.settings_activity)
+        _binding = SettingsActivityBinding.inflate(layoutInflater)
+        setContentView(_binding.root)
         supportFragmentManager.beginTransaction().replace(R.id.settings, SettingsFragment()).commit()
 
         //TOOLBAR
-        setSupportActionBar(main_list_toolbar)
+        //TOOLBAR
+        setSupportActionBar(_binding.customToolbar.mainListToolbar)    //merges the custom TOOLBAR with the existing MENU
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.setDisplayShowHomeEnabled(true)
-        toolbar_main_text?.text = resources.getText(R.string.nav_settings)
+        _binding.customToolbar.toolbarMainText.text = resources.getText(R.string.nav_settings)
     }
 
 
