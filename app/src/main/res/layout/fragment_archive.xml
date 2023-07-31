@@ -8,7 +8,7 @@
     tools:context=".views.MainActivity">
 
 
-    <include layout="@layout/no_notes_layout" />
+    <include android:id="@+id/no_notes_layout" layout="@layout/no_notes_layout" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recycler_view_archive"

@@ -11,18 +11,20 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction
 import bez.dev.featurenotes.R
+import bez.dev.featurenotes.databinding.MainActivityBinding
 import com.google.android.material.navigation.NavigationView
-import kotlinx.android.synthetic.main.main_activity.*
-import kotlinx.android.synthetic.main.main_activity_toolbar.*
 
 class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedListener {
 
+    private lateinit var _binding: MainActivityBinding
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        _binding = MainActivityBinding.inflate(layoutInflater)
 
         if (isCalledFromSummaryNotification()) return
 
-        setContentView(R.layout.main_activity)
+        setContentView(_binding.root)
 
         initUI(savedInstanceState)
 
@@ -32,9 +34,9 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
     private fun handleBackPress() {
         onBackPressedDispatcher.addCallback(this, object: OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
-                if (drawer_layout.isDrawerOpen(GravityCompat.START)) {
-                    drawer_layout.closeDrawer(GravityCompat.START)
-                } else if (!nav_view.menu.getItem(0).isChecked){
+                if (_binding.drawerLayout.isDrawerOpen(GravityCompat.START)) {
+                    _binding.drawerLayout.closeDrawer(GravityCompat.START)
+                } else if (!_binding.navView.menu.getItem(0).isChecked){
                     // if (R.id.nav_notes) NOT selected, go to it:
                     showNotesFragment()
                 } else {
@@ -60,13 +62,13 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
 
     private fun initUI(savedInstanceState: Bundle?) {
         //TOOLBAR
-        setSupportActionBar(main_list_toolbar)    //merges the custom TOOLBAR with the existing MENU
+        setSupportActionBar(_binding.mainActivityToolbar.mainListToolbar)    //merges the custom TOOLBAR with the existing MENU
 
         //NAVIGATION DRAWER
-        val toggle = ActionBarDrawerToggle(this, drawer_layout, main_list_toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close)
-        drawer_layout.addDrawerListener(toggle)
+        val toggle = ActionBarDrawerToggle(this, _binding.drawerLayout, _binding.mainActivityToolbar.mainListToolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close)
+        _binding.drawerLayout.addDrawerListener(toggle)
         toggle.syncState()
-        nav_view.setNavigationItemSelectedListener(this)
+        _binding.navView.setNavigationItemSelectedListener(this)
 
 
         if (savedInstanceState == null) { //don't trigger on device rotation
@@ -74,9 +76,12 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
         }
     }
 
+    fun setToolbarText(text: CharSequence){
+        _binding.mainActivityToolbar.toolbarMainText.text = text
+    }
 
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
-        if(item.itemId != nav_view.checkedItem?.itemId) {
+        if(item.itemId != _binding.navView.checkedItem?.itemId) {
             when (item.itemId) {
                 R.id.nav_notes -> {
                     replaceFragment(R.id.fragment_container, NotesFragment())
@@ -89,7 +94,7 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
                 }
             }
         }
-        drawer_layout.closeDrawer(GravityCompat.START)
+        _binding.drawerLayout.closeDrawer(GravityCompat.START)
         return true
     }
 
@@ -124,7 +129,7 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
 
     private fun showNotesFragment() {
         replaceFragment(R.id.fragment_container, NotesFragment())
-        nav_view.setCheckedItem(R.id.nav_notes)
+        _binding.navView.setCheckedItem(R.id.nav_notes)
     }
 
 }
