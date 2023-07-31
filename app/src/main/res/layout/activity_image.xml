@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:layoutDirection="ltr">
 
-    <include android:id="@+id/main_activity_toolbar" layout="@layout/main_activity_toolbar" />
+    <include android:id="@+id/custom_toolbar" layout="@layout/custom_toolbar" />
 
     <TextView
         android:id="@+id/imageToText_title"
