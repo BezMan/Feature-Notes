@@ -9,7 +9,6 @@ import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
 import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.DiffUtil
@@ -18,6 +17,7 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import bez.dev.featurenotes.R
 import bez.dev.featurenotes.data.NoteItem
+import bez.dev.featurenotes.databinding.DetailActivityListItemBinding
 
 class DetailListAdapter internal constructor(myListener: OnDetailItemClickListener, myItemTouchHelper: ItemTouchHelper, editMode: Boolean) : ListAdapter<NoteItem, DetailListAdapter.DetailItemHolder>(DIFF_CALLBACK) {
 
@@ -27,58 +27,58 @@ class DetailListAdapter internal constructor(myListener: OnDetailItemClickListen
 
 
     override fun onCreateViewHolder(viewGroup: ViewGroup, i: Int): DetailItemHolder {
-        val itemView = LayoutInflater.from(viewGroup.context)
-                .inflate(R.layout.detail_activity_list_item, viewGroup, false)
-        return DetailItemHolder(itemView)
+        val layoutInflater = LayoutInflater.from(viewGroup.context)
+        val binding = DetailActivityListItemBinding.inflate(layoutInflater, viewGroup, false)
+        return DetailItemHolder(binding)
+    }
+
+    override fun onBindViewHolder(detailItemHolder: DetailItemHolder, position: Int) {
+        val currentItem = getItem(position)
+        detailItemHolder.bind(currentItem)
     }
 
     @SuppressLint("ClickableViewAccessibility")
-    override fun onBindViewHolder(detailItemHolder: DetailItemHolder, position: Int) {
-        val currentItem = getItem(position)
+    inner class DetailItemHolder(private val binding: DetailActivityListItemBinding) : RecyclerView.ViewHolder(binding.root) {
+        fun bind(currentItem: NoteItem) {
 
-        detailItemHolder.apply {
-            itemText.text = currentItem.itemText.trim()
+            binding.apply {
+                detailItemText.text = currentItem.itemText.trim()
 
-            //do regardless of mode
-            deleteItem.showOnEditMode(mIsEditMode)
-            dragItem.showOnEditMode(mIsEditMode)
-            itemText.showItemIsDone(currentItem.isDone)
+                //do regardless of mode
+                detailImageDeleteItem.showOnEditMode(mIsEditMode)
+                detailImageDragItem.showOnEditMode(mIsEditMode)
+                detailItemText.showItemIsDone(currentItem.isDone)
 
-            itemText.setOnLongClickListener {
-                listener.onDetailItemLongClick(currentItem.itemText, position)
-            }
-
-            if (mIsEditMode) { //ONLY edit mode
-                itemText.setTextColor(ContextCompat.getColor(listener as Context, R.color.black))
-
-                itemText.setOnClickListener {
-                    listener.onDetailItemClick(currentItem, position)
+                detailItemText.setOnLongClickListener {
+                    listener.onDetailItemLongClick(currentItem.itemText, position)
                 }
-                deleteItem.setOnClickListener {
-                    listener.onDeleteItemClick(position)
-                }
-                dragItem.setOnTouchListener { _, event ->
-                    if (event.actionMasked == MotionEvent.ACTION_DOWN) {
-                        touchHelper.startDrag(detailItemHolder)
+
+                if (mIsEditMode) { //ONLY edit mode
+                    detailItemText.setTextColor(ContextCompat.getColor(listener as Context, R.color.black))
+
+                    detailItemText.setOnClickListener {
+                        listener.onDetailItemClick(currentItem, position)
                     }
-                    false
-                }
-            } else {  //NOT edit mode
-                itemText.setTextColor(ContextCompat.getColor(listener as Context, R.color.gray))
+                    detailImageDeleteItem.setOnClickListener {
+                        listener.onDeleteItemClick(position)
+                    }
+                    detailImageDragItem.setOnTouchListener { _, event ->
+                        if (event.actionMasked == MotionEvent.ACTION_DOWN) {
+                            touchHelper.startDrag(this@DetailItemHolder)
+                        }
+                        false
+                    }
+                } else {  //NOT edit mode
+                    detailItemText.setTextColor(ContextCompat.getColor(listener as Context, R.color.gray))
 
-                itemText.setOnClickListener {
-                    listener.onDetailItemClickToggleDone(!currentItem.isDone, position)
+                    detailItemText.setOnClickListener {
+                        listener.onDetailItemClickToggleDone(!currentItem.isDone, position)
+                    }
                 }
+
             }
+
         }
-
-    }
-
-    inner class DetailItemHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-
-        internal val deleteItem: ImageView = itemView.detail_image_delete_item
-        internal val itemText: TextView = itemView.detail_item_text
-        internal val dragItem: ImageView = itemView.detail_image_drag_item
     }
 
 

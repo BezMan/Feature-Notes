@@ -40,7 +40,7 @@ class NotesFragment : Fragment(), MainListAdapter.OnItemClickListener {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         _binding = FragmentNotesBinding.inflate(inflater, container, false)
         return binding.root
 
