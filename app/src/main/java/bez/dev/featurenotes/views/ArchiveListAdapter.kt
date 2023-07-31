@@ -61,7 +61,7 @@ class ArchiveListAdapter (context: OnItemClickListener) : ListAdapter<Note, Arch
                 }
 
                 overflowImageNoteItem.setOnClickListener {
-                    listener.onNoteItemOverflowClick(currentNote, binding.overflowImageNoteItem)
+                    listener.onNoteItemOverflowClick(currentNote, overflowImageNoteItem)
                 }
             }
         }

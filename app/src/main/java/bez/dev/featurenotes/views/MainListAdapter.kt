@@ -1,17 +1,13 @@
 package bez.dev.featurenotes.views
 
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
-import android.widget.CheckBox
 import android.widget.ImageView
-import android.widget.TextView
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import bez.dev.featurenotes.R
 import bez.dev.featurenotes.data.Note
-import kotlinx.android.synthetic.main.main_activity_list_item.view.*
+import bez.dev.featurenotes.databinding.MainActivityListItemBinding
 
 class MainListAdapter internal constructor(context: OnItemClickListener) : ListAdapter<Note, MainListAdapter.NoteHolder>(DIFF_CALLBACK) {
     private var listener: OnItemClickListener = context
@@ -21,9 +17,9 @@ class MainListAdapter internal constructor(context: OnItemClickListener) : ListA
     }
 
     override fun onCreateViewHolder(viewGroup: ViewGroup, i: Int): NoteHolder {
-        val itemView = LayoutInflater.from(viewGroup.context)
-                .inflate(R.layout.main_activity_list_item, viewGroup, false)
-        return NoteHolder(itemView)
+        val layoutInflater = LayoutInflater.from(viewGroup.context)
+        val binding = MainActivityListItemBinding.inflate(layoutInflater, viewGroup, false)
+        return NoteHolder(binding)
     }
 
 
@@ -40,23 +36,7 @@ class MainListAdapter internal constructor(context: OnItemClickListener) : ListA
 
     override fun onBindViewHolder(noteHolder: NoteHolder, position: Int) {
         val currentNote = getNoteAt(position)
-
-        noteHolder.apply {
-            tvTitle.text = currentNote.title
-            tvPriority.text = currentNote.priority.toString()
-            checkboxToggleNotification.isChecked = currentNote.isNotification
-
-            tvTitle.setOnClickListener {
-                listener.onNoteItemTextClick(currentNote)
-            }
-            overflow.setOnClickListener {
-                listener.onNoteItemOverflowClick(currentNote, overflow, noteHolder)
-            }
-            checkboxToggleNotification.setOnCheckedChangeListener { _, isChecked ->
-                listener.onToggleNotificationClick(currentNote, isChecked)
-            }
-        }
-
+        noteHolder.bind(currentNote)
     }
 
 
@@ -66,11 +46,24 @@ class MainListAdapter internal constructor(context: OnItemClickListener) : ListA
         fun onToggleNotificationClick(note: Note, isChecked: Boolean)
     }
 
-    inner class NoteHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        internal val tvTitle: TextView = itemView.text_view_title
-        internal val tvPriority: TextView = itemView.text_view_priority
-        internal val overflow: ImageView = itemView.overflow_image_note_item
-        internal val checkboxToggleNotification: CheckBox = itemView.checkbox_toggle_button
+    inner class NoteHolder(private val binding: MainActivityListItemBinding) : RecyclerView.ViewHolder(binding.root) {
+        fun bind(currentNote: Note) {
+            binding.apply {
+                textViewTitle.text = currentNote.title
+                textViewPriority.text = currentNote.priority.toString()
+                checkboxToggleButton.isChecked = currentNote.isNotification
+
+                textViewTitle.setOnClickListener {
+                    listener.onNoteItemTextClick(currentNote)
+                }
+                overflowImageNoteItem.setOnClickListener {
+                    listener.onNoteItemOverflowClick(currentNote, overflowImageNoteItem, this@NoteHolder)
+                }
+                checkboxToggleButton.setOnCheckedChangeListener { _, isChecked ->
+                    listener.onToggleNotificationClick(currentNote, isChecked)
+                }
+            }
+        }
     }
 
     companion object {
