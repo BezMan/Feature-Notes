@@ -5,10 +5,9 @@ import android.content.Context
 import android.os.Bundle
 import android.view.ViewGroup
 import android.view.Window
-import bez.dev.featurenotes.R
 import bez.dev.featurenotes.data.NoteItem
+import bez.dev.featurenotes.databinding.DetailActivityDialogEditTextBinding
 import bez.dev.featurenotes.misc.Utils
-import kotlinx.android.synthetic.main.detail_activity_dialog_edit_text.*
 
 class DetailEditTextDialog(context: Context, private val noteItem: NoteItem, myPosition: Int = 0) : Dialog(context) {
 
@@ -16,19 +15,23 @@ class DetailEditTextDialog(context: Context, private val noteItem: NoteItem, myP
     private var isNewItem: Boolean = false
     private var position: Int = myPosition
 
+    private lateinit var _binding: DetailActivityDialogEditTextBinding
+
     public override fun onCreate(savedInstanceState: Bundle?) {
         requestWindowFeature(Window.FEATURE_NO_TITLE)
-        setContentView(R.layout.detail_activity_dialog_edit_text)
+
+        _binding = DetailActivityDialogEditTextBinding.inflate(layoutInflater)
+        setContentView(_binding.root)
 
         initUI()
 
         if (noteItem.itemText.isEmpty()) {
             isNewItem = true //is new item?
         } else {
-            dialogEditText.append(noteItem.itemText)
+            _binding.dialogEditText.append(noteItem.itemText)
         }
 
-        dialogSaveTextBtn.setOnClickListener {
+        _binding.dialogSaveTextBtn.setOnClickListener {
             saveMe()
             dismiss()
         }
@@ -40,7 +43,7 @@ class DetailEditTextDialog(context: Context, private val noteItem: NoteItem, myP
     }
 
     fun saveMe() {
-        val newNoteItem = NoteItem(dialogEditText.text.toString().trim(), noteItem.isDone)
+        val newNoteItem = NoteItem(_binding.dialogEditText.text.toString().trim(), noteItem.isDone)
         myListener.onTextSaveDialogBtnClick(newNoteItem, position, isNewItem)
     }
 

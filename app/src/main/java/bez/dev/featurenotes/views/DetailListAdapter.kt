@@ -18,7 +18,6 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import bez.dev.featurenotes.R
 import bez.dev.featurenotes.data.NoteItem
-import kotlinx.android.synthetic.main.detail_activity_list_item.view.*
 
 class DetailListAdapter internal constructor(myListener: OnDetailItemClickListener, myItemTouchHelper: ItemTouchHelper, editMode: Boolean) : ListAdapter<NoteItem, DetailListAdapter.DetailItemHolder>(DIFF_CALLBACK) {
 
