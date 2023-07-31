@@ -16,13 +16,17 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import bez.dev.featurenotes.R
 import bez.dev.featurenotes.data.Note
 import bez.dev.featurenotes.databinding.FragmentNotesBinding
+import bez.dev.featurenotes.databinding.NoNotesLayoutBinding
 import bez.dev.featurenotes.views.BaseActivity.Companion.toggleShowView
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.launch
 
 class NotesFragment : Fragment(), MainListAdapter.OnItemClickListener {
 
-        private var _binding: FragmentNotesBinding? = null
+    private var _bindingNoNotes: NoNotesLayoutBinding? = null
+    private val bindingNoNotes get() = _bindingNoNotes!!
+
+    private var _binding: FragmentNotesBinding? = null
     private val binding get() = _binding!!
 
     private lateinit var mainListAdapter: MainListAdapter
@@ -42,6 +46,7 @@ class NotesFragment : Fragment(), MainListAdapter.OnItemClickListener {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentNotesBinding.inflate(inflater, container, false)
+        _bindingNoNotes = NoNotesLayoutBinding.bind(binding.root)
         return binding.root
 
     }
@@ -74,7 +79,7 @@ class NotesFragment : Fragment(), MainListAdapter.OnItemClickListener {
         binding.recyclerView.adapter = mainListAdapter
 
         //TEXT WHEN EMPTY LIST
-        binding.noNotesLayout.noNotesView.text = resources.getText(R.string.empty_notes)
+        bindingNoNotes.noNotesView.text = resources.getText(R.string.empty_notes)
 
         //FAB
         binding.fabAddNote.setOnClickListener { baseActivity.addNote() }
@@ -93,7 +98,7 @@ class NotesFragment : Fragment(), MainListAdapter.OnItemClickListener {
         mainListAdapter.submitList(noteList)  //reads the adapter DIFF we created, and displays list
 
         //no notes layout
-        binding.noNotesLayout.noNotesView.toggleShowView(noteList.isEmpty())
+        bindingNoNotes.noNotesView.toggleShowView(noteList.isEmpty())
 
         //Notification
         baseActivity.notificationManager.updateNotification(noteList)
@@ -200,7 +205,7 @@ class NotesFragment : Fragment(), MainListAdapter.OnItemClickListener {
 
 
     private fun showUndoDelete(note: Note) {
-        val snack = Snackbar.make(binding.noNotesLayout.noNotesView, note.title + " - note deleted", Snackbar.LENGTH_INDEFINITE)
+        val snack = Snackbar.make(bindingNoNotes.noNotesView, note.title + " - note deleted", Snackbar.LENGTH_INDEFINITE)
 
         snack.setDuration(8000)
                 .setAction("UNDO") {
@@ -214,7 +219,7 @@ class NotesFragment : Fragment(), MainListAdapter.OnItemClickListener {
 
 
     private fun showUndoArchive(note: Note) {
-        val snack = Snackbar.make(binding.noNotesLayout.noNotesView, note.title + " - note archived", Snackbar.LENGTH_INDEFINITE)
+        val snack = Snackbar.make(bindingNoNotes.noNotesView, note.title + " - note archived", Snackbar.LENGTH_INDEFINITE)
 
         snack.setDuration(8000)
                 .setAction("UNDO") {
@@ -229,7 +234,7 @@ class NotesFragment : Fragment(), MainListAdapter.OnItemClickListener {
 
 
     private fun showUndoDeleteAllNotes(restorePoint: List<Note>) {
-        val snack = Snackbar.make(binding.noNotesLayout.noNotesView, "deleted all notes", Snackbar.LENGTH_INDEFINITE)
+        val snack = Snackbar.make(bindingNoNotes.noNotesView, "deleted all notes", Snackbar.LENGTH_INDEFINITE)
 
         snack.setDuration(8000)
                 .setAction("UNDO") {
