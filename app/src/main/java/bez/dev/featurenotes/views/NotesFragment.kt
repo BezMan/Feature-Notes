@@ -2,10 +2,12 @@ package bez.dev.featurenotes.views
 
 import android.content.Intent
 import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
+import android.view.ViewGroup
 import android.widget.ImageView
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.widget.PopupMenu
@@ -13,14 +15,15 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import bez.dev.featurenotes.R
 import bez.dev.featurenotes.data.Note
+import bez.dev.featurenotes.databinding.FragmentNotesBinding
 import bez.dev.featurenotes.views.BaseActivity.Companion.toggleShowView
 import com.google.android.material.snackbar.Snackbar
-import kotlinx.android.synthetic.main.fragment_notes.*
-import kotlinx.android.synthetic.main.main_activity_toolbar.*
-import kotlinx.android.synthetic.main.no_notes_layout.*
 import kotlinx.coroutines.launch
 
-class NotesFragment : Fragment(R.layout.fragment_notes), MainListAdapter.OnItemClickListener {
+class NotesFragment : Fragment(), MainListAdapter.OnItemClickListener {
+
+        private var _binding: FragmentNotesBinding? = null
+    private val binding get() = _binding!!
 
     private lateinit var mainListAdapter: MainListAdapter
     private var noteList: List<Note> = ArrayList()
@@ -33,6 +36,15 @@ class NotesFragment : Fragment(R.layout.fragment_notes), MainListAdapter.OnItemC
         setHasOptionsMenu(true)
     }
 
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        _binding = FragmentNotesBinding.inflate(inflater, container, false)
+        return binding.root
+
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -53,19 +65,19 @@ class NotesFragment : Fragment(R.layout.fragment_notes), MainListAdapter.OnItemC
 
     private fun initUI() {
         //TOOLBAR
-        activity?.toolbar_main_text?.text = resources.getText(R.string.app_name)
+        (requireActivity() as MainActivity).setToolbarText(resources.getText(R.string.nav_archive))
 
         //RECYCLER
-        recycler_view.layoutManager = LinearLayoutManager(context)
-        recycler_view.setHasFixedSize(true)
+        binding.recyclerView.layoutManager = LinearLayoutManager(context)
+        binding.recyclerView.setHasFixedSize(true)
         mainListAdapter = MainListAdapter(this)
-        recycler_view.adapter = mainListAdapter
+        binding.recyclerView.adapter = mainListAdapter
 
         //TEXT WHEN EMPTY LIST
-        no_notes_view.text = resources.getText(R.string.empty_notes)
+        binding.noNotesLayout.noNotesView.text = resources.getText(R.string.empty_notes)
 
         //FAB
-        fab_add_note.setOnClickListener { baseActivity.addNote() }
+        binding.fabAddNote.setOnClickListener { baseActivity.addNote() }
     }
 
 
@@ -81,7 +93,7 @@ class NotesFragment : Fragment(R.layout.fragment_notes), MainListAdapter.OnItemC
         mainListAdapter.submitList(noteList)  //reads the adapter DIFF we created, and displays list
 
         //no notes layout
-        no_notes_view.toggleShowView(noteList.isEmpty())
+        binding.noNotesLayout.noNotesView.toggleShowView(noteList.isEmpty())
 
         //Notification
         baseActivity.notificationManager.updateNotification(noteList)
@@ -188,7 +200,7 @@ class NotesFragment : Fragment(R.layout.fragment_notes), MainListAdapter.OnItemC
 
 
     private fun showUndoDelete(note: Note) {
-        val snack = Snackbar.make(notes_layout, note.title + " - note deleted", Snackbar.LENGTH_INDEFINITE)
+        val snack = Snackbar.make(binding.noNotesLayout.noNotesView, note.title + " - note deleted", Snackbar.LENGTH_INDEFINITE)
 
         snack.setDuration(8000)
                 .setAction("UNDO") {
@@ -202,7 +214,7 @@ class NotesFragment : Fragment(R.layout.fragment_notes), MainListAdapter.OnItemC
 
 
     private fun showUndoArchive(note: Note) {
-        val snack = Snackbar.make(notes_layout, note.title + " - note archived", Snackbar.LENGTH_INDEFINITE)
+        val snack = Snackbar.make(binding.noNotesLayout.noNotesView, note.title + " - note archived", Snackbar.LENGTH_INDEFINITE)
 
         snack.setDuration(8000)
                 .setAction("UNDO") {
@@ -217,7 +229,7 @@ class NotesFragment : Fragment(R.layout.fragment_notes), MainListAdapter.OnItemC
 
 
     private fun showUndoDeleteAllNotes(restorePoint: List<Note>) {
-        val snack = Snackbar.make(notes_layout, "deleted all notes", Snackbar.LENGTH_INDEFINITE)
+        val snack = Snackbar.make(binding.noNotesLayout.noNotesView, "deleted all notes", Snackbar.LENGTH_INDEFINITE)
 
         snack.setDuration(8000)
                 .setAction("UNDO") {
