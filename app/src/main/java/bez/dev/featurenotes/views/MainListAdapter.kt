@@ -47,6 +47,12 @@ class MainListAdapter internal constructor(context: OnItemClickListener) : ListA
     }
 
     inner class NoteHolder(private val binding: MainActivityListItemBinding) : RecyclerView.ViewHolder(binding.root) {
+
+        fun toggleCheckBox(){
+            binding.checkboxToggleButton.performClick()
+
+        }
+
         fun bind(currentNote: Note) {
             binding.apply {
                 textViewTitle.text = currentNote.title

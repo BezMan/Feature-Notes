@@ -143,7 +143,7 @@ class NotesFragment : Fragment(R.layout.fragment_notes), MainListAdapter.OnItemC
                     showUndoArchive(note)
                 }
                 R.id.main_overflow_note_notification -> {
-                    noteHolder.checkboxToggleNotification.performClick()
+                    noteHolder.toggleCheckBox()
                 }
 
             }
