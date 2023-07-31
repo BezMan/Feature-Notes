@@ -13,13 +13,14 @@ import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import bez.dev.featurenotes.R
+import bez.dev.featurenotes.databinding.ActivityImageBinding
 import com.google.firebase.ml.vision.FirebaseVision
 import com.google.firebase.ml.vision.common.FirebaseVisionImage
 import com.google.firebase.ml.vision.text.FirebaseVisionText
-import kotlinx.android.synthetic.main.activity_image.*
-import kotlinx.android.synthetic.main.main_activity_toolbar.*
 
 class ImageActivity : AppCompatActivity() {
+
+    private lateinit var _binding: ActivityImageBinding
 
     private lateinit var bitmap: Bitmap
 
@@ -29,13 +30,14 @@ class ImageActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_image)
+        _binding = ActivityImageBinding.inflate(layoutInflater)
+        setContentView(_binding.root)
 
         //TOOLBAR
-        setSupportActionBar(main_list_toolbar)
+        setSupportActionBar(_binding.customToolbar.mainListToolbar)    //merges the custom TOOLBAR with the existing MENU
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.setDisplayShowHomeEnabled(true)
-        toolbar_main_text?.text = resources.getText(R.string.load_image)
+        _binding.customToolbar.toolbarMainText.text = resources.getText(R.string.load_image)
     }
 
 
@@ -56,26 +58,26 @@ class ImageActivity : AppCompatActivity() {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == REQUEST_IMAGE && resultCode == Activity.RESULT_OK) {
-            imageToText_image.setImageURI(data!!.data)
+            _binding.imageToTextImage.setImageURI(data!!.data)
             startRecognizing()
         }
     }
 
     private fun startRecognizing() {
-        if (imageToText_image.drawable != null) {
-            imageToText_text.setText("")
-            bitmap = (imageToText_image.drawable as BitmapDrawable).bitmap
+        if (_binding.imageToTextImage.drawable != null) {
+            _binding.imageToTextText.setText("")
+            bitmap = (_binding.imageToTextImage.drawable as BitmapDrawable).bitmap
             val image = FirebaseVisionImage.fromBitmap(bitmap)
             val detector = FirebaseVision.getInstance().onDeviceTextRecognizer
 
             detector.processImage(image)
                     .addOnSuccessListener { firebaseVisionText ->
                         processResultText(firebaseVisionText)
-                        imageToText_rotate_left.visibility = View.VISIBLE
-                        imageToText_rotate_right.visibility = View.VISIBLE
+                        _binding.imageToTextRotateLeft.visibility = View.VISIBLE
+                        _binding.imageToTextRotateRight.visibility = View.VISIBLE
                     }
                     .addOnFailureListener {
-                        imageToText_text.hint = "Failed"
+                        _binding.imageToTextText.hint = "Failed"
                     }
         } else {
             Toast.makeText(this, "Select an Image First", Toast.LENGTH_LONG).show()
@@ -86,17 +88,17 @@ class ImageActivity : AppCompatActivity() {
 
     private fun processResultText(resultText: FirebaseVisionText) {
         if (resultText.textBlocks.size == 0) {
-            imageToText_text.hint = "No Text Found"
+            _binding.imageToTextText.hint = "No Text Found"
             return
         }
         for (block in resultText.textBlocks) {
             val blockText = block.text
-            imageToText_text.append(blockText + "\n")
+            _binding.imageToTextText.append(blockText + "\n")
         }
     }
 
     fun clickCopyText(view: View) {
-        copyTextToClipboard(imageToText_text.text.toString())
+        copyTextToClipboard(_binding.imageToTextText.text.toString())
     }
 
     private fun copyTextToClipboard(text: String) {
@@ -117,13 +119,13 @@ class ImageActivity : AppCompatActivity() {
 
     fun imageRotateRight(view: View) {
         bitmap = bitmap.rotate(90F) // value must be float
-        imageToText_image.setImageBitmap(bitmap)
+        _binding.imageToTextImage.setImageBitmap(bitmap)
         startRecognizing()
     }
 
     fun imageRotateLeft(view: View) {
         bitmap = bitmap.rotate(270F) // value must be float
-        imageToText_image.setImageBitmap(bitmap)
+        _binding.imageToTextImage.setImageBitmap(bitmap)
         startRecognizing()
     }
 
