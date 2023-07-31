@@ -5,27 +5,30 @@ import android.content.Context
 import android.os.Bundle
 import android.view.Window
 import android.view.WindowManager
-import bez.dev.featurenotes.R
-import kotlinx.android.synthetic.main.detail_activity_dialog_priority.*
+import bez.dev.featurenotes.databinding.DetailActivityDialogPriorityBinding
 
 class DetailPriorityDialog(context: Context, private val mPriority: Int) : Dialog(context) {
 
+    private lateinit var _binding: DetailActivityDialogPriorityBinding
     private var myListener: OnPrioritySaveClickListener? = context as OnPrioritySaveClickListener
-
 
     public override fun onCreate(savedInstanceState: Bundle?) {
         requestWindowFeature(Window.FEATURE_NO_TITLE)
-        setContentView(R.layout.detail_activity_dialog_priority)
+        _binding = DetailActivityDialogPriorityBinding.inflate(layoutInflater)
+        setContentView(_binding.root)
 
         window?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN)
 
-        numberPicker.wrapSelectorWheel = false //non-circular
-        numberPicker.minValue = 1
-        numberPicker.maxValue = 5
-        numberPicker.value = mPriority
+        _binding.numberPicker.apply {
+            wrapSelectorWheel = false //non-circular
+            minValue = 1
+            maxValue = 5
+            value = mPriority
 
-        savePriorityBtn.setOnClickListener {
-            val newPriority = numberPicker.value
+        }
+
+        _binding.savePriorityBtn.setOnClickListener {
+            val newPriority = _binding.numberPicker.value
             myListener?.onPrioritySaveBtnClick(newPriority)
             dismiss()
         }
