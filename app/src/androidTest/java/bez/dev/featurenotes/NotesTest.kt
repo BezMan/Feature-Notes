@@ -59,7 +59,7 @@ class NotesTest {
     }
 
 
-    @Ignore
+    @Ignore("can add reason")
     @Test
     fun clickNoteEdit_openDetailActivityEditItem() {
 //        val title = "test mock"

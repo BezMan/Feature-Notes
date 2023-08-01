@@ -4,13 +4,14 @@ import bez.dev.featurenotes.misc.App
 import bez.dev.featurenotes.misc.DInjector
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 const val KEY_FIRST_RUN = "KEY_FIRST_RUN"
 
-class NoteRepository @Inject constructor(): IRepository {
+class NoteRepository @Inject constructor() : IRepository {
 
     private val noteDao: NoteDao = App.database.noteDao()
     private val repoScope = CoroutineScope(Dispatchers.IO)
@@ -20,12 +21,18 @@ class NoteRepository @Inject constructor(): IRepository {
         getAllNotes()
     }
 
-    override fun insert(note: Note): Long {
-        return noteDao.insert(note)
+    override suspend fun insert(note: Note): Long {
+        val res = repoScope.async {
+            noteDao.insert(note)
+        }
+        return res.await()
     }
 
-    override fun insert(note: List<Note>): List<Long> {
-        return noteDao.insert(note)
+    override suspend fun insert(note: List<Note>): List<Long> {
+        val res = repoScope.async {
+            noteDao.insert(note)
+        }
+        return res.await()
     }
 
     override fun update(note: Note) {
@@ -33,7 +40,7 @@ class NoteRepository @Inject constructor(): IRepository {
     }
 
     override fun delete(note: Note) {
-        noteDao.delete(note)
+        repoScope.launch { noteDao.delete(note) }
     }
 
     override fun deleteAllNotes() {
@@ -41,7 +48,7 @@ class NoteRepository @Inject constructor(): IRepository {
     }
 
     override fun clearAllData() {
-        App.database.clearAllTables()
+        repoScope.launch { App.database.clearAllTables() }
     }
 
     override fun resetAllNotifications() {

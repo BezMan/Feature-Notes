@@ -4,8 +4,8 @@ import kotlinx.coroutines.flow.Flow
 
 interface IRepository {
 
-    fun insert(note: Note): Long
-    fun insert(note: List<Note>): List<Long>
+    suspend fun insert(note: Note): Long
+    suspend fun insert(note: List<Note>): List<Long>
     fun update(note: Note)
     fun delete(note: Note)
     fun deleteAllNotes()

@@ -11,7 +11,7 @@ import javax.inject.Inject
 @HiltViewModel
 class RepoViewModel @Inject constructor(private val repository: IRepository) : ViewModel() {
 
-    fun insert(note: Note): Long {
+    suspend fun insert(note: Note): Long {
         return repository.insert(note)
     }
 
