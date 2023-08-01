@@ -1,8 +1,6 @@
 package bez.dev.featurenotes.views
 
-import android.app.Activity
 import android.content.Intent
-import android.os.Bundle
 import android.util.Log
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
@@ -22,29 +20,6 @@ abstract class BaseActivity : AppCompatActivity() {
     val notificationManager = get<NotificationManager>()
 
     val baseCoroutineIO = CoroutineScope(Dispatchers.IO)
-
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        appInitialization()
-    }
-
-
-    private fun appInitialization() {
-        Thread.setDefaultUncaughtExceptionHandler { thread, ex -> // code here to send crash analytics
-            ex.printStackTrace()
-            triggerRestart(this)
-        }
-    }
-
-    private fun triggerRestart(context: Activity) {
-        val intent = Intent(context, MainActivity::class.java)
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK)
-        context.startActivity(intent)
-        finish()
-        Runtime.getRuntime().exit(0)
-    }
-
 
     fun deleteNote(note: Note) {
         notificationManager.cancelNotificationById(note.id)
