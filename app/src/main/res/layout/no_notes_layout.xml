@@ -1,12 +1,13 @@
 <merge xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools">
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
 <TextView
     android:id="@+id/no_notes_view"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_margin="60dp"
-    android:drawableBottom="@mipmap/ic_app_launcher"
+    app:drawableBottomCompat="@mipmap/ic_app_launcher"
     android:drawablePadding="10dp"
     android:gravity="center"
     android:textAppearance="@style/TextAppearance.AppCompat.Large"

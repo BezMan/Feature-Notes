@@ -36,7 +36,7 @@ class NoteRepository : IRepository {
     }
 
     override fun deleteAllNotes() {
-        noteDao.deleteAllNotes()
+        repoScope.launch { noteDao.deleteAllNotes() }
     }
 
     override fun clearAllData() {
@@ -44,7 +44,7 @@ class NoteRepository : IRepository {
     }
 
     override fun resetAllNotifications() {
-        noteDao.resetAllNotifications()
+        repoScope.launch { noteDao.resetAllNotifications() }
     }
 
     override fun getNoteById(noteId: Long): Flow<Note> {
