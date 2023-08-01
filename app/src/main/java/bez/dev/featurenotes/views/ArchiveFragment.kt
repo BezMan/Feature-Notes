@@ -13,12 +13,16 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import bez.dev.featurenotes.R
 import bez.dev.featurenotes.data.Note
 import bez.dev.featurenotes.databinding.FragmentArchiveBinding
+import bez.dev.featurenotes.databinding.NoNotesLayoutBinding
 import bez.dev.featurenotes.views.BaseActivity.Companion.toggleShowView
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.launch
 
 
 class ArchiveFragment : Fragment(), ArchiveListAdapter.OnItemClickListener {
+
+    private var _bindingNoNotes: NoNotesLayoutBinding? = null
+    private val bindingNoNotes get() = _bindingNoNotes!!
 
     private var _binding: FragmentArchiveBinding? = null
     private val binding get() = _binding!!
@@ -39,6 +43,7 @@ class ArchiveFragment : Fragment(), ArchiveListAdapter.OnItemClickListener {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentArchiveBinding.inflate(inflater, container, false)
+        _bindingNoNotes = NoNotesLayoutBinding.bind(binding.root)
         return binding.root
     }
 
@@ -70,7 +75,7 @@ class ArchiveFragment : Fragment(), ArchiveListAdapter.OnItemClickListener {
         binding.recyclerViewArchive.adapter = archiveListAdapter
 
         //TEXT WHEN EMPTY LIST
-        binding.noNotesLayout.noNotesView.text = resources.getText(R.string.empty_archive)
+        bindingNoNotes.noNotesView.text = resources.getText(R.string.empty_archive)
     }
 
 
@@ -86,7 +91,7 @@ class ArchiveFragment : Fragment(), ArchiveListAdapter.OnItemClickListener {
         archiveListAdapter.submitList(archivedList)  //reads the adapter DIFF we created, and displays list
 
         //no notes layout
-        binding.noNotesLayout.noNotesView.toggleShowView(archivedList.isEmpty())
+        bindingNoNotes.noNotesView.toggleShowView(archivedList.isEmpty())
     }
 
 

@@ -70,7 +70,7 @@ class NotesFragment : Fragment(), MainListAdapter.OnItemClickListener {
 
     private fun initUI() {
         //TOOLBAR
-        (requireActivity() as MainActivity).setToolbarText(resources.getText(R.string.nav_archive))
+        (requireActivity() as MainActivity).setToolbarText(resources.getText(R.string.nav_notes))
 
         //RECYCLER
         binding.recyclerView.layoutManager = LinearLayoutManager(context)
