@@ -4,16 +4,19 @@ import android.app.IntentService
 import android.content.Intent
 import android.os.Build
 import androidx.core.app.RemoteInput
+import bez.dev.featurenotes.data.IRepository
 import bez.dev.featurenotes.data.Note
 import bez.dev.featurenotes.data.NoteItem
-import bez.dev.featurenotes.data.NoteRepository
 import bez.dev.featurenotes.misc.NotificationManager
-import org.koin.android.ext.android.get
+import javax.inject.Inject
 
 class AddFromNotificationIntentService : IntentService("AddFromNotificationIntentService") {
 
-    private val noteRepository = get<NoteRepository>()
-    private val notificationManager = get<NotificationManager>()
+    @Inject
+    lateinit var notificationManager: NotificationManager
+
+    @Inject
+    lateinit var noteRepository: IRepository
 
     @Deprecated("Deprecated in Java")
     override fun onHandleIntent(intent: Intent?) {

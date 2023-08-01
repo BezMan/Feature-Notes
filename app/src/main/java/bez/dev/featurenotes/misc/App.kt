@@ -4,18 +4,15 @@ import android.app.Application
 import android.content.Context
 import android.content.Intent
 import bez.dev.featurenotes.data.NoteDatabase
-import bez.dev.featurenotes.koin_injection.appModule
-import bez.dev.featurenotes.koin_injection.viewModelModule
 import bez.dev.featurenotes.views.MainActivity
-import org.koin.android.ext.koin.androidContext
-import org.koin.core.context.startKoin
+import dagger.hilt.android.HiltAndroidApp
 
+@HiltAndroidApp
 class App : Application() {
 
     override fun onCreate() {
         super.onCreate()
         appContext = applicationContext
-        initKoin(appContext)
         database = NoteDatabase.getInstance(appContext)
 
         // Set the default uncaught exception handler.
@@ -37,14 +34,6 @@ class App : Application() {
         context.startActivity(intent)
         Runtime.getRuntime().exit(0)
     }
-
-    private fun initKoin(context: Context) {
-        startKoin {
-            androidContext(context)
-            modules(listOf(appModule, viewModelModule))
-        }
-    }
-
 
     companion object {
         lateinit var appContext: Context

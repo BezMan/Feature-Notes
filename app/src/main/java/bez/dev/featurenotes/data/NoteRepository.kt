@@ -6,10 +6,11 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 const val KEY_FIRST_RUN = "KEY_FIRST_RUN"
 
-class NoteRepository : IRepository {
+class NoteRepository @Inject constructor(): IRepository {
 
     private val noteDao: NoteDao = App.database.noteDao()
     private val repoScope = CoroutineScope(Dispatchers.IO)

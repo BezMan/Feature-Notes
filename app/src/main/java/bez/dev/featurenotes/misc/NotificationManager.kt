@@ -1,11 +1,13 @@
 package bez.dev.featurenotes.misc
 
+import android.Manifest
 import android.app.Notification
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.graphics.Typeface
 import android.os.Build
 import android.text.Spannable
@@ -13,6 +15,7 @@ import android.text.SpannableString
 import android.text.style.StrikethroughSpan
 import android.text.style.StyleSpan
 import androidx.annotation.RequiresApi
+import androidx.core.app.ActivityCompat
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import androidx.core.app.RemoteInput
@@ -25,16 +28,15 @@ import bez.dev.featurenotes.views.DetailActivity
 import bez.dev.featurenotes.views.MainActivity
 import kotlin.random.Random
 
-class NotificationManager(context: Context) {
+class NotificationManager (val context: Context) {
 
-    private val mContext = context
-    private val mNotificationManager: NotificationManager = mContext.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+    private val mNotificationManager: NotificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
     private var mNotificationBuilder: NotificationCompat.Builder = NotificationCompat.Builder(context, CHANNEL_ID)
 
-    private val mainPendingIntent = PendingIntent.getActivity(mContext,
-            0, Intent(mContext, MainActivity::class.java), PendingIntent.FLAG_MUTABLE)
+    private val mainPendingIntent = PendingIntent.getActivity(context,
+            0, Intent(context, MainActivity::class.java), PendingIntent.FLAG_MUTABLE)
 
-    private val detailIntent = Intent(mContext, DetailActivity::class.java)
+    private val detailIntent = Intent(context, DetailActivity::class.java)
 
     init {
 
@@ -42,7 +44,7 @@ class NotificationManager(context: Context) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             mNotificationManager.createNotificationChannel(NotificationChannel(
                     CHANNEL_ID,
-                    mContext.getString(bez.dev.featurenotes.R.string.app_name),
+                    context.getString(bez.dev.featurenotes.R.string.app_name),
                     NotificationManager.IMPORTANCE_LOW))
         }
 
@@ -51,7 +53,7 @@ class NotificationManager(context: Context) {
     private fun setSummaryBuilder(): Notification {
         return mNotificationBuilder
                 .setSmallIcon(bez.dev.featurenotes.R.mipmap.ic_app_launcher)
-                .setColor(ContextCompat.getColor(mContext, bez.dev.featurenotes.R.color.colorPrimary))
+                .setColor(ContextCompat.getColor(context, bez.dev.featurenotes.R.color.colorPrimary))
                 .setGroup(KEY_NOTIFICATION_GROUP)
                 .setGroupSummary(true)
                 .setContentIntent(mainPendingIntent)
@@ -73,7 +75,21 @@ class NotificationManager(context: Context) {
     }
 
     fun updateSpecificNotification(note: Note) {
-        NotificationManagerCompat.from(mContext).apply {
+        NotificationManagerCompat.from(context).apply {
+            if (ActivityCompat.checkSelfPermission(
+                    context,
+                    Manifest.permission.POST_NOTIFICATIONS
+                ) != PackageManager.PERMISSION_GRANTED
+            ) {
+                // TODO: Consider calling
+                //    ActivityCompat#requestPermissions
+                // here to request the missing permissions, and then overriding
+                //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+                //                                          int[] grantResults)
+                // to handle the case where the user grants the permission. See the documentation
+                // for ActivityCompat#requestPermissions for more details.
+                return
+            }
             notify(note.id.toInt(), createNotificationBuilder(note))
         }
     }
@@ -90,7 +106,21 @@ class NotificationManager(context: Context) {
             }
         }
         if (count > 0) {
-            NotificationManagerCompat.from(mContext).apply {
+            NotificationManagerCompat.from(context).apply {
+                if (ActivityCompat.checkSelfPermission(
+                        context,
+                        Manifest.permission.POST_NOTIFICATIONS
+                    ) != PackageManager.PERMISSION_GRANTED
+                ) {
+                    // TODO: Consider calling
+                    //    ActivityCompat#requestPermissions
+                    // here to request the missing permissions, and then overriding
+                    //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+                    //                                          int[] grantResults)
+                    // to handle the case where the user grants the permission. See the documentation
+                    // for ActivityCompat#requestPermissions for more details.
+                    return
+                }
                 notify(NOTIFICATION_ID, setSummaryBuilder())
             }
         } else {
@@ -116,15 +146,15 @@ class NotificationManager(context: Context) {
         var dismissActionPendingIntent: PendingIntent? = null
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            val intentAdd = Intent(mContext, AddFromNotificationIntentService::class.java)
+            val intentAdd = Intent(context, AddFromNotificationIntentService::class.java)
             intentAdd.action = AddFromNotificationIntentService.ACTION_REPLY
             intentAdd.putExtra(AddFromNotificationIntentService.NOTIFICATION_NOTE, note)
-            replyActionPendingIntent = PendingIntent.getService(mContext, note.id.toInt(), intentAdd, PendingIntent.FLAG_MUTABLE)
+            replyActionPendingIntent = PendingIntent.getService(context, note.id.toInt(), intentAdd, PendingIntent.FLAG_MUTABLE)
 
-            val intentDismiss = Intent(mContext, AddFromNotificationIntentService::class.java)
+            val intentDismiss = Intent(context, AddFromNotificationIntentService::class.java)
             intentDismiss.action = AddFromNotificationIntentService.ACTION_DISMISS
             intentDismiss.putExtra(AddFromNotificationIntentService.NOTIFICATION_NOTE, note)
-            dismissActionPendingIntent = PendingIntent.getService(mContext, note.id.toInt(), intentDismiss, PendingIntent.FLAG_MUTABLE)
+            dismissActionPendingIntent = PendingIntent.getService(context, note.id.toInt(), intentDismiss, PendingIntent.FLAG_MUTABLE)
 
         }
 
@@ -161,12 +191,12 @@ class NotificationManager(context: Context) {
     }
 
     private fun setBodyNotification(note: Note, replyAction: NotificationCompat.Action?, dismissAction: NotificationCompat.Action?, inboxStyle: NotificationCompat.InboxStyle): Notification {
-        return NotificationCompat.Builder(mContext, CHANNEL_ID)
+        return NotificationCompat.Builder(context, CHANNEL_ID)
                 .setSmallIcon(bez.dev.featurenotes.R.mipmap.ic_app_launcher)
                 .setContentTitle(boldText(note.title))
                 .setGroup(KEY_NOTIFICATION_GROUP)
                 .setOngoing(true)
-                .setContentIntent(TaskStackBuilder.create(mContext).run {
+                .setContentIntent(TaskStackBuilder.create(context).run {
                     // Add the intent, which inflates the back stack
                     detailIntent.putExtra(EXTRA_NOTE, note)
                     addNextIntentWithParentStack(detailIntent)
