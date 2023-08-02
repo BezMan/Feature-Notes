@@ -12,15 +12,19 @@ import android.widget.ImageView
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.widget.PopupMenu
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import bez.dev.featurenotes.R
 import bez.dev.featurenotes.data.Note
 import bez.dev.featurenotes.databinding.FragmentNotesBinding
 import bez.dev.featurenotes.databinding.NoNotesLayoutBinding
+import bez.dev.featurenotes.view_models.RepoViewModel
 import bez.dev.featurenotes.views.BaseActivity.Companion.toggleShowView
 import com.google.android.material.snackbar.Snackbar
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
+@AndroidEntryPoint
 class NotesFragment : Fragment(), MainListAdapter.OnItemClickListener {
 
     private var _bindingNoNotes: NoNotesLayoutBinding? = null
@@ -34,6 +38,7 @@ class NotesFragment : Fragment(), MainListAdapter.OnItemClickListener {
     private lateinit var restorePoint: List<Note>
     private lateinit var baseActivity: BaseActivity
 
+    internal val repoViewModel: RepoViewModel by activityViewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -87,7 +92,7 @@ class NotesFragment : Fragment(), MainListAdapter.OnItemClickListener {
 
 
     private fun initNoteViewModel() {
-        baseActivity.repoViewModel.getAllNotes().observe(viewLifecycleOwner) {
+        repoViewModel.getAllNotes().observe(viewLifecycleOwner) {
             noteList = it
             refreshUI()
         }
@@ -128,7 +133,7 @@ class NotesFragment : Fragment(), MainListAdapter.OnItemClickListener {
 
     private fun resetAllNotifications() {
         if (noteList.isNotEmpty()) {
-            baseActivity.repoViewModel.resetAllNotifications()
+            repoViewModel.resetAllNotifications()
         }
     }
 
@@ -178,7 +183,7 @@ class NotesFragment : Fragment(), MainListAdapter.OnItemClickListener {
             baseActivity.notificationManager.cancelNotificationById(note.id)
 
             note.isNotification = isChecked
-            baseActivity.repoViewModel.update(note)
+            repoViewModel.update(note)
         }
 
     }
@@ -191,7 +196,7 @@ class NotesFragment : Fragment(), MainListAdapter.OnItemClickListener {
             val builder = AlertDialog.Builder(baseActivity)
             builder.setMessage("All notes will be deleted.. \n Are you sure?")
                     .setPositiveButton("Yes") { dialog, id ->
-                        baseActivity.repoViewModel.deleteAllNotes()
+                        repoViewModel.deleteAllNotes()
                         showUndoDeleteAllNotes(restorePoint)
                     }
                     .setNegativeButton("Cancel") { dialog, id ->
@@ -211,7 +216,7 @@ class NotesFragment : Fragment(), MainListAdapter.OnItemClickListener {
                 .setAction("UNDO") {
                     // execute when UNDO is clicked
                     baseActivity.baseCoroutineIO.launch {
-                        baseActivity.repoViewModel.insert(note)
+                        repoViewModel.insert(note)
                     }
                 }
         snack.show()
@@ -225,7 +230,7 @@ class NotesFragment : Fragment(), MainListAdapter.OnItemClickListener {
                 .setAction("UNDO") {
                     // execute when UNDO is clicked
                     baseActivity.baseCoroutineIO.launch {
-                        baseActivity.repoViewModel.unArchive(note)
+                        repoViewModel.unArchive(note)
                     }
                 }
         snack.show()
@@ -241,7 +246,7 @@ class NotesFragment : Fragment(), MainListAdapter.OnItemClickListener {
                     // execute when UNDO is clicked
                     for (note: Note in restorePoint) {
                         baseActivity.baseCoroutineIO.launch {
-                            baseActivity.repoViewModel.insert(note)
+                            repoViewModel.insert(note)
                         }
                     }
                 }

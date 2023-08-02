@@ -9,11 +9,13 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import androidx.appcompat.widget.PopupMenu
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import bez.dev.featurenotes.R
 import bez.dev.featurenotes.data.Note
 import bez.dev.featurenotes.databinding.FragmentArchiveBinding
 import bez.dev.featurenotes.databinding.NoNotesLayoutBinding
+import bez.dev.featurenotes.view_models.RepoViewModel
 import bez.dev.featurenotes.views.BaseActivity.Companion.toggleShowView
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.launch
@@ -31,6 +33,7 @@ class ArchiveFragment : Fragment(), ArchiveListAdapter.OnItemClickListener {
     private var archivedList: List<Note> = ArrayList()
     private lateinit var baseActivity: BaseActivity
 
+    internal val repoViewModel: RepoViewModel by activityViewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -80,7 +83,7 @@ class ArchiveFragment : Fragment(), ArchiveListAdapter.OnItemClickListener {
 
 
     private fun initNoteViewModel() {
-        baseActivity.repoViewModel.getArchivedNotes().observe(viewLifecycleOwner) {
+        repoViewModel.getArchivedNotes().observe(viewLifecycleOwner) {
             archivedList = it
             refreshUI()
         }
@@ -140,7 +143,7 @@ class ArchiveFragment : Fragment(), ArchiveListAdapter.OnItemClickListener {
                 .setAction("UNDO") {
                     // execute when UNDO is clicked
                     baseActivity.baseCoroutineIO.launch {
-                        baseActivity.repoViewModel.insert(note)
+                        repoViewModel.insert(note)
                     }
                 }
         snack.show()
@@ -155,7 +158,7 @@ class ArchiveFragment : Fragment(), ArchiveListAdapter.OnItemClickListener {
                 .setAction("UNDO") {
                     // execute when UNDO is clicked
                     baseActivity.baseCoroutineIO.launch {
-                        baseActivity.repoViewModel.archive(note)
+                        repoViewModel.archive(note)
                     }
                 }
         snack.show()

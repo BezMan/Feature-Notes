@@ -9,12 +9,12 @@ These are some useful features you'll find in this app and I can't wait to add m
  This project is written in Kotlin and showcases these concepts:
 
 - Architecture Components: MVVM, Room, Kotlin Flow in conjunction with Live Data.
-- Dependency Injection with Koin (Repository, NotificationManager and ViewModel).
+- Dependency Injection with Dagger Hilt (Repository, NotificationManager and ViewModel).
 - Transitioning between Fragments with Navigation Drawer layout.
 - Parcelable Note data class, so we can pass it between Activities.
 - TypeConverter for storing non-primitive object types in Room Database.
 - ItemTouchHelper callbacks for gesture detection: drag & drop items.
-- Custom Views (AlertDialog) managing their own UI setup and lifecycle.
+- Custom Views (Dialog popups) managing their own UI setup and lifecycle.
 - Note priority influences the order of notes displayed within list.
 - Generating primary key, where insert() provides us a unique note id.
 - Auto-scroll to bottom of list when adding note items to the end.
