@@ -1,7 +1,6 @@
 package bez.dev.featurenotes.data
 
 import bez.dev.featurenotes.misc.App
-import bez.dev.featurenotes.misc.DInjector
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
@@ -11,14 +10,39 @@ import javax.inject.Inject
 
 const val KEY_FIRST_RUN = "KEY_FIRST_RUN"
 
-class NoteRepository @Inject constructor() : IRepository {
+class NoteRepository @Inject constructor(private val sharedPrefs: SharedPrefs) : IRepository {
 
     private val noteDao: NoteDao = App.database.noteDao()
     private val repoScope = CoroutineScope(Dispatchers.IO)
 
     init {
-        DInjector.setInitNotes()
+        setNotesFirstRun()
         getAllNotes()
+    }
+
+    private fun setNotesFirstRun() {
+
+        if (sharedPrefs.getBoolValue(KEY_FIRST_RUN, true)) {
+            CoroutineScope(Dispatchers.IO).launch {
+                insert(createNotes(5))
+            }
+            sharedPrefs.setBoolValue(KEY_FIRST_RUN, false) //toggle to not first run anymore:
+        }
+    }
+
+    private fun createNotes(noteCount: Int): MutableList<Note> {
+        val noteList = mutableListOf<Note>()
+        for (i in 1..noteCount) {
+            noteList.add(
+                Note(
+                    "mock $i", i, mutableListOf(
+                        NoteItem("select edit"),
+                        NoteItem("drag and drop")
+                    )
+                )
+            )
+        }
+        return noteList
     }
 
     override suspend fun insert(note: Note): Long {

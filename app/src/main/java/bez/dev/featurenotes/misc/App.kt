@@ -12,8 +12,7 @@ class App : Application() {
 
     override fun onCreate() {
         super.onCreate()
-        appContext = applicationContext
-        database = NoteDatabase.getInstance(appContext)
+        database = NoteDatabase.getInstance(this)
 
         // Set the default uncaught exception handler.
         handleUncaughtExceptions()
@@ -23,7 +22,7 @@ class App : Application() {
     private fun handleUncaughtExceptions() {
         Thread.setDefaultUncaughtExceptionHandler { thread, ex ->
             ex.printStackTrace()
-            triggerRestart(appContext)
+            triggerRestart(this)
         }
     }
 
@@ -36,7 +35,6 @@ class App : Application() {
     }
 
     companion object {
-        lateinit var appContext: Context
         lateinit var database: NoteDatabase
     }
 
