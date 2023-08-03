@@ -3,6 +3,7 @@ package bez.dev.featurenotes.di
 import android.app.Application
 import androidx.lifecycle.ViewModel
 import bez.dev.featurenotes.data.IRepository
+import bez.dev.featurenotes.data.NoteDatabase
 import bez.dev.featurenotes.data.NoteRepository
 import bez.dev.featurenotes.data.SharedPrefs
 import bez.dev.featurenotes.misc.NotificationManager
@@ -20,8 +21,15 @@ object AppModule {
 
     @Provides
     @Singleton
-    fun provideNotesRepo(sharedPrefs: SharedPrefs): IRepository {
-        return NoteRepository(sharedPrefs)
+    fun provideNotesRepo(database: NoteDatabase, sharedPrefs: SharedPrefs): IRepository {
+        return NoteRepository(database, sharedPrefs)
+    }
+
+    @Provides
+    @Singleton
+    fun provideNotesDatabase(context: Application): NoteDatabase {
+        return NoteDatabase.getInstance(context)
+
     }
 
     @Provides

@@ -3,7 +3,6 @@ package bez.dev.featurenotes.misc
 import android.app.Application
 import android.content.Context
 import android.content.Intent
-import bez.dev.featurenotes.data.NoteDatabase
 import bez.dev.featurenotes.views.MainActivity
 import dagger.hilt.android.HiltAndroidApp
 
@@ -12,7 +11,6 @@ class App : Application() {
 
     override fun onCreate() {
         super.onCreate()
-        database = NoteDatabase.getInstance(this)
 
         // Set the default uncaught exception handler.
         handleUncaughtExceptions()
@@ -33,10 +31,5 @@ class App : Application() {
         context.startActivity(intent)
         Runtime.getRuntime().exit(0)
     }
-
-    companion object {
-        lateinit var database: NoteDatabase
-    }
-
 
 }

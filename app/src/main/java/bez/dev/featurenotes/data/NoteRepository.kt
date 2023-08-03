@@ -1,6 +1,5 @@
 package bez.dev.featurenotes.data
 
-import bez.dev.featurenotes.misc.App
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
@@ -10,9 +9,9 @@ import javax.inject.Inject
 
 const val KEY_FIRST_RUN = "KEY_FIRST_RUN"
 
-class NoteRepository @Inject constructor(private val sharedPrefs: SharedPrefs) : IRepository {
+class NoteRepository @Inject constructor(private val database: NoteDatabase, private val sharedPrefs: SharedPrefs) : IRepository {
 
-    private val noteDao: NoteDao = App.database.noteDao()
+    private val noteDao: NoteDao = database.noteDao()
     private val repoScope = CoroutineScope(Dispatchers.IO)
 
     init {
@@ -24,13 +23,13 @@ class NoteRepository @Inject constructor(private val sharedPrefs: SharedPrefs) :
 
         if (sharedPrefs.getBoolValue(KEY_FIRST_RUN, true)) {
             CoroutineScope(Dispatchers.IO).launch {
-                insert(createNotes(5))
+                insert(createStarterNotes())
             }
             sharedPrefs.setBoolValue(KEY_FIRST_RUN, false) //toggle to not first run anymore:
         }
     }
 
-    private fun createNotes(noteCount: Int): MutableList<Note> {
+    private fun createStarterNotes(noteCount: Int = 5): MutableList<Note> {
         val noteList = mutableListOf<Note>()
         for (i in 1..noteCount) {
             noteList.add(
@@ -72,7 +71,7 @@ class NoteRepository @Inject constructor(private val sharedPrefs: SharedPrefs) :
     }
 
     override fun clearAllData() {
-        repoScope.launch { App.database.clearAllTables() }
+        repoScope.launch { database.clearAllTables() }
     }
 
     override fun resetAllNotifications() {
