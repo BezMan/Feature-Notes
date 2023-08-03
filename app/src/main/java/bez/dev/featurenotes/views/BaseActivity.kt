@@ -10,7 +10,7 @@ import androidx.preference.PreferenceManager
 import bez.dev.featurenotes.R
 import bez.dev.featurenotes.data.Note
 import bez.dev.featurenotes.misc.NotificationManager
-import bez.dev.featurenotes.view_models.RepoViewModel
+import bez.dev.featurenotes.presenters.RepoViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers

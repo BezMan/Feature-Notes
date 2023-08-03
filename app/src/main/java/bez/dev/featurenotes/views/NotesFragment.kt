@@ -18,13 +18,11 @@ import bez.dev.featurenotes.R
 import bez.dev.featurenotes.data.Note
 import bez.dev.featurenotes.databinding.FragmentNotesBinding
 import bez.dev.featurenotes.databinding.NoNotesLayoutBinding
-import bez.dev.featurenotes.view_models.RepoViewModel
+import bez.dev.featurenotes.presenters.RepoViewModel
 import bez.dev.featurenotes.views.BaseActivity.Companion.toggleShowView
 import com.google.android.material.snackbar.Snackbar
-import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
-@AndroidEntryPoint
 class NotesFragment : Fragment(), MainListAdapter.OnItemClickListener {
 
     private var _bindingNoNotes: NoNotesLayoutBinding? = null

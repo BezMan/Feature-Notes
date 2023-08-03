@@ -6,7 +6,7 @@ import bez.dev.featurenotes.data.IRepository
 import bez.dev.featurenotes.data.NoteRepository
 import bez.dev.featurenotes.data.SharedPrefs
 import bez.dev.featurenotes.misc.NotificationManager
-import bez.dev.featurenotes.view_models.RepoViewModel
+import bez.dev.featurenotes.presenters.RepoViewModel
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

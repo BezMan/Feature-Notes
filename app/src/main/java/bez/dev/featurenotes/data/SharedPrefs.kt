@@ -2,9 +2,8 @@ package bez.dev.featurenotes.data
 
 import android.content.Context
 import android.preference.PreferenceManager
-import javax.inject.Inject
 
-class SharedPrefs @Inject constructor(val context: Context) {
+class SharedPrefs (val context: Context) {
 
     fun setBoolValue(key: String, bool: Boolean) {
         val preferences = PreferenceManager.getDefaultSharedPreferences(context)

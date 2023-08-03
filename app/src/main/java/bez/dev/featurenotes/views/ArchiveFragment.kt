@@ -15,7 +15,7 @@ import bez.dev.featurenotes.R
 import bez.dev.featurenotes.data.Note
 import bez.dev.featurenotes.databinding.FragmentArchiveBinding
 import bez.dev.featurenotes.databinding.NoNotesLayoutBinding
-import bez.dev.featurenotes.view_models.RepoViewModel
+import bez.dev.featurenotes.presenters.RepoViewModel
 import bez.dev.featurenotes.views.BaseActivity.Companion.toggleShowView
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.launch
