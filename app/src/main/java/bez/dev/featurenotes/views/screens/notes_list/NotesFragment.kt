@@ -1,4 +1,4 @@
-package bez.dev.featurenotes.views
+package bez.dev.featurenotes.views.screens.notes_list
 
 import android.content.Intent
 import android.os.Bundle
@@ -18,8 +18,10 @@ import bez.dev.featurenotes.R
 import bez.dev.featurenotes.data.Note
 import bez.dev.featurenotes.databinding.FragmentNotesBinding
 import bez.dev.featurenotes.databinding.NoNotesLayoutBinding
-import bez.dev.featurenotes.presenters.RepoViewModel
-import bez.dev.featurenotes.views.BaseActivity.Companion.toggleShowView
+import bez.dev.featurenotes.views.screens.BaseActivity
+import bez.dev.featurenotes.views.presenters.RepoViewModel
+import bez.dev.featurenotes.views.screens.BaseActivity.Companion.toggleShowView
+import bez.dev.featurenotes.views.screens.ImageActivity
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.launch
 

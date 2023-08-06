@@ -3,7 +3,7 @@ package bez.dev.featurenotes.misc
 import android.app.Application
 import android.content.Context
 import android.content.Intent
-import bez.dev.featurenotes.views.MainActivity
+import bez.dev.featurenotes.views.screens.notes_list.MainActivity
 import dagger.hilt.android.HiltAndroidApp
 
 @HiltAndroidApp

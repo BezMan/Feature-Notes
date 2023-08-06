@@ -1,4 +1,4 @@
-package bez.dev.featurenotes.views
+package bez.dev.featurenotes.views.screens.note_detail
 
 import android.app.Dialog
 import android.content.Context

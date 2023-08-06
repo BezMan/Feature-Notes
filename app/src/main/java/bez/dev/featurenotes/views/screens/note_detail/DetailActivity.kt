@@ -1,4 +1,4 @@
-package bez.dev.featurenotes.views
+package bez.dev.featurenotes.views.screens.note_detail
 
 import android.content.ClipData
 import android.content.ClipboardManager
@@ -20,14 +20,16 @@ import bez.dev.featurenotes.R
 import bez.dev.featurenotes.data.Note
 import bez.dev.featurenotes.data.NoteItem
 import bez.dev.featurenotes.databinding.DetailActivityBinding
-import bez.dev.featurenotes.views.DetailPriorityDialog.OnPrioritySaveClickListener
+import bez.dev.featurenotes.views.screens.BaseActivity
+import bez.dev.featurenotes.views.screens.note_detail.DetailPriorityDialog.OnPrioritySaveClickListener
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.*
 
 
-class DetailActivity : BaseActivity(), OnPrioritySaveClickListener, DetailEditTextDialog.OnItemSaveClickListener, DetailListAdapter.OnDetailItemClickListener {
+class DetailActivity : BaseActivity(), OnPrioritySaveClickListener,
+    DetailEditTextDialog.OnItemSaveClickListener, DetailListAdapter.OnDetailItemClickListener {
 
     private var isEditMode: Boolean = false
     private var menuEditItem: MenuItem? = null

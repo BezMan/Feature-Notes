@@ -1,4 +1,4 @@
-package bez.dev.featurenotes.views
+package bez.dev.featurenotes.views.screens
 
 import android.app.Activity
 import android.content.ClipData

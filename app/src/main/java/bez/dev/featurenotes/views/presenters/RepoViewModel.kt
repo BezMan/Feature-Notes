@@ -1,4 +1,4 @@
-package bez.dev.featurenotes.presenters
+package bez.dev.featurenotes.views.presenters
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel

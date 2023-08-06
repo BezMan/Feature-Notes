@@ -14,7 +14,7 @@ import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.rule.ActivityTestRule
 import androidx.test.runner.lifecycle.ActivityLifecycleMonitorRegistry
 import androidx.test.runner.lifecycle.Stage
-import bez.dev.featurenotes.views.MainActivity
+import bez.dev.featurenotes.views.screens.notes_list.MainActivity
 import org.hamcrest.Matchers.`is`
 import org.junit.Ignore
 import org.junit.Rule

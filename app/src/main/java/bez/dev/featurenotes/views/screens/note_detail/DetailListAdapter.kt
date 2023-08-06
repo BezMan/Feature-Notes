@@ -1,4 +1,4 @@
-package bez.dev.featurenotes.views
+package bez.dev.featurenotes.views.screens.note_detail
 
 import android.annotation.SuppressLint
 import android.content.Context
@@ -19,7 +19,9 @@ import bez.dev.featurenotes.R
 import bez.dev.featurenotes.data.NoteItem
 import bez.dev.featurenotes.databinding.DetailActivityListItemBinding
 
-class DetailListAdapter internal constructor(myListener: OnDetailItemClickListener, myItemTouchHelper: ItemTouchHelper, editMode: Boolean) : ListAdapter<NoteItem, DetailListAdapter.DetailItemHolder>(DIFF_CALLBACK) {
+class DetailListAdapter internal constructor(myListener: OnDetailItemClickListener, myItemTouchHelper: ItemTouchHelper, editMode: Boolean) : ListAdapter<NoteItem, DetailListAdapter.DetailItemHolder>(
+    DIFF_CALLBACK
+) {
 
     private var mIsEditMode: Boolean = editMode
     private var touchHelper: ItemTouchHelper = myItemTouchHelper

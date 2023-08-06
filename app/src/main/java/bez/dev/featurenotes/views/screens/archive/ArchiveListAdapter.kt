@@ -1,4 +1,4 @@
-package bez.dev.featurenotes.views
+package bez.dev.featurenotes.views.screens.archive
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -9,7 +9,9 @@ import androidx.recyclerview.widget.RecyclerView
 import bez.dev.featurenotes.data.Note
 import bez.dev.featurenotes.databinding.ArchiveListItemBinding
 
-class ArchiveListAdapter (context: OnItemClickListener) : ListAdapter<Note, ArchiveListAdapter.NoteHolder>(DIFF_CALLBACK) {
+class ArchiveListAdapter (context: OnItemClickListener) : ListAdapter<Note, ArchiveListAdapter.NoteHolder>(
+    DIFF_CALLBACK
+) {
     private var listener: OnItemClickListener = context
 
     internal fun getNoteAt(position: Int): Note {

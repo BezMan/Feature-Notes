@@ -1,4 +1,4 @@
-package bez.dev.featurenotes.views
+package bez.dev.featurenotes.views.screens.archive
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -15,8 +15,10 @@ import bez.dev.featurenotes.R
 import bez.dev.featurenotes.data.Note
 import bez.dev.featurenotes.databinding.FragmentArchiveBinding
 import bez.dev.featurenotes.databinding.NoNotesLayoutBinding
-import bez.dev.featurenotes.presenters.RepoViewModel
-import bez.dev.featurenotes.views.BaseActivity.Companion.toggleShowView
+import bez.dev.featurenotes.views.screens.BaseActivity
+import bez.dev.featurenotes.views.presenters.RepoViewModel
+import bez.dev.featurenotes.views.screens.BaseActivity.Companion.toggleShowView
+import bez.dev.featurenotes.views.screens.notes_list.MainActivity
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.launch
 

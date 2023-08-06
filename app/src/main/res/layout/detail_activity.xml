@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:layoutDirection="ltr"
     android:orientation="vertical"
-    tools:context=".views.DetailActivity">
+    tools:context=".views.screens.note_detail.DetailActivity">
 
     <include android:id="@+id/detail_activity_toolbar" layout="@layout/detail_activity_toolbar" />
 

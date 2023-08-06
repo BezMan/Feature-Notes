@@ -1,4 +1,4 @@
-package bez.dev.featurenotes.views
+package bez.dev.featurenotes.views.screens
 
 import android.content.Intent
 import android.util.Log
@@ -10,7 +10,8 @@ import androidx.preference.PreferenceManager
 import bez.dev.featurenotes.R
 import bez.dev.featurenotes.data.Note
 import bez.dev.featurenotes.misc.NotificationManager
-import bez.dev.featurenotes.presenters.RepoViewModel
+import bez.dev.featurenotes.views.screens.note_detail.DetailActivity
+import bez.dev.featurenotes.views.presenters.RepoViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
