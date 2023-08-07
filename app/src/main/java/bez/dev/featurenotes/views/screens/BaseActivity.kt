@@ -8,7 +8,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.PopupMenu
 import androidx.preference.PreferenceManager
 import bez.dev.featurenotes.R
-import bez.dev.featurenotes.data.Note
+import bez.dev.featurenotes.data.domain.Note
 import bez.dev.featurenotes.misc.NotificationManager
 import bez.dev.featurenotes.views.screens.note_detail.DetailActivity
 import bez.dev.featurenotes.views.presenters.RepoViewModel

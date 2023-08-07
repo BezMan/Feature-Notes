@@ -1,4 +1,4 @@
-package bez.dev.featurenotes.data
+package bez.dev.featurenotes.data.domain
 
 
 import android.os.Parcelable

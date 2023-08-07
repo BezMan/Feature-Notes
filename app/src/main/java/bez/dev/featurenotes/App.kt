@@ -1,4 +1,4 @@
-package bez.dev.featurenotes.misc
+package bez.dev.featurenotes
 
 import android.app.Application
 import android.content.Context

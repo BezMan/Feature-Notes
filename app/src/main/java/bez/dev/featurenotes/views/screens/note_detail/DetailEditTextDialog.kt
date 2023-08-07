@@ -5,7 +5,7 @@ import android.content.Context
 import android.os.Bundle
 import android.view.ViewGroup
 import android.view.Window
-import bez.dev.featurenotes.data.NoteItem
+import bez.dev.featurenotes.data.domain.NoteItem
 import bez.dev.featurenotes.databinding.DetailActivityDialogEditTextBinding
 import bez.dev.featurenotes.misc.Utils
 

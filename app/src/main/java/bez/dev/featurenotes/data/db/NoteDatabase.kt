@@ -1,4 +1,4 @@
-package bez.dev.featurenotes.data
+package bez.dev.featurenotes.data.db
 
 import android.content.Context
 import androidx.room.Database
@@ -6,6 +6,7 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 import androidx.sqlite.db.SupportSQLiteDatabase
+import bez.dev.featurenotes.data.domain.Note
 
 @Database(entities = [Note::class], version = 1, exportSchema = false)
 @TypeConverters(Converters::class)

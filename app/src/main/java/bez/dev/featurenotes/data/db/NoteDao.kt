@@ -1,6 +1,7 @@
-package bez.dev.featurenotes.data
+package bez.dev.featurenotes.data.db
 
 import androidx.room.*
+import bez.dev.featurenotes.data.domain.Note
 import kotlinx.coroutines.flow.Flow
 
 @Dao

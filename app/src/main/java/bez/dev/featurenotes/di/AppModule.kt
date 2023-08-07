@@ -2,8 +2,8 @@ package bez.dev.featurenotes.di
 
 import android.app.Application
 import androidx.lifecycle.ViewModel
-import bez.dev.featurenotes.data.IRepository
-import bez.dev.featurenotes.data.NoteDatabase
+import bez.dev.featurenotes.data.domain.IRepository
+import bez.dev.featurenotes.data.db.NoteDatabase
 import bez.dev.featurenotes.data.NoteRepository
 import bez.dev.featurenotes.data.SharedPrefs
 import bez.dev.featurenotes.misc.NotificationManager

@@ -4,9 +4,9 @@ import android.app.IntentService
 import android.content.Intent
 import android.os.Build
 import androidx.core.app.RemoteInput
-import bez.dev.featurenotes.data.IRepository
-import bez.dev.featurenotes.data.Note
-import bez.dev.featurenotes.data.NoteItem
+import bez.dev.featurenotes.data.domain.IRepository
+import bez.dev.featurenotes.data.domain.Note
+import bez.dev.featurenotes.data.domain.NoteItem
 import bez.dev.featurenotes.misc.NotificationManager
 import javax.inject.Inject
 

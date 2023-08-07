@@ -3,8 +3,8 @@ package bez.dev.featurenotes.views.presenters
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asLiveData
-import bez.dev.featurenotes.data.IRepository
-import bez.dev.featurenotes.data.Note
+import bez.dev.featurenotes.data.domain.IRepository
+import bez.dev.featurenotes.data.domain.Note
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 

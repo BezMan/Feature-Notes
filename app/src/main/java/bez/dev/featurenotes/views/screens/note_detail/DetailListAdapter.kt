@@ -16,7 +16,7 @@ import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import bez.dev.featurenotes.R
-import bez.dev.featurenotes.data.NoteItem
+import bez.dev.featurenotes.data.domain.NoteItem
 import bez.dev.featurenotes.databinding.DetailActivityListItemBinding
 
 class DetailListAdapter internal constructor(myListener: OnDetailItemClickListener, myItemTouchHelper: ItemTouchHelper, editMode: Boolean) : ListAdapter<NoteItem, DetailListAdapter.DetailItemHolder>(

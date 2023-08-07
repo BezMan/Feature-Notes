@@ -6,7 +6,7 @@ import android.widget.ImageView
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import bez.dev.featurenotes.data.Note
+import bez.dev.featurenotes.data.domain.Note
 import bez.dev.featurenotes.databinding.MainActivityListItemBinding
 
 class MainListAdapter internal constructor(context: OnItemClickListener) : ListAdapter<Note, MainListAdapter.NoteHolder>(

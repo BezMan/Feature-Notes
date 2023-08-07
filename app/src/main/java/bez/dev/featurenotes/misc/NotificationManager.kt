@@ -21,7 +21,7 @@ import androidx.core.app.NotificationManagerCompat
 import androidx.core.app.RemoteInput
 import androidx.core.app.TaskStackBuilder
 import androidx.core.content.ContextCompat
-import bez.dev.featurenotes.data.Note
+import bez.dev.featurenotes.data.domain.Note
 import bez.dev.featurenotes.services.AddFromNotificationIntentService
 import bez.dev.featurenotes.views.screens.BaseActivity.Companion.EXTRA_NOTE
 import bez.dev.featurenotes.views.screens.note_detail.DetailActivity

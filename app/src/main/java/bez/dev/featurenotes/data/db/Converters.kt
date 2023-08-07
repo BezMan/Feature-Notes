@@ -1,6 +1,7 @@
-package bez.dev.featurenotes.data
+package bez.dev.featurenotes.data.db
 
 import androidx.room.TypeConverter
+import bez.dev.featurenotes.data.domain.NoteItem
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 

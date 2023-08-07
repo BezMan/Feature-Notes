@@ -12,7 +12,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import bez.dev.featurenotes.R
-import bez.dev.featurenotes.data.Note
+import bez.dev.featurenotes.data.domain.Note
 import bez.dev.featurenotes.databinding.FragmentArchiveBinding
 import bez.dev.featurenotes.databinding.NoNotesLayoutBinding
 import bez.dev.featurenotes.views.screens.BaseActivity

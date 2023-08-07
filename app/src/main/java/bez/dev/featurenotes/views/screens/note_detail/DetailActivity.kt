@@ -17,8 +17,8 @@ import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import bez.dev.featurenotes.R
-import bez.dev.featurenotes.data.Note
-import bez.dev.featurenotes.data.NoteItem
+import bez.dev.featurenotes.data.domain.Note
+import bez.dev.featurenotes.data.domain.NoteItem
 import bez.dev.featurenotes.databinding.DetailActivityBinding
 import bez.dev.featurenotes.views.screens.BaseActivity
 import bez.dev.featurenotes.views.screens.note_detail.DetailPriorityDialog.OnPrioritySaveClickListener

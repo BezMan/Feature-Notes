@@ -1,5 +1,10 @@
 package bez.dev.featurenotes.data
 
+import bez.dev.featurenotes.data.db.NoteDao
+import bez.dev.featurenotes.data.db.NoteDatabase
+import bez.dev.featurenotes.data.domain.IRepository
+import bez.dev.featurenotes.data.domain.Note
+import bez.dev.featurenotes.data.domain.NoteItem
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
@@ -9,7 +14,8 @@ import javax.inject.Inject
 
 const val KEY_FIRST_RUN = "KEY_FIRST_RUN"
 
-class NoteRepository @Inject constructor(private val database: NoteDatabase, private val sharedPrefs: SharedPrefs) : IRepository {
+class NoteRepository @Inject constructor(private val database: NoteDatabase, private val sharedPrefs: SharedPrefs) :
+    IRepository {
 
     private val noteDao: NoteDao = database.noteDao()
     private val repoScope = CoroutineScope(Dispatchers.IO)
