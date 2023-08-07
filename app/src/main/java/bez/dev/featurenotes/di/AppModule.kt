@@ -6,6 +6,7 @@ import bez.dev.featurenotes.data.domain.IRepository
 import bez.dev.featurenotes.data.db.NoteDatabase
 import bez.dev.featurenotes.data.NoteRepository
 import bez.dev.featurenotes.data.SharedPrefs
+import bez.dev.featurenotes.data.domain.FlavorConfig
 import bez.dev.featurenotes.misc.NotificationManager
 import bez.dev.featurenotes.views.presenters.RepoViewModel
 import dagger.Module
@@ -21,8 +22,8 @@ object AppModule {
 
     @Provides
     @Singleton
-    fun provideNotesRepo(database: NoteDatabase, sharedPrefs: SharedPrefs): IRepository {
-        return NoteRepository(database, sharedPrefs)
+    fun provideNotesRepo(database: NoteDatabase, sharedPrefs: SharedPrefs, config: FlavorConfig): IRepository {
+        return NoteRepository(database, sharedPrefs, config)
     }
 
     @Provides
