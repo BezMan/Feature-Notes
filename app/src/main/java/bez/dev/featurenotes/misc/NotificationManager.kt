@@ -22,7 +22,7 @@ import androidx.core.app.RemoteInput
 import androidx.core.app.TaskStackBuilder
 import androidx.core.content.ContextCompat
 import bez.dev.featurenotes.data.domain.Note
-import bez.dev.featurenotes.services.AddFromNotificationIntentService
+import bez.dev.featurenotes.services.MyBroadcastReceiver
 import bez.dev.featurenotes.views.screens.BaseActivity.Companion.EXTRA_NOTE
 import bez.dev.featurenotes.views.screens.note_detail.DetailActivity
 import bez.dev.featurenotes.views.screens.notes_list.MainActivity
@@ -135,7 +135,7 @@ class NotificationManager (val context: Context) {
         // Create the RemoteInput specifying this key.
         val labelADD = "ADD"
         val labelDISMISS = "DISMISS"
-        val remoteInput = RemoteInput.Builder(AddFromNotificationIntentService.EXTRA_REPLY)
+        val remoteInput = RemoteInput.Builder(MyBroadcastReceiver.EXTRA_REPLY)
                 .setLabel(labelADD)
                 .build()
 
@@ -146,15 +146,15 @@ class NotificationManager (val context: Context) {
         var dismissActionPendingIntent: PendingIntent? = null
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            val intentAdd = Intent(context, AddFromNotificationIntentService::class.java)
-            intentAdd.action = AddFromNotificationIntentService.ACTION_REPLY
-            intentAdd.putExtra(AddFromNotificationIntentService.NOTIFICATION_NOTE, note)
-            replyActionPendingIntent = PendingIntent.getService(context, note.id.toInt(), intentAdd, PendingIntent.FLAG_MUTABLE)
+            val intentAdd = Intent(context, MyBroadcastReceiver::class.java)
+            intentAdd.action = MyBroadcastReceiver.ACTION_REPLY
+            intentAdd.putExtra(MyBroadcastReceiver.NOTIFICATION_NOTE, note)
+            replyActionPendingIntent = PendingIntent.getBroadcast(context, note.id.toInt(), intentAdd, PendingIntent.FLAG_MUTABLE)
 
-            val intentDismiss = Intent(context, AddFromNotificationIntentService::class.java)
-            intentDismiss.action = AddFromNotificationIntentService.ACTION_DISMISS
-            intentDismiss.putExtra(AddFromNotificationIntentService.NOTIFICATION_NOTE, note)
-            dismissActionPendingIntent = PendingIntent.getService(context, note.id.toInt(), intentDismiss, PendingIntent.FLAG_MUTABLE)
+            val intentDismiss = Intent(context, MyBroadcastReceiver::class.java)
+            intentDismiss.action = MyBroadcastReceiver.ACTION_DISMISS
+            intentDismiss.putExtra(MyBroadcastReceiver.NOTIFICATION_NOTE, note)
+            dismissActionPendingIntent = PendingIntent.getBroadcast(context, note.id.toInt(), intentDismiss, PendingIntent.FLAG_MUTABLE)
 
         }
 

@@ -1,6 +1,7 @@
 package bez.dev.featurenotes.services
 
-import android.app.IntentService
+import android.content.BroadcastReceiver
+import android.content.Context
 import android.content.Intent
 import android.os.Build
 import androidx.core.app.RemoteInput
@@ -8,9 +9,11 @@ import bez.dev.featurenotes.data.domain.IRepository
 import bez.dev.featurenotes.data.domain.Note
 import bez.dev.featurenotes.data.domain.NoteItem
 import bez.dev.featurenotes.misc.NotificationManager
+import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
-class AddFromNotificationIntentService : IntentService("AddFromNotificationIntentService") {
+@AndroidEntryPoint
+class MyBroadcastReceiver : BroadcastReceiver() {
 
     @Inject
     lateinit var notificationManager: NotificationManager
@@ -18,9 +21,9 @@ class AddFromNotificationIntentService : IntentService("AddFromNotificationInten
     @Inject
     lateinit var noteRepository: IRepository
 
-    @Deprecated("Deprecated in Java")
-    override fun onHandleIntent(intent: Intent?) {
-        val note = intent?.let {
+
+    override fun onReceive(context: Context, intent: Intent) {
+        val note = intent.let {
             it.getParcelableExtra(NOTIFICATION_NOTE) as Note?
         }
 
@@ -31,6 +34,7 @@ class AddFromNotificationIntentService : IntentService("AddFromNotificationInten
                 handleActionDismiss(note)
             }
         }
+
     }
 
     /**
@@ -53,7 +57,9 @@ class AddFromNotificationIntentService : IntentService("AddFromNotificationInten
      * Handles notification action for ADD items.
      */
     private fun handleActionAdd(note: Note, intent: Intent) {
-        val message = RemoteInput.getResultsFromIntent(intent)?.getCharSequence(EXTRA_REPLY)
+        val message = RemoteInput.getResultsFromIntent(intent)?.getCharSequence(
+            EXTRA_REPLY
+        )
         if (!message.isNullOrBlank()) {
             note.items.add(0, NoteItem(message.toString().trim()))
         }
@@ -61,13 +67,11 @@ class AddFromNotificationIntentService : IntentService("AddFromNotificationInten
         notificationManager.updateSpecificNotification(note)
     }
 
-
     companion object {
         const val ACTION_REPLY = "ACTION_REPLY"
         const val ACTION_DISMISS = "ACTION_DISMISS"
         const val EXTRA_REPLY = "EXTRA_REPLY"
         const val NOTIFICATION_NOTE = "NOTIFICATION_NOTE"
     }
-
 
 }
