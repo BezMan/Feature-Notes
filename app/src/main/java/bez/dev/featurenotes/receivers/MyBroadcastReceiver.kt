@@ -1,4 +1,4 @@
-package bez.dev.featurenotes.services
+package bez.dev.featurenotes.receivers
 
 import android.content.BroadcastReceiver
 import android.content.Context

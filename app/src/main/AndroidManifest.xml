@@ -33,7 +33,7 @@
             android:name=".views.screens.SettingsActivity"
             android:label="@string/title_activity_settings" />
 
-        <receiver android:name=".services.MyBroadcastReceiver"
+        <receiver android:name=".receivers.MyBroadcastReceiver"
             android:exported="false">
         </receiver>
 

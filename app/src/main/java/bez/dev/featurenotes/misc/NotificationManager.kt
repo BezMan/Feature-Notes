@@ -22,7 +22,7 @@ import androidx.core.app.RemoteInput
 import androidx.core.app.TaskStackBuilder
 import androidx.core.content.ContextCompat
 import bez.dev.featurenotes.data.domain.Note
-import bez.dev.featurenotes.services.MyBroadcastReceiver
+import bez.dev.featurenotes.receivers.MyBroadcastReceiver
 import bez.dev.featurenotes.views.screens.BaseActivity.Companion.EXTRA_NOTE
 import bez.dev.featurenotes.views.screens.note_detail.DetailActivity
 import bez.dev.featurenotes.views.screens.notes_list.MainActivity
