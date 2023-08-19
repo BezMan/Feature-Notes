@@ -47,14 +47,14 @@ object AppModule {
 
 }
 
-@Module
-@InstallIn(ViewModelComponent::class)
-object ViewModelModule {
-
-    @Provides
-    @Singleton
-    fun provideSharedViewModel(repository: IRepository): ViewModel {
-        return RepoViewModel(repository)
-    }
-
-}
+//@Module
+//@InstallIn(ViewModelComponent::class)
+//object ViewModelModule {
+//
+//    @Provides
+//    @Singleton
+//    fun provideSharedViewModel(repository: IRepository): ViewModel {
+//        return RepoViewModel(repository)
+//    }
+//
+//}
