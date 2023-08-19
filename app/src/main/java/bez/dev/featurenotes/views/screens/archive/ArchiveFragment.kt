@@ -1,170 +1,227 @@
-package bez.dev.featurenotes.views.screens.archive
-
 import android.os.Bundle
 import android.view.LayoutInflater
-import android.view.Menu
-import android.view.MenuInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
-import androidx.appcompat.widget.PopupMenu
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
+import androidx.compose.material.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.MoreVert
+import androidx.compose.material.icons.filled.Search
+import androidx.compose.material.icons.filled.Undo
+import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.*
+import androidx.compose.ui.unit.dp
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.recyclerview.widget.LinearLayoutManager
-import bez.dev.featurenotes.R
 import bez.dev.featurenotes.data.domain.Note
-import bez.dev.featurenotes.databinding.FragmentArchiveBinding
-import bez.dev.featurenotes.databinding.NoNotesLayoutBinding
-import bez.dev.featurenotes.views.screens.BaseActivity
 import bez.dev.featurenotes.views.presenters.RepoViewModel
-import bez.dev.featurenotes.views.screens.BaseActivity.Companion.toggleShowView
-import bez.dev.featurenotes.views.screens.notes_list.MainActivity
-import com.google.android.material.snackbar.Snackbar
+import bez.dev.featurenotes.views.screens.BaseActivity
 import kotlinx.coroutines.launch
 
+class ArchiveFragment : Fragment() {
 
-class ArchiveFragment : Fragment(), ArchiveListAdapter.OnItemClickListener {
-
-    private var _bindingNoNotes: NoNotesLayoutBinding? = null
-    private val bindingNoNotes get() = _bindingNoNotes!!
-
-    private var _binding: FragmentArchiveBinding? = null
-    private val binding get() = _binding!!
-
-    private lateinit var archiveListAdapter: ArchiveListAdapter
-    private var archivedList: List<Note> = ArrayList()
-    private lateinit var baseActivity: BaseActivity
-
-    internal val repoViewModel: RepoViewModel by activityViewModels()
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setHasOptionsMenu(true)
-    }
+    private val repoViewModel: RepoViewModel by activityViewModels()
+    private val baseActivity: BaseActivity by lazy { requireActivity() as BaseActivity }
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = FragmentArchiveBinding.inflate(inflater, container, false)
-        _bindingNoNotes = NoNotesLayoutBinding.bind(binding.root)
-        return binding.root
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
-        baseActivity = requireActivity() as BaseActivity
-
-        initNoteViewModel()
-
-        initUI()
-    }
-
-
-    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        inflater.inflate(R.menu.archive_fragment_menu, menu)
-        super.onCreateOptionsMenu(menu, inflater)
-    }
-
-
-    private fun initUI() {
-        //TOOLBAR
-        (requireActivity() as MainActivity).setToolbarText(resources.getText(R.string.nav_archive))
-
-        //RECYCLER
-        binding.recyclerViewArchive.layoutManager = LinearLayoutManager(context)
-        binding.recyclerViewArchive.setHasFixedSize(true)
-        archiveListAdapter = ArchiveListAdapter(this)
-        binding.recyclerViewArchive.adapter = archiveListAdapter
-
-        //TEXT WHEN EMPTY LIST
-        bindingNoNotes.noNotesView.text = resources.getText(R.string.empty_archive)
-    }
-
-
-    private fun initNoteViewModel() {
-        repoViewModel.getArchivedNotes().observe(viewLifecycleOwner) {
-            archivedList = it
-            refreshUI()
-        }
-    }
-
-
-    private fun refreshUI() {
-        archiveListAdapter.submitList(archivedList)  //reads the adapter DIFF we created, and displays list
-
-        //no notes layout
-        bindingNoNotes.noNotesView.toggleShowView(archivedList.isEmpty())
-    }
-
-
-    override fun onNoteItemTextClick(note: Note) {
-        baseActivity.editNote(note, true)
-    }
-
-    override fun onNoteItemUnArchive(note: Note) {
-        showUndoArchiveRestore(note)
-    }
-
-    override fun onNoteItemOverflowClick(note: Note, overflow: ImageView) {
-        val popupMenu = PopupMenu(baseActivity, overflow)
-        popupMenu.inflate(R.menu.overflow_note_popup_archived)
-
-        baseActivity.addIconsToMenu(popupMenu)
-
-        popupMenu.setOnMenuItemClickListener {
-            when (it.itemId) {
-                R.id.main_overflow_note_edit -> {
-                    baseActivity.editNote(note, true) // add param to diff the archived state
-                }
-                R.id.main_overflow_note_share -> {
-                    baseActivity.shareNote(note)
-                }
-                R.id.main_overflow_note_delete -> {
-                    showUndoDelete(note)
-                }
-                R.id.main_overflow_note_unarchive -> {
-                    showUndoArchiveRestore(note)
-                }
-
+        return ComposeView(requireContext()).apply {
+            setContent {
+                ArchiveScreen()
             }
-            false
         }
-
-        popupMenu.show() //showing popup menu
     }
 
+    @Composable
+    fun ArchiveScreen() {
+        val archivedNotes by repoViewModel.getArchivedNotes().collectAsState(emptyList())
+        val coroutineScope = rememberCoroutineScope()
+        val scaffoldState = rememberScaffoldState()
 
-    private fun showUndoDelete(note: Note) {
-        baseActivity.deleteNote(note)
-        val snack = Snackbar.make(binding.notesLayout, note.title + " - note deleted", Snackbar.LENGTH_INDEFINITE)
-
-        snack.setDuration(8000)
-                .setAction("UNDO") {
-                    // execute when UNDO is clicked
-                    baseActivity.baseCoroutineIO.launch {
-                        repoViewModel.insert(note)
+        Scaffold(
+            scaffoldState = scaffoldState, // Pass scaffoldState to Scaffold
+            topBar = {
+                TopAppBar(
+                    title = { Text(text = "Archive") },
+                    actions = {
+                        IconButton(onClick = { /* Handle action */ }) {
+                            Icon(imageVector = Icons.Default.Search, contentDescription = null)
+                        }
+                    }
+                )
+            },
+            content = {
+                val modifier = Modifier.padding(it)
+                Column(modifier) { // Apply the padding modifier to the Column
+                    if (archivedNotes.isEmpty()) {
+                        NoNotesView()
+                    } else {
+                        NoteList(
+                            notes = archivedNotes,
+                            onItemClick = { note -> baseActivity.editNote(note, true) },
+                            onUnArchiveClick = { note -> showUndoArchiveRestore(note, scaffoldState) },
+                            onOverflowClick = { note, overflow -> showPopupMenu(note, overflow, scaffoldState) }
+                        )
                     }
                 }
-        snack.show()
+            }
+        )
     }
 
+    @Composable
+    fun NoNotesView() {
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(16.dp),
+            contentAlignment = Alignment.Center
+        ) {
+            Text(
+                text = "No archived notes",
+                style = MaterialTheme.typography.h5,
+                color = Color.Gray
+            )
+        }
+    }
 
-    private fun showUndoArchiveRestore(note: Note) {
+    @Composable
+    fun NoteList(
+        notes: List<Note>,
+        onItemClick: (Note) -> Unit,
+        onUnArchiveClick: (Note) -> Unit,
+        onOverflowClick: (Note, OverflowMenu) -> Unit
+    ) {
+        LazyColumn {
+            items(notes) { note ->
+                NoteItem(
+                    note = note,
+                    onItemClick = { onItemClick(note) },
+                    onUnArchiveClick = { onUnArchiveClick(note) },
+                    onOverflowClick = { overflow -> onOverflowClick(note, overflow) }
+                )
+            }
+        }
+    }
+
+    @Composable
+    fun NoteItem(
+        note: Note,
+        onItemClick: () -> Unit,
+        onUnArchiveClick: () -> Unit,
+        onOverflowClick: (OverflowMenu) -> Unit
+    ) {
+        Card(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(8.dp),
+            elevation = 4.dp
+        ) {
+            Column(
+                modifier = Modifier
+                    .clickable { onItemClick() }
+                    .padding(16.dp)
+            ) {
+                Text(text = note.title, style = MaterialTheme.typography.h6)
+                Text(text = note.title, style = MaterialTheme.typography.body2)
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(top = 8.dp),
+                    horizontalArrangement = Arrangement.SpaceBetween
+                ) {
+                    IconButton(
+                        onClick = { onUnArchiveClick() },
+                        modifier = Modifier.size(36.dp)
+                    ) {
+                        Icon(
+                            imageVector = Icons.Default.Undo,
+                            contentDescription = null,
+                            tint = Color.Gray
+                        )
+                    }
+                    OverflowMenu { overflow -> onOverflowClick(overflow) }
+                }
+            }
+        }
+    }
+
+    @Composable
+    fun OverflowMenu(onClick: (OverflowMenu) -> Unit) {
+        var expanded by remember { mutableStateOf(false) }
+        IconButton(onClick = { expanded = true }) {
+            Icon(imageVector = Icons.Default.MoreVert, contentDescription = null)
+        }
+        DropdownMenu(
+            expanded = expanded,
+            onDismissRequest = { expanded = false }
+        ) {
+            DropdownMenuItem(onClick = { onClick(OverflowMenu.EDIT) }) {
+                Text("Edit")
+            }
+            DropdownMenuItem(onClick = { onClick(OverflowMenu.SHARE) }) {
+                Text("Share")
+            }
+            DropdownMenuItem(onClick = { onClick(OverflowMenu.DELETE) }) {
+                Text("Delete")
+            }
+            DropdownMenuItem(onClick = { onClick(OverflowMenu.UNARCHIVE) }) {
+                Text("Unarchive")
+            }
+        }
+    }
+
+    private fun showUndoArchiveRestore(note: Note, scaffoldState: ScaffoldState) {
         baseActivity.unArchiveNote(note)
-        val snack = Snackbar.make(binding.notesLayout, note.title + " - note unarchived", Snackbar.LENGTH_INDEFINITE)
 
-        snack.setDuration(8000)
-                .setAction("UNDO") {
-                    // execute when UNDO is clicked
-                    baseActivity.baseCoroutineIO.launch {
-                        repoViewModel.archive(note)
-                    }
+        baseActivity.baseCoroutineIO.launch {
+            scaffoldState.snackbarHostState.showSnackbar(
+                message = "${note.title} - note unarchived",
+                actionLabel = "UNDO",
+                duration = SnackbarDuration.Short // Specify the duration here
+            ).apply {
+                // Execute when UNDO is clicked
+                baseActivity.baseCoroutineIO.launch {
+                    repoViewModel.archive(note)
                 }
-        snack.show()
+            }
+        }
+    }
+    private fun showPopupMenu(note: Note, overflow: OverflowMenu, scaffoldState: ScaffoldState) {
+        when (overflow) {
+            OverflowMenu.EDIT -> baseActivity.editNote(note, true)
+            OverflowMenu.SHARE -> baseActivity.shareNote(note)
+            OverflowMenu.DELETE -> showUndoDelete(note, scaffoldState)
+            OverflowMenu.UNARCHIVE -> showUndoArchiveRestore(note, scaffoldState)
+        }
     }
 
+    private fun showUndoDelete(note: Note, scaffoldState: ScaffoldState) {
+        baseActivity.deleteNote(note)
 
+        baseActivity.baseCoroutineIO.launch {
+            scaffoldState.snackbarHostState.showSnackbar(
+                message = "${note.title} - note deleted",
+                actionLabel = "UNDO",
+                duration = SnackbarDuration.Short // Specify the duration here
+            ).apply {
+                // Execute when UNDO is clicked
+                baseActivity.baseCoroutineIO.launch {
+                    repoViewModel.insert(note)
+                }
+            }
+        }
+    }
+
+    enum class OverflowMenu {
+        EDIT, SHARE, DELETE, UNARCHIVE
+    }
 }

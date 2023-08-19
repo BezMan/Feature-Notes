@@ -6,6 +6,7 @@ import androidx.lifecycle.asLiveData
 import bez.dev.featurenotes.data.domain.IRepository
 import bez.dev.featurenotes.data.domain.Note
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
 @HiltViewModel
@@ -40,6 +41,6 @@ class RepoViewModel @Inject constructor(private val repository: IRepository) : V
 
     fun getAllNotes(): LiveData<List<Note>> = repository.getAllNotes().asLiveData()
 
-    fun getArchivedNotes(): LiveData<List<Note>> = repository.getArchivedNotes().asLiveData()
+    fun getArchivedNotes(): Flow<List<Note>> = repository.getArchivedNotes()
 
 }
