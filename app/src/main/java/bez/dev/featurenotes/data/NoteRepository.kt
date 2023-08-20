@@ -2,7 +2,6 @@ package bez.dev.featurenotes.data
 
 import bez.dev.featurenotes.data.db.NoteDao
 import bez.dev.featurenotes.data.db.NoteDatabase
-import bez.dev.featurenotes.data.domain.FlavorConfig
 import bez.dev.featurenotes.data.domain.IRepository
 import bez.dev.featurenotes.data.domain.Note
 import bez.dev.featurenotes.data.domain.NoteItem
@@ -17,8 +16,7 @@ const val KEY_FIRST_RUN = "KEY_FIRST_RUN"
 
 class NoteRepository @Inject constructor(
     private val database: NoteDatabase,
-    private val sharedPrefs: SharedPrefs,
-    private val flavorConfig: FlavorConfig
+    private val sharedPrefs: SharedPrefs
 ) :
     IRepository {
 
@@ -34,7 +32,7 @@ class NoteRepository @Inject constructor(
 
         if (sharedPrefs.getBoolValue(KEY_FIRST_RUN, true)) {
             CoroutineScope(Dispatchers.IO).launch {
-                insert(createStarterNotes(flavorConfig.notesCount))
+                insert(createStarterNotes(5))
                 sharedPrefs.setBoolValue(KEY_FIRST_RUN, false) //toggle to not first run anymore:
             }
         }

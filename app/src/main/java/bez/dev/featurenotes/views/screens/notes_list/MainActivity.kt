@@ -1,6 +1,5 @@
 package bez.dev.featurenotes.views.screens.notes_list
 
-import ArchiveFragment
 import android.content.Intent
 import android.os.Bundle
 import android.view.MenuItem
@@ -15,8 +14,11 @@ import bez.dev.featurenotes.R
 import bez.dev.featurenotes.databinding.MainActivityBinding
 import bez.dev.featurenotes.views.screens.BaseActivity
 import bez.dev.featurenotes.views.screens.SettingsActivity
+import bez.dev.featurenotes.views.screens.archive.ArchiveFragment
 import com.google.android.material.navigation.NavigationView
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedListener {
 
     private lateinit var _binding: MainActivityBinding
