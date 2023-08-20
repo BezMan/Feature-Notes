@@ -4,6 +4,7 @@ import android.app.Application
 import bez.dev.featurenotes.data.NoteRepository
 import bez.dev.featurenotes.data.SharedPrefs
 import bez.dev.featurenotes.data.db.NoteDatabase
+import bez.dev.featurenotes.data.domain.FlavorConfig
 import bez.dev.featurenotes.data.domain.IRepository
 import bez.dev.featurenotes.misc.NotificationManager
 import dagger.Module
@@ -18,8 +19,8 @@ object AppModule {
 
     @Provides
     @Singleton
-    fun provideNotesRepo(database: NoteDatabase, sharedPrefs: SharedPrefs): IRepository {
-        return NoteRepository(database, sharedPrefs)
+    fun provideNotesRepo(database: NoteDatabase, sharedPrefs: SharedPrefs, config: FlavorConfig): IRepository {
+        return NoteRepository(database, sharedPrefs, config)
     }
 
     @Provides
@@ -39,6 +40,11 @@ object AppModule {
     @Singleton
     fun provideNotificationManager(context: Application): NotificationManager {
         return NotificationManager(context)
+    }
+
+    @Provides
+    fun provideInitNotesCount(): FlavorConfig {
+        return FlavorConfig(FlavorData.INIT_NOTES_COUNT)
     }
 
 }
