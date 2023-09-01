@@ -41,6 +41,6 @@ class RepoViewModel @Inject constructor(private val repository: IRepository) : V
 
     fun getAllNotes(): LiveData<List<Note>> = repository.getAllNotes().asLiveData()
 
-    fun getArchivedNotes(): Flow<List<Note>> = repository.getArchivedNotes()
+    fun getArchivedNotes(): LiveData<List<Note>> = repository.getArchivedNotes().asLiveData()
 
 }

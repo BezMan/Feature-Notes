@@ -16,9 +16,7 @@ import bez.dev.featurenotes.views.screens.BaseActivity
 import bez.dev.featurenotes.views.screens.SettingsActivity
 import bez.dev.featurenotes.views.screens.archive.ArchiveFragment
 import com.google.android.material.navigation.NavigationView
-import dagger.hilt.android.AndroidEntryPoint
 
-@AndroidEntryPoint
 class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedListener {
 
     private lateinit var _binding: MainActivityBinding

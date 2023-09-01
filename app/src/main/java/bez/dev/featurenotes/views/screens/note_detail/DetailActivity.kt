@@ -23,12 +23,10 @@ import bez.dev.featurenotes.databinding.DetailActivityBinding
 import bez.dev.featurenotes.views.screens.BaseActivity
 import bez.dev.featurenotes.views.screens.note_detail.DetailPriorityDialog.OnPrioritySaveClickListener
 import com.google.android.material.snackbar.Snackbar
-import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.*
 
-@AndroidEntryPoint
 class DetailActivity : BaseActivity(), OnPrioritySaveClickListener,
     DetailEditTextDialog.OnItemSaveClickListener, DetailListAdapter.OnDetailItemClickListener {
 
@@ -245,7 +243,7 @@ class DetailActivity : BaseActivity(), OnPrioritySaveClickListener,
         detailListAdapter.submitList(currentNote.items)
 
         if (!isNoteEmpty() && isExistingNote && currentNote.isNotification) {
-//            notificationManager.updateSpecificNotification(currentNote)
+            notificationManager.updateSpecificNotification(currentNote)
         }
 
     }

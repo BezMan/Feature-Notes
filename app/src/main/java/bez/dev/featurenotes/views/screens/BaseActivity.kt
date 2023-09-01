@@ -20,15 +20,15 @@ import javax.inject.Inject
 @AndroidEntryPoint
 abstract class BaseActivity : AppCompatActivity() {
 
-//    @Inject
-//    lateinit var notificationManager: NotificationManager
+    @Inject
+    lateinit var notificationManager: NotificationManager
 
     internal val repoViewModel: RepoViewModel by viewModels()
 
     val baseCoroutineIO = CoroutineScope(Dispatchers.IO)
 
     fun deleteNote(note: Note) {
-//        notificationManager.cancelNotificationById(note.id)
+        notificationManager.cancelNotificationById(note.id)
         repoViewModel.delete(note)
     }
 

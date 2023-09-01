@@ -13,21 +13,18 @@ import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.widget.PopupMenu
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import bez.dev.featurenotes.R
 import bez.dev.featurenotes.data.domain.Note
 import bez.dev.featurenotes.databinding.FragmentNotesBinding
 import bez.dev.featurenotes.databinding.NoNotesLayoutBinding
-import bez.dev.featurenotes.views.screens.BaseActivity
 import bez.dev.featurenotes.views.presenters.RepoViewModel
+import bez.dev.featurenotes.views.screens.BaseActivity
 import bez.dev.featurenotes.views.screens.BaseActivity.Companion.toggleShowView
 import bez.dev.featurenotes.views.screens.ImageActivity
 import com.google.android.material.snackbar.Snackbar
-import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
-@AndroidEntryPoint
 class NotesFragment : Fragment(), MainListAdapter.OnItemClickListener {
 
     private var _bindingNoNotes: NoNotesLayoutBinding? = null
@@ -41,7 +38,7 @@ class NotesFragment : Fragment(), MainListAdapter.OnItemClickListener {
     private lateinit var restorePoint: List<Note>
     private lateinit var baseActivity: BaseActivity
 
-    val repoViewModel: RepoViewModel by activityViewModels()
+    private val repoViewModel: RepoViewModel by activityViewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -109,7 +106,7 @@ class NotesFragment : Fragment(), MainListAdapter.OnItemClickListener {
         bindingNoNotes.noNotesView.toggleShowView(noteList.isEmpty())
 
         //Notification
-//        baseActivity.notificationManager.updateNotification(noteList)
+        baseActivity.notificationManager.updateNotification(noteList)
     }
 
 
@@ -183,7 +180,7 @@ class NotesFragment : Fragment(), MainListAdapter.OnItemClickListener {
 
     override fun onToggleNotificationClick(note: Note, isChecked: Boolean) {
         if (isChecked != note.isNotification) {
-//            baseActivity.notificationManager.cancelNotificationById(note.id)
+            baseActivity.notificationManager.cancelNotificationById(note.id)
 
             note.isNotification = isChecked
             repoViewModel.update(note)
