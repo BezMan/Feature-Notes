@@ -9,10 +9,9 @@ import androidx.recyclerview.widget.RecyclerView
 import bez.dev.featurenotes.data.domain.Note
 import bez.dev.featurenotes.databinding.MainActivityListItemBinding
 
-class MainListAdapter internal constructor(context: OnItemClickListener) : ListAdapter<Note, MainListAdapter.NoteHolder>(
+class MainListAdapter internal constructor(private val listener: OnItemClickListener) : ListAdapter<Note, MainListAdapter.NoteHolder>(
     DIFF_CALLBACK
 ) {
-    private var listener: OnItemClickListener = context
 
     internal fun getNoteAt(position: Int): Note {
         return getItem(position)

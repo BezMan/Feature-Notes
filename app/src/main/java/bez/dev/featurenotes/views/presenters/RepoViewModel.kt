@@ -6,7 +6,6 @@ import androidx.lifecycle.asLiveData
 import bez.dev.featurenotes.data.domain.IRepository
 import bez.dev.featurenotes.data.domain.Note
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
 @HiltViewModel
