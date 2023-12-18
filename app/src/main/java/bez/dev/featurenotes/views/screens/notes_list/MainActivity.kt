@@ -12,12 +12,14 @@ import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction
 import bez.dev.featurenotes.R
 import bez.dev.featurenotes.databinding.MainActivityBinding
-import bez.dev.featurenotes.views.screens.BaseActivity
+import bez.dev.featurenotes.views.screens.ActivityDelegateImpl
 import bez.dev.featurenotes.views.screens.SettingsActivity
 import bez.dev.featurenotes.views.screens.archive.ArchiveFragment
 import com.google.android.material.navigation.NavigationView
+import dagger.hilt.android.AndroidEntryPoint
 
-class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedListener {
+@AndroidEntryPoint
+class MainActivity : ActivityDelegateImpl(), NavigationView.OnNavigationItemSelectedListener {
 
     private lateinit var _binding: MainActivityBinding
 

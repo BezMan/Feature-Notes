@@ -15,15 +15,27 @@ import bez.dev.featurenotes.R
 import bez.dev.featurenotes.data.domain.Note
 import bez.dev.featurenotes.databinding.FragmentArchiveBinding
 import bez.dev.featurenotes.databinding.NoNotesLayoutBinding
-import bez.dev.featurenotes.views.screens.BaseActivity
+import bez.dev.featurenotes.misc.NotificationManager
 import bez.dev.featurenotes.views.presenters.RepoViewModel
-import bez.dev.featurenotes.views.screens.BaseActivity.Companion.toggleShowView
+import bez.dev.featurenotes.views.screens.ActivityDelegate
+import bez.dev.featurenotes.views.screens.ActivityDelegateImpl
+import bez.dev.featurenotes.views.screens.ActivityDelegateImpl.Companion.toggleShowView
 import bez.dev.featurenotes.views.screens.notes_list.MainActivity
 import com.google.android.material.snackbar.Snackbar
+import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 
-class ArchiveFragment : Fragment(), ArchiveListAdapter.OnItemClickListener {
+@AndroidEntryPoint
+class ArchiveFragment : ActivityDelegate by ActivityDelegateImpl(), Fragment(), ArchiveListAdapter.OnItemClickListener {
+
+    @Inject
+    lateinit var notificationManager: NotificationManager
+
+    val baseCoroutineIO = CoroutineScope(Dispatchers.IO)
 
     private var _bindingNoNotes: NoNotesLayoutBinding? = null
     private val bindingNoNotes get() = _bindingNoNotes!!
@@ -33,7 +45,6 @@ class ArchiveFragment : Fragment(), ArchiveListAdapter.OnItemClickListener {
 
     private lateinit var archiveListAdapter: ArchiveListAdapter
     private var archivedList: List<Note> = ArrayList()
-    private lateinit var baseActivity: BaseActivity
 
     internal val repoViewModel: RepoViewModel by activityViewModels()
 
@@ -54,8 +65,6 @@ class ArchiveFragment : Fragment(), ArchiveListAdapter.OnItemClickListener {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        baseActivity = requireActivity() as BaseActivity
 
         initNoteViewModel()
 
@@ -101,7 +110,7 @@ class ArchiveFragment : Fragment(), ArchiveListAdapter.OnItemClickListener {
 
 
     override fun onNoteItemTextClick(note: Note) {
-        baseActivity.editNote(note, true)
+        editNote(requireContext(), note, true)
     }
 
     override fun onNoteItemUnArchive(note: Note) {
@@ -109,18 +118,18 @@ class ArchiveFragment : Fragment(), ArchiveListAdapter.OnItemClickListener {
     }
 
     override fun onNoteItemOverflowClick(note: Note, overflow: ImageView) {
-        val popupMenu = PopupMenu(baseActivity, overflow)
+        val popupMenu = PopupMenu(requireContext(), overflow)
         popupMenu.inflate(R.menu.overflow_note_popup_archived)
 
-        baseActivity.addIconsToMenu(popupMenu)
+        addIconsToMenu(popupMenu)
 
         popupMenu.setOnMenuItemClickListener {
             when (it.itemId) {
                 R.id.main_overflow_note_edit -> {
-                    baseActivity.editNote(note, true) // add param to diff the archived state
+                    editNote(requireContext(), note, true) // add param to diff the archived state
                 }
                 R.id.main_overflow_note_share -> {
-                    baseActivity.shareNote(note)
+                    shareNote(note)
                 }
                 R.id.main_overflow_note_delete -> {
                     showUndoDelete(note)
@@ -138,13 +147,13 @@ class ArchiveFragment : Fragment(), ArchiveListAdapter.OnItemClickListener {
 
 
     private fun showUndoDelete(note: Note) {
-        baseActivity.deleteNote(note)
+        deleteNote(repoViewModel, notificationManager, note)
         val snack = Snackbar.make(binding.notesLayout, note.title + " - note deleted", Snackbar.LENGTH_INDEFINITE)
 
         snack.setDuration(8000)
             .setAction("UNDO") {
                 // execute when UNDO is clicked
-                baseActivity.baseCoroutineIO.launch {
+                baseCoroutineIO.launch {
                     repoViewModel.insert(note)
                 }
             }
@@ -153,13 +162,13 @@ class ArchiveFragment : Fragment(), ArchiveListAdapter.OnItemClickListener {
 
 
     private fun showUndoArchiveRestore(note: Note) {
-        baseActivity.unArchiveNote(note)
+        unArchiveNote(repoViewModel, note)
         val snack = Snackbar.make(binding.notesLayout, note.title + " - note unarchived", Snackbar.LENGTH_INDEFINITE)
 
         snack.setDuration(8000)
             .setAction("UNDO") {
                 // execute when UNDO is clicked
-                baseActivity.baseCoroutineIO.launch {
+                baseCoroutineIO.launch {
                     repoViewModel.archive(note)
                 }
             }

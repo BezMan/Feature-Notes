@@ -18,14 +18,25 @@ import bez.dev.featurenotes.R
 import bez.dev.featurenotes.data.domain.Note
 import bez.dev.featurenotes.databinding.FragmentNotesBinding
 import bez.dev.featurenotes.databinding.NoNotesLayoutBinding
+import bez.dev.featurenotes.misc.NotificationManager
 import bez.dev.featurenotes.views.presenters.RepoViewModel
-import bez.dev.featurenotes.views.screens.BaseActivity
-import bez.dev.featurenotes.views.screens.BaseActivity.Companion.toggleShowView
 import bez.dev.featurenotes.views.screens.ImageActivity
+import bez.dev.featurenotes.views.screens.ActivityDelegate
+import bez.dev.featurenotes.views.screens.ActivityDelegateImpl
+import bez.dev.featurenotes.views.screens.ActivityDelegateImpl.Companion.toggleShowView
 import com.google.android.material.snackbar.Snackbar
+import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class NotesFragment : Fragment(), MainListAdapter.OnItemClickListener {
+@AndroidEntryPoint
+class NotesFragment : ActivityDelegate by ActivityDelegateImpl(), Fragment(), MainListAdapter.OnItemClickListener {
+
+    @Inject
+    lateinit var notificationManager: NotificationManager
+
 
     private var _bindingNoNotes: NoNotesLayoutBinding? = null
     private val bindingNoNotes get() = _bindingNoNotes!!
@@ -36,7 +47,8 @@ class NotesFragment : Fragment(), MainListAdapter.OnItemClickListener {
     private lateinit var mainListAdapter: MainListAdapter
     private var noteList: List<Note> = ArrayList()
     private lateinit var restorePoint: List<Note>
-    private lateinit var baseActivity: BaseActivity
+
+    val baseCoroutineIO = CoroutineScope(Dispatchers.IO)
 
     private val repoViewModel: RepoViewModel by activityViewModels()
 
@@ -58,8 +70,6 @@ class NotesFragment : Fragment(), MainListAdapter.OnItemClickListener {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        baseActivity = activity as BaseActivity
 
         initNoteViewModel()
 
@@ -87,7 +97,7 @@ class NotesFragment : Fragment(), MainListAdapter.OnItemClickListener {
         bindingNoNotes.noNotesView.text = resources.getText(R.string.empty_notes)
 
         //FAB
-        binding.fabAddNote.setOnClickListener { baseActivity.addNote() }
+        binding.fabAddNote.setOnClickListener { addNote(requireContext()) }
     }
 
 
@@ -106,14 +116,14 @@ class NotesFragment : Fragment(), MainListAdapter.OnItemClickListener {
         bindingNoNotes.noNotesView.toggleShowView(noteList.isEmpty())
 
         //Notification
-        baseActivity.notificationManager.updateNotification(noteList)
+        notificationManager.updateNotification(noteList)
     }
 
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.main_menu_add_note -> {
-                baseActivity.addNote()
+                addNote(requireContext())
             }
             R.id.main_menu_reset_all_notifications -> {
                 resetAllNotifications()
@@ -139,29 +149,29 @@ class NotesFragment : Fragment(), MainListAdapter.OnItemClickListener {
 
 
     override fun onNoteItemTextClick(note: Note) {
-        baseActivity.editNote(note)
+        editNote(requireContext(), note)
     }
 
     override fun onNoteItemOverflowClick(note: Note, overflow: ImageView, noteHolder: MainListAdapter.NoteHolder) {
-        val popupMenu = PopupMenu(baseActivity, overflow)
+        val popupMenu = PopupMenu(requireContext(), overflow)
         popupMenu.inflate(R.menu.overflow_note_popup)
 
-        baseActivity.addIconsToMenu(popupMenu)
+        addIconsToMenu(popupMenu)
 
         popupMenu.setOnMenuItemClickListener {
             when (it.itemId) {
                 R.id.main_overflow_note_edit -> {
-                    baseActivity.editNote(note)
+                    editNote(requireContext(), note)
                 }
                 R.id.main_overflow_note_share -> {
-                    baseActivity.shareNote(note)
+                    shareNote(note)
                 }
                 R.id.main_overflow_note_delete -> {
-                    baseActivity.deleteNote(note)
+                    deleteNote(repoViewModel, notificationManager, note)
                     showUndoDelete(note)
                 }
                 R.id.main_overflow_note_archive -> {
-                    baseActivity.archiveNote(note)
+                    archiveNote(repoViewModel, note)
                     showUndoArchive(note)
                 }
                 R.id.main_overflow_note_notification -> {
@@ -180,7 +190,7 @@ class NotesFragment : Fragment(), MainListAdapter.OnItemClickListener {
 
     override fun onToggleNotificationClick(note: Note, isChecked: Boolean) {
         if (isChecked != note.isNotification) {
-            baseActivity.notificationManager.cancelNotificationById(note.id)
+            notificationManager.cancelNotificationById(note.id)
 
             note.isNotification = isChecked
             repoViewModel.update(note)
@@ -193,7 +203,7 @@ class NotesFragment : Fragment(), MainListAdapter.OnItemClickListener {
         if (noteList.isNotEmpty()) {
             restorePoint = noteList
 
-            val builder = AlertDialog.Builder(baseActivity)
+            val builder = AlertDialog.Builder(requireContext())
             builder.setMessage("All notes will be deleted.. \n Are you sure?")
                     .setPositiveButton("Yes") { dialog, id ->
                         repoViewModel.deleteAllNotes()
@@ -215,7 +225,7 @@ class NotesFragment : Fragment(), MainListAdapter.OnItemClickListener {
         snack.setDuration(8000)
                 .setAction("UNDO") {
                     // execute when UNDO is clicked
-                    baseActivity.baseCoroutineIO.launch {
+                    baseCoroutineIO.launch {
                         repoViewModel.insert(note)
                     }
                 }
@@ -229,7 +239,7 @@ class NotesFragment : Fragment(), MainListAdapter.OnItemClickListener {
         snack.setDuration(8000)
                 .setAction("UNDO") {
                     // execute when UNDO is clicked
-                    baseActivity.baseCoroutineIO.launch {
+                    baseCoroutineIO.launch {
                         repoViewModel.unArchive(note)
                     }
                 }
@@ -245,7 +255,7 @@ class NotesFragment : Fragment(), MainListAdapter.OnItemClickListener {
                 .setAction("UNDO") {
                     // execute when UNDO is clicked
                     for (note: Note in restorePoint) {
-                        baseActivity.baseCoroutineIO.launch {
+                        baseCoroutineIO.launch {
                             repoViewModel.insert(note)
                         }
                     }

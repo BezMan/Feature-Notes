@@ -10,6 +10,7 @@ import android.view.View
 import android.widget.ScrollView
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
+import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.DividerItemDecoration
@@ -20,15 +21,30 @@ import bez.dev.featurenotes.R
 import bez.dev.featurenotes.data.domain.Note
 import bez.dev.featurenotes.data.domain.NoteItem
 import bez.dev.featurenotes.databinding.DetailActivityBinding
-import bez.dev.featurenotes.views.screens.BaseActivity
+import bez.dev.featurenotes.misc.NotificationManager
+import bez.dev.featurenotes.views.presenters.RepoViewModel
+import bez.dev.featurenotes.views.screens.ActivityDelegateImpl
 import bez.dev.featurenotes.views.screens.note_detail.DetailPriorityDialog.OnPrioritySaveClickListener
 import com.google.android.material.snackbar.Snackbar
+import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.*
+import javax.inject.Inject
 
-class DetailActivity : BaseActivity(), OnPrioritySaveClickListener,
+@AndroidEntryPoint
+class DetailActivity : ActivityDelegateImpl(), OnPrioritySaveClickListener,
     DetailEditTextDialog.OnItemSaveClickListener, DetailListAdapter.OnDetailItemClickListener {
+
+    @Inject
+    lateinit var notificationManager: NotificationManager
+
+    internal val repoViewModel: RepoViewModel by viewModels()
+
+    val baseCoroutineIO = CoroutineScope(Dispatchers.IO)
+
 
     private var isEditMode: Boolean = false
     private var menuEditItem: MenuItem? = null
@@ -297,7 +313,7 @@ class DetailActivity : BaseActivity(), OnPrioritySaveClickListener,
         builder.setMessage("empty note will be discarded.. \n Are you sure?")
                 .setPositiveButton("Discard") { dialog, id ->
                     finish()
-                    deleteNote(currentNote)
+                    deleteNote(repoViewModel, notificationManager, currentNote)
                 }
                 .setNegativeButton("Cancel") { dialog, id ->
                     dialog.dismiss()
@@ -405,7 +421,7 @@ class DetailActivity : BaseActivity(), OnPrioritySaveClickListener,
                 revertNote()
             }
             R.id.menu_detail_unarchive -> {
-                unArchiveNote(currentNote)
+                unArchiveNote(repoViewModel, currentNote)
                 finish()
             }
             R.id.menu_detail_edit_note -> {

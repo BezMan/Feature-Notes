@@ -1,60 +1,65 @@
 package bez.dev.featurenotes.views.screens
 
+import android.content.Context
 import android.content.Intent
 import android.util.Log
 import android.view.View
-import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.PopupMenu
 import androidx.preference.PreferenceManager
 import bez.dev.featurenotes.R
 import bez.dev.featurenotes.data.domain.Note
 import bez.dev.featurenotes.misc.NotificationManager
-import bez.dev.featurenotes.views.screens.note_detail.DetailActivity
 import bez.dev.featurenotes.views.presenters.RepoViewModel
-import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import javax.inject.Inject
+import bez.dev.featurenotes.views.screens.note_detail.DetailActivity
 
-@AndroidEntryPoint
-abstract class BaseActivity : AppCompatActivity() {
 
-    @Inject
-    lateinit var notificationManager: NotificationManager
+interface ActivityDelegate {
+    fun addNote(context: Context)
+    fun editNote(context: Context, note: Note, isArchived: Boolean = false)
+    fun shareNote(note: Note)
+    fun addIconsToMenu(popupMenu: PopupMenu)
+    fun getSavedDefaultPriority(): Int
+    fun archiveNote(repoViewModel: RepoViewModel, note: Note)
+    fun unArchiveNote(repoViewModel: RepoViewModel, note: Note)
+    fun deleteNote(
+        repoViewModel: RepoViewModel,
+        notificationManager: NotificationManager,
+        note: Note
+    )
+}
 
-    internal val repoViewModel: RepoViewModel by viewModels()
 
-    val baseCoroutineIO = CoroutineScope(Dispatchers.IO)
+open class ActivityDelegateImpl: ActivityDelegate, AppCompatActivity() {
 
-    fun deleteNote(note: Note) {
+
+    override fun addNote(context: Context) {
+        val intent = Intent(context, DetailActivity::class.java)
+        context.startActivity(intent)
+    }
+
+    override fun editNote(context: Context, note: Note, isArchived: Boolean) {
+        val intent = Intent(context, DetailActivity::class.java)
+        intent.putExtra(EXTRA_NOTE, note)
+        intent.putExtra(EXTRA_IS_ARCHIVED, isArchived)
+        context.startActivity(intent)
+    }
+
+    override fun deleteNote(repoViewModel: RepoViewModel, notificationManager: NotificationManager, note: Note) {
         notificationManager.cancelNotificationById(note.id)
         repoViewModel.delete(note)
     }
 
 
-    fun archiveNote(note: Note) {
+    override fun archiveNote(repoViewModel: RepoViewModel, note: Note) {
         repoViewModel.archive(note)
     }
 
-    fun unArchiveNote(note: Note) {
+    override fun unArchiveNote(repoViewModel: RepoViewModel, note: Note) {
         repoViewModel.unArchive(note)
     }
 
-
-    fun addNote() {
-        val intent = Intent(this, DetailActivity::class.java)
-        startActivity(intent)
-    }
-
-    fun editNote(note: Note, isArchived: Boolean = false) {
-        val intent = Intent(this, DetailActivity::class.java)
-        intent.putExtra(EXTRA_NOTE, note)
-        intent.putExtra(EXTRA_IS_ARCHIVED, isArchived)
-        startActivity(intent)
-    }
-
-    fun shareNote(note: Note) {
+    override fun shareNote(note: Note) {
         val sendIntent: Intent = Intent().apply {
             action = Intent.ACTION_SEND
             putExtra(Intent.EXTRA_TEXT, note.toString())
@@ -65,24 +70,25 @@ abstract class BaseActivity : AppCompatActivity() {
     }
 
 
-    fun addIconsToMenu(popupMenu: PopupMenu) {
+    override fun addIconsToMenu(popupMenu: PopupMenu) {
         try {
             val declaredField = PopupMenu::class.java.getDeclaredField("mPopup")
             declaredField.isAccessible = true
             val mPopup = declaredField.get(popupMenu)
             mPopup.javaClass.getDeclaredMethod("setForceShowIcon", Boolean::class.java)
-                    .invoke(mPopup, true)
+                .invoke(mPopup, true)
         } catch (e: Exception) {
             Log.e("PopupMenu", "Error showing menu icons", e)
         }
     }
 
 
-    fun getSavedDefaultPriority(): Int {
+    override fun getSavedDefaultPriority(): Int {
         val defaultSharedPreferences = PreferenceManager.getDefaultSharedPreferences(this)
         val defPriority = defaultSharedPreferences.getString(resources.getString(R.string.note_preferences), "3")
         return Integer.parseInt(defPriority!!)
     }
+
 
     companion object {
         const val FRAGMENT_DATA = "FRAGMENT_DATA"
@@ -98,6 +104,5 @@ abstract class BaseActivity : AppCompatActivity() {
             }
         }
     }
-
 
 }
