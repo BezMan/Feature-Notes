@@ -30,7 +30,7 @@ android {
         viewBinding = true
     }
 
-    flavorDimensions "mock"
+    flavorDimensions = ["mock"]
 
     // If you need to add more flavors, consider using flavor dimensions.
     productFlavors {
