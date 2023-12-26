@@ -2,13 +2,16 @@ package bez.dev.featurenotes
 
 import android.app.Activity
 import android.view.View
+import android.widget.EditText
 import androidx.recyclerview.widget.RecyclerView
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.espresso.Espresso.*
 import androidx.test.espresso.NoMatchingViewException
 import androidx.test.espresso.ViewAssertion
+import androidx.test.espresso.action.ViewActions.clearText
 import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.action.ViewActions.typeText
+import androidx.test.espresso.contrib.RecyclerViewActions
 import androidx.test.espresso.matcher.ViewMatchers.*
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.rule.ActivityTestRule
@@ -16,7 +19,6 @@ import androidx.test.runner.lifecycle.ActivityLifecycleMonitorRegistry
 import androidx.test.runner.lifecycle.Stage
 import bez.dev.featurenotes.views.screens.notes_list.MainActivity
 import org.hamcrest.Matchers.`is`
-import org.junit.Ignore
 import org.junit.Rule
 import org.junit.Test
 import java.text.SimpleDateFormat
@@ -59,20 +61,25 @@ class NotesTest {
     }
 
 
-    @Ignore("can add reason")
     @Test
-    fun clickNoteEdit_openDetailActivityEditItem() {
-//        val title = "test mock"
-//        onView(withId(R.id.recycler_view))
-//                .perform(RecyclerViewActions.actionOnItem<RecyclerView.ViewHolder>(hasDescendant(withText(title)), click()));
-//
-//        onView(withId(R.id.edit_text_title))
-//                .check(matches(withText(title)))
+    fun selectNote_openDetailActivityEditTitle() {
+  //click item by position//
+        onView(withId(R.id.recycler_view))
+                .perform(RecyclerViewActions.actionOnItemAtPosition<RecyclerView.ViewHolder>(0, click()));
 
-//  //click item by position//
-//        onView(withId(R.id.recycler_view))
-//                .perform(RecyclerViewActions.actionOnItemAtPosition<RecyclerView.ViewHolder>(0, click()));
-    }
+    val titleText = getActivityInstance()!!.findViewById<EditText>(R.id.edit_text_title).text
+
+    onView(withId(R.id.menu_detail_edit_note))
+        .perform(click())
+
+    onView(withId(R.id.edit_text_title))
+        .perform(clearText())
+        .perform(typeText("$titleText EDITED"))
+
+    pressBack()
+    pressBack()
+
+}
 
     @Test
     fun clickOverflowMenuButton_addNote() {
