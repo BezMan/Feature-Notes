@@ -25,10 +25,10 @@ interface NoteDao {
     @Query("UPDATE note_table SET isNotification = 0 WHERE isNotification = 1 ")
     fun resetAllNotifications()
 
-    @Query("SELECT * FROM note_table WHERE isArchived = 0 ORDER BY priority DESC")
+    @Query("SELECT * FROM note_table WHERE isArchived = 0 ORDER BY priority DESC, timeModified DESC")
     fun getAllNotesByPriority(): Flow<List<Note>>
 
-    @Query("SELECT * FROM note_table WHERE isArchived = 1 ORDER BY priority DESC")
+    @Query("SELECT * FROM note_table WHERE isArchived = 1 ORDER BY priority DESC, timeModified DESC")
     fun getAllArchivedNotesByPriority(): Flow<List<Note>>
 
     @Query("SELECT * FROM note_table WHERE id = :noteId")
